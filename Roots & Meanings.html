@@ -1,0 +1,2183 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Morphology & Word Roots Explorer</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        display: ['"Space Grotesk"', 'sans-serif']
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            200: '#bae0fd',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.4);
+            border-radius: 9999px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(156, 163, 175, 0.7);
+        }
+        /* Card Flip animation for Flashcards */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-full flex flex-col font-sans transition-colors duration-200">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-30 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between py-4 gap-4">
+                
+                <!-- Title & Badge -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2.5 bg-gradient-to-tr from-brand-600 to-indigo-600 rounded-xl text-white shadow-md shadow-brand-500/20">
+                            <i data-lucide="book-open-check" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold font-display tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
+                                Lexicon Master
+                                <span class="text-xs font-semibold px-2 py-0.5 bg-brand-100 dark:bg-brand-900/50 text-brand-700 dark:text-brand-300 rounded-full border border-brand-200 dark:border-brand-800">Affix & Root Guide</span>
+                            </h1>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Interactive Morphology & Vocabulary Study System</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile Action Buttons -->
+                    <div class="flex items-center gap-2 md:hidden">
+                        <select id="voiceSelectMobile" class="bg-slate-100 dark:bg-slate-800 text-xs text-slate-700 dark:text-slate-300 px-2 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 max-w-[120px] truncate focus:outline-none">
+                            <option value="">Loading voices...</option>
+                        </select>
+                        <button id="themeToggleMobile" class="p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 rounded-lg bg-slate-100 dark:bg-slate-800">
+                            <i data-lucide="moon" class="w-5 h-5 dark:hidden"></i>
+                            <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Search & Tools Bar -->
+                <div class="flex flex-1 items-center gap-3 max-w-2xl">
+                    <div class="relative w-full">
+                        <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
+                        <input type="text" id="searchInput" placeholder="Search prefixes, roots, meanings, or example words (e.g. 'water', 'sub', 'bio')..." 
+                            class="w-full pl-10 pr-10 py-2.5 bg-slate-100 dark:bg-slate-800/80 text-sm text-slate-900 dark:text-white rounded-xl border border-transparent focus:border-brand-500 dark:focus:border-brand-500 focus:bg-white dark:focus:bg-slate-900 focus:outline-none transition-all placeholder:text-slate-400">
+                        <button id="clearSearch" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                            <i data-lucide="x" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Desktop Actions -->
+                    <div class="hidden md:flex items-center gap-2">
+                        <div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700" title="Audio Pronunciation Voice Selection">
+                            <i data-lucide="volume-2" class="w-4 h-4 ml-1.5 text-brand-500"></i>
+                            <select id="voiceSelect" class="bg-transparent text-xs font-medium text-slate-700 dark:text-slate-300 px-2 py-1.5 focus:outline-none max-w-[200px] truncate cursor-pointer">
+                                <option value="">Loading voices...</option>
+                            </select>
+                        </div>
+
+                        <button id="themeToggle" title="Toggle Light/Dark Theme" class="p-2.5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors border border-slate-200 dark:border-slate-800">
+                            <i data-lucide="moon" class="w-4 h-4 dark:hidden"></i>
+                            <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Tab Navigation Bar -->
+            <nav class="flex space-x-1 overflow-x-auto custom-scrollbar border-t border-slate-200 dark:border-slate-800 pt-2 pb-1 text-sm font-medium">
+                <button class="tab-btn active" data-tab="common-prefixes">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i> Common Prefixes
+                    <span class="tab-badge" id="count-common-prefixes">0</span>
+                </button>
+                <button class="tab-btn" data-tab="other-prefixes">
+                    <i data-lucide="layers" class="w-4 h-4"></i> Extended Prefixes
+                    <span class="tab-badge" id="count-other-prefixes">0</span>
+                </button>
+                <button class="tab-btn" data-tab="number-prefixes">
+                    <i data-lucide="binary" class="w-4 h-4"></i> Number Prefixes
+                    <span class="tab-badge" id="count-number-prefixes">0</span>
+                </button>
+                <button class="tab-btn" data-tab="suffixes">
+                    <i data-lucide="arrow-right-left" class="w-4 h-4"></i> Suffixes
+                    <span class="tab-badge" id="count-suffixes">0</span>
+                </button>
+                <button class="tab-btn" data-tab="roots">
+                    <i data-lucide="dna" class="w-4 h-4"></i> Greek & Latin Roots
+                    <span class="tab-badge" id="count-roots">0</span>
+                </button>
+                <button class="tab-btn" data-tab="flashcards">
+                    <i data-lucide="brain-circuit" class="w-4 h-4 text-emerald-500"></i> Practice Mode
+                </button>
+                <button class="tab-btn" data-tab="bookmarks">
+                    <i data-lucide="bookmark" class="w-4 h-4 text-amber-500"></i> Saved (<span id="bookmark-count">0</span>)
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- Active Tab Header & Controls -->
+        <div id="sectionHeader" class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+            <div>
+                <h2 id="currentTabTitle" class="text-xl font-bold font-display text-slate-900 dark:text-white flex items-center gap-2">
+                    Common Prefixes
+                </h2>
+                <p id="currentTabDesc" class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+                    Essential prefixes used to modify word meanings.
+                </p>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <!-- Quick Filter Pill / Sort -->
+                <div id="originFilterWrapper" class="hidden">
+                    <select id="originFilter" class="bg-slate-100 dark:bg-slate-800 text-xs text-slate-700 dark:text-slate-300 px-3 py-2 rounded-xl border-none focus:ring-2 focus:ring-brand-500 font-medium">
+                        <option value="all">All Origins (Greek & Latin)</option>
+                        <option value="Greek">Greek Only</option>
+                        <option value="Latin">Latin Only</option>
+                    </select>
+                </div>
+                <div id="posFilterWrapper" class="hidden">
+                    <select id="posFilter" class="bg-slate-100 dark:bg-slate-800 text-xs text-slate-700 dark:text-slate-300 px-3 py-2 rounded-xl border-none focus:ring-2 focus:ring-brand-500 font-medium">
+                        <option value="all">All Grammar Types</option>
+                        <option value="Noun">Noun Suffixes</option>
+                        <option value="Verb">Verb Suffixes</option>
+                        <option value="Adjective">Adjective Suffixes</option>
+                        <option value="Adverb">Adverb Suffixes</option>
+                    </select>
+                </div>
+
+                <div class="text-xs text-slate-500 font-medium bg-slate-100 dark:bg-slate-800 px-3 py-2 rounded-xl">
+                    Showing <span id="visibleCount" class="font-bold text-brand-600 dark:text-brand-400">0</span> items
+                </div>
+            </div>
+        </div>
+
+        <!-- SEARCH RESULTS SUMMARY (If searching) -->
+        <div id="searchAlert" class="hidden mb-6 p-4 bg-brand-50 dark:bg-brand-950/40 border border-brand-200 dark:border-brand-900 rounded-xl flex items-center justify-between text-sm">
+            <div class="flex items-center gap-2 text-brand-800 dark:text-brand-300">
+                <i data-lucide="info" class="w-4 h-4 text-brand-600"></i>
+                <span>Showing search results for "<strong id="searchQueryText"></strong>" across all categories.</span>
+            </div>
+            <button id="resetSearchBtn" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-semibold">Clear Search</button>
+        </div>
+
+        <!-- TAB CONTENT 1: Common Prefixes Grid -->
+        <div id="tab-common-prefixes" class="tab-content">
+            <div id="grid-common-prefixes" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </div>
+
+        <!-- TAB CONTENT 2: Other Prefixes Grid -->
+        <div id="tab-other-prefixes" class="tab-content hidden">
+            <div id="grid-other-prefixes" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </div>
+
+        <!-- TAB CONTENT 3: Number Prefixes (Greek vs Latin comparative layout) -->
+        <div id="tab-number-prefixes" class="tab-content hidden">
+            <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm mb-6">
+                <table class="w-full text-left border-collapse text-sm">
+                    <thead>
+                        <tr class="bg-slate-100/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border-b border-slate-200 dark:border-slate-800">
+                            <th class="p-4 font-bold">Number / Meaning</th>
+                            <th class="p-4 font-bold text-sky-600 dark:text-sky-400"><span class="inline-flex items-center gap-1"><i data-lucide="landmark" class="w-3.5 h-3.5"></i> Greek Prefix</span></th>
+                            <th class="p-4 font-bold text-purple-600 dark:text-purple-400"><span class="inline-flex items-center gap-1"><i data-lucide="shield" class="w-3.5 h-3.5"></i> Latin Prefix</span></th>
+                            <th class="p-4 font-bold">Examples & Usage</th>
+                            <th class="p-4 text-right">Save</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-number-prefixes" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB CONTENT 4: Suffixes -->
+        <div id="tab-suffixes" class="tab-content hidden">
+            <div id="grid-suffixes" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </div>
+
+        <!-- TAB CONTENT 5: Roots -->
+        <div id="tab-roots" class="tab-content hidden">
+            <div id="grid-roots" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </div>
+
+        <!-- TAB CONTENT 6: Interactive Flashcards -->
+        <div id="tab-flashcards" class="tab-content hidden">
+            <!-- Mode Switcher (Flashcards vs Quiz Challenge) -->
+            <div class="flex justify-center mb-6">
+                <div class="inline-flex p-1 bg-slate-200/80 dark:bg-slate-800/80 rounded-2xl gap-1">
+                    <button id="modeFlashcardsBtn" class="px-4 py-2 text-xs sm:text-sm font-semibold rounded-xl bg-white dark:bg-slate-900 text-brand-600 dark:text-brand-400 shadow-sm transition-all flex items-center gap-2">
+                        <i data-lucide="layers" class="w-4 h-4"></i> Flashcards
+                    </button>
+                    <button id="modeQuizBtn" class="px-4 py-2 text-xs sm:text-sm font-semibold rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all flex items-center gap-2">
+                        <i data-lucide="trophy" class="w-4 h-4 text-amber-500"></i> Quiz Challenge
+                    </button>
+                </div>
+            </div>
+
+            <!-- Flashcard Section -->
+            <div id="flashcardSection" class="max-w-xl mx-auto">
+                <!-- Controls -->
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2">
+                        <select id="flashcardDeck" class="bg-white dark:bg-slate-900 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm focus:outline-none">
+                            <option value="all">All Cards (100+ items)</option>
+                            <option value="prefixes">Prefixes Only</option>
+                            <option value="suffixes">Suffixes Only</option>
+                            <option value="roots">Roots Only</option>
+                        </select>
+                        <button id="shuffleDeckBtn" class="p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-600 dark:text-slate-400 hover:text-brand-600 transition-colors" title="Shuffle Cards">
+                            <i data-lucide="shuffle" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+
+                    <div class="text-xs font-semibold text-slate-500">
+                        Card <span id="cardCurrentIndex">1</span> of <span id="cardTotalCount">0</span>
+                    </div>
+                </div>
+
+                <!-- Flip Card Component -->
+                <div id="flashcardContainer" class="perspective-1000 w-full h-80 cursor-pointer group">
+                    <div id="flashcardInner" class="relative w-full h-full duration-500 transform-style-3d shadow-xl rounded-3xl border border-slate-200 dark:border-slate-800">
+                        
+                        <!-- Front of Card -->
+                        <div class="absolute inset-0 w-full h-full bg-white dark:bg-slate-900 rounded-3xl p-8 flex flex-col justify-between items-center text-center backface-hidden">
+                            <div class="w-full flex justify-between items-center text-xs text-slate-400">
+                                <span id="cardCategoryTag" class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 text-brand-600 dark:text-brand-400 font-bold rounded-full uppercase tracking-wider text-[10px]">Prefix</span>
+                                <span class="flex items-center gap-1 text-slate-400"><i data-lucide="rotate-cw" class="w-3 h-3"></i> Click card to reveal definition</span>
+                            </div>
+
+                            <div class="my-auto">
+                                <div id="cardFrontText" class="text-4xl sm:text-5xl font-extrabold font-display text-slate-900 dark:text-white tracking-tight mb-2">
+                                    un-
+                                </div>
+                                <div id="cardSubTag" class="text-xs text-slate-400 italic">Common Prefix</div>
+                            </div>
+
+                            <div class="text-xs text-slate-400">
+                                Test yourself: What does this mean & give 2 examples?
+                            </div>
+                        </div>
+
+                        <!-- Back of Card -->
+                        <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-brand-900 to-slate-900 text-white rounded-3xl p-8 flex flex-col justify-between items-center text-center rotate-y-180 backface-hidden border border-brand-700">
+                            <div class="w-full flex justify-between items-center text-xs text-brand-300">
+                                <span class="font-bold">Definition & Examples</span>
+                                <span class="text-brand-400">Back Side</span>
+                            </div>
+
+                            <div class="my-auto space-y-3">
+                                <div id="cardBackMeaning" class="text-2xl font-bold text-white">
+                                    not; opposite
+                                </div>
+                                <div class="w-12 h-0.5 bg-brand-500/40 mx-auto"></div>
+                                <div id="cardBackExamples" class="text-sm text-brand-200 flex flex-wrap justify-center gap-1.5">
+                                    <!-- Examples list -->
+                                </div>
+                            </div>
+
+                            <div id="cardBackOrigin" class="text-xs text-brand-400 font-medium">
+                                Origin / Notes
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="flex items-center justify-between gap-4 mt-6">
+                    <button id="prevCardBtn" class="flex-1 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-slate-700 dark:text-slate-300 font-semibold text-sm hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center justify-center gap-2 transition-all shadow-sm">
+                        <i data-lucide="chevron-left" class="w-4 h-4"></i> Previous
+                    </button>
+                    <button id="speakCardBtn" class="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-slate-600 dark:text-slate-300 hover:text-brand-500 transition-colors shadow-sm" title="Listen with British Female Voice">
+                        <i data-lucide="volume-2" class="w-5 h-5"></i>
+                    </button>
+                    <button id="nextCardBtn" class="flex-1 py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-2xl font-semibold text-sm flex items-center justify-center gap-2 transition-all shadow-md shadow-brand-500/20">
+                        Next Card <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Quiz Section Container -->
+            <div id="quizSection" class="max-w-xl mx-auto hidden">
+                <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-xl">
+                    <div class="flex items-center justify-between mb-4 border-b border-slate-100 dark:border-slate-800 pb-3">
+                        <div class="flex items-center gap-2 text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
+                            <i data-lucide="trophy" class="w-4 h-4"></i> Morphology Quiz
+                        </div>
+                        <div class="flex items-center gap-3 text-xs font-bold">
+                            <span class="text-slate-500">Score: <span id="quizScore" class="text-brand-600 dark:text-brand-400">0</span></span>
+                            <span class="text-slate-500">Streak: <span id="quizStreak" class="text-emerald-500">🔥 0</span></span>
+                        </div>
+                    </div>
+
+                    <div id="quizCard" class="text-center py-2">
+                        <span id="quizCategoryTag" class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 bg-slate-100 dark:bg-slate-800 text-brand-600 dark:text-brand-400 rounded-full">Prefix</span>
+                        <h3 id="quizQuestionTerm" class="text-4xl font-extrabold font-display text-slate-900 dark:text-white mt-4 mb-1">un-</h3>
+                        <p id="quizPrompt" class="text-xs text-slate-500 dark:text-slate-400 mb-6">Select the correct definition for this term:</p>
+
+                        <div id="quizOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4"></div>
+
+                        <div id="quizFeedback" class="hidden p-3 rounded-xl text-xs font-semibold mb-4 text-center"></div>
+
+                        <button id="nextQuizBtn" class="hidden w-full py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-2xl font-semibold text-sm transition-all flex items-center justify-center gap-2 shadow-md shadow-brand-500/20">
+                            Next Question <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB CONTENT 7: Bookmarks View -->
+        <div id="tab-bookmarks" class="tab-content hidden">
+            <div id="bookmarksEmpty" class="text-center py-16 bg-white dark:bg-slate-900 rounded-3xl border border-dashed border-slate-300 dark:border-slate-800">
+                <div class="w-16 h-16 bg-amber-50 dark:bg-amber-950/40 text-amber-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="bookmark" class="w-8 h-8"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-1">No Saved Affixes Yet</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-4">
+                    Click the bookmark icon on any affix card or table row while browsing to store items here for focused review.
+                </p>
+            </div>
+            <div id="grid-bookmarks" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </div>
+
+        <!-- Empty State Container for Search Filters -->
+        <div id="noResults" class="hidden text-center py-16 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 my-4">
+            <div class="w-12 h-12 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                <i data-lucide="search-x" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">No matching affixes or roots found</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Try tweaking your search term or selecting a different category tab.</p>
+        </div>
+
+    </main>
+
+    <!-- Word Breakdown & Definition Interactive Modal -->
+    <div id="wordModal" class="fixed inset-0 z-50 hidden bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
+            <button id="closeModal" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            
+            <div class="flex items-center gap-2 mb-2 text-xs font-bold text-brand-600 dark:text-brand-400 uppercase tracking-wider">
+                <i data-lucide="sparkles" class="w-4 h-4"></i> Morphological Breakdown
+            </div>
+
+            <h3 id="modalWord" class="text-3xl font-extrabold font-display text-slate-900 dark:text-white mb-2">
+                Uncover
+            </h3>
+
+            <div id="modalBreakdown" class="p-3 bg-slate-100 dark:bg-slate-800/60 rounded-xl font-mono text-sm text-slate-700 dark:text-slate-300 mb-4 flex items-center gap-2">
+                <!-- Highlighted word structure -->
+            </div>
+
+            <div class="space-y-3 mb-6">
+                <div>
+                    <div class="text-xs text-slate-400 font-semibold mb-0.5">Base Element</div>
+                    <div id="modalAffix" class="text-sm font-bold text-slate-800 dark:text-slate-200">un- (Prefix)</div>
+                </div>
+                <div>
+                    <div class="text-xs text-slate-400 font-semibold mb-0.5">Meaning Contribution</div>
+                    <div id="modalMeaning" class="text-sm text-slate-600 dark:text-slate-400">not; opposite</div>
+                </div>
+                <div>
+                    <div class="text-xs text-slate-400 font-semibold mb-0.5">Word Definition</div>
+                    <div id="modalWordDefinition" class="text-sm text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200/80 dark:border-slate-700/80 leading-relaxed italic">
+                        Loading definition...
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                <button id="modalAudioBtn" class="flex-1 py-2.5 bg-brand-50 dark:bg-brand-950/50 hover:bg-brand-100 dark:hover:bg-brand-900 text-brand-700 dark:text-brand-300 font-semibold text-xs rounded-xl flex items-center justify-center gap-2 transition-colors">
+                    <i data-lucide="volume-2" class="w-4 h-4"></i> Pronounce Word
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-6 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="flex items-center gap-2 font-medium">
+                <i data-lucide="graduation-cap" class="w-4 h-4 text-brand-500"></i>
+                <span>Complete Reference of Common Prefixes, Suffixes & Roots</span>
+            </div>
+            <div>
+                Interactive Learning Hub &bull; All 100+ Reference Affixes Loaded
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Datasets derived strictly from the provided PDF document
+        const AFFIX_DATA = {
+            commonPrefixes: [
+                { id: "cp1", term: "un-", meaning: "not; opposite", examples: ["uncover", "unlock", "unsafe"] },
+                { id: "cp2", term: "re-", meaning: "again; back", examples: ["rewrite", "reread", "return"] },
+                { id: "cp3", term: "in-, im-, ir-, il-", meaning: "not; into", examples: ["incorrect", "insert", "inexpensive", "illegal", "irregular", "inability"] },
+                { id: "cp4", term: "dis-", meaning: "not, away, apart, negative", examples: ["disagree", "discord", "discomfort", "discontent", "distrust"] },
+                { id: "cp5", term: "en-, em-", meaning: "cause to", examples: ["enjoy", "endure", "enlighten", "entail"] },
+                { id: "cp6", term: "non-", meaning: "not", examples: ["nonsense", "nonverbal", "nonstick", "nonspecific"] },
+                { id: "cp7", term: "in-, im-", meaning: "in, into, not", examples: ["invade", "implant", "imperfect", "immoral", "inedible", "incapable"] },
+                { id: "cp8", term: "over-", meaning: "too much", examples: ["overload", "overdo", "overact", "overboard", "overdose"] },
+                { id: "cp9", term: "mis-", meaning: "wrongly", examples: ["misjudge", "misinterpret", "misguided", "mismatch", "misplace"] },
+                { id: "cp10", term: "sub-", meaning: "under", examples: ["submarine", "subtext", "substandard", "substitute", "subversive"] },
+                { id: "cp11", term: "pre-", meaning: "before", examples: ["preview", "pretest", "prevent", "preplan"] },
+                { id: "cp12", term: "inter-", meaning: "between, among", examples: ["interstate", "international", "intermission", "intermingle", "interface"] },
+                { id: "cp13", term: "fore-", meaning: "before", examples: ["foreshadow", "foresight", "foreseeable", "forecast", "foreground"] },
+                { id: "cp14", term: "de-, dis-", meaning: "opposite of, not", examples: ["depose", "detour", "dehydrated", "decaffeinated", "discord", "discomfort", "disengage"] },
+                { id: "cp15", term: "trans-", meaning: "across; move between", examples: ["transatlantic", "transcend", "transfer", "transact", "transport"] },
+                { id: "cp16", term: "super-", meaning: "above", examples: ["supersonic", "superstar", "supernatural", "superstore"] },
+                { id: "cp17", term: "semi-", meaning: "half", examples: ["semicircle", "semiprecious", "semicolon", "semifinal"] },
+                { id: "cp18", term: "anti-", meaning: "against", examples: ["antifreeze", "antithesis", "antitrust", "antidote", "antisocial"] },
+                { id: "cp19", term: "mid-", meaning: "middle", examples: ["midterm", "Midwest", "midstream", "midway", "midnight"] },
+                { id: "cp20", term: "under-", meaning: "too little; not enough", examples: ["underfed", "underdog", "underestimate", "underage"] }
+            ],
+
+            otherPrefixes: [
+                { id: "op1", term: "ante-", meaning: "before", examples: ["antebellum", "antecedent", "anterior"] },
+                { id: "op2", term: "be-", meaning: "to, completely", examples: ["belittle", "befriend", "bejeweled"] },
+                { id: "op3", term: "bene-", meaning: "good, well", examples: ["beneficial", "benefit", "benediction", "benevolent"] },
+                { id: "op4", term: "circum-", meaning: "around, about", examples: ["circumference", "circumvent"] },
+                { id: "op5", term: "co-, com-, con-, col-", meaning: "together, with", examples: ["cooperate", "copilot", "committee", "commit", "concur", "concert", "collide", "collaborate", "colleague"] },
+                { id: "op6", term: "dia-", meaning: "across, through", examples: ["diagonal", "diameter", "diagnostic"] },
+                { id: "op7", term: "ex-", meaning: "out, from", examples: ["expel", "excavate", "exhale"] },
+                { id: "op8", term: "homo-", meaning: "same, alike", examples: ["homonym", "homogenize", "homophone"] },
+                { id: "op9", term: "hyper-", meaning: "over, above, excessive", examples: ["hyperactive", "hyperventilate", "hypercritical", "hyperthermia"] },
+                { id: "op10", term: "mal-", meaning: "bad, evil", examples: ["malicious", "maladjusted", "malnutrition"] },
+                { id: "op11", term: "micro-", meaning: "small", examples: ["microscopic", "microcosm", "microbiology", "microwave"] },
+                { id: "op12", term: "multi-", meaning: "many, much", examples: ["multiply", "multigrain", "multiple"] },
+                { id: "op13", term: "para-", meaning: "beside, alongside", examples: ["paraprofessional", "paralegal"] },
+                { id: "op14", term: "poly-", meaning: "many, much", examples: ["polygon", "polyester"] },
+                { id: "op15", term: "post-", meaning: "after, behind", examples: ["postwar", "posterior", "postdate"] },
+                { id: "op16", term: "pro-", meaning: "forward, earlier, prior to", examples: ["project", "proceed", "progress"] },
+                { id: "op17", term: "retro-", meaning: "back, backward", examples: ["retroactive", "retrogression"] },
+                { id: "op18", term: "tele-", meaning: "distant", examples: ["telephone", "telegraph", "television"] },
+                { id: "op19", term: "therm-", meaning: "heat, warm", examples: ["thermostat", "thermal"] },
+                { id: "op20", term: "trans-", meaning: "across; move between", examples: ["transatlantic", "transcend", "transfer", "transact", "transport"] },
+                { id: "op21", term: "uni-", meaning: "one, single", examples: ["universe", "unicycle", "unicorn"] }
+            ],
+
+            numberPrefixes: [
+                { id: "np1", greek: "mono-", latin: "uni-", value: "1", examples: ["monotone", "monopoly", "monologue", "monogamy", "monochrome", "monograph", "monomial", "monotheism", "universe", "uniform", "unicorn"] },
+                { id: "np2", greek: "di-", latin: "bi-, du-, duo-", value: "2", examples: ["biology", "bicycle", "dichotomy", "bilingual", "binary", "bimonthly", "binoculars", "duo", "duet", "duel"] },
+                { id: "np3", greek: "tri-", latin: "tri-", value: "3", examples: ["tricycle", "triad", "triathlon", "triangle", "tripod", "triumvirate", "triple"] },
+                { id: "np4", greek: "tetra-", latin: "quadri-, quart-", value: "4", examples: ["tetrameter", "quadrilateral", "quadriplegic", "quadrangle", "quadruple", "quarter", "quarterly", "quartet", "quartile"] },
+                { id: "np5", greek: "penta-", latin: "quin-", value: "5", examples: ["pentameter", "pentagon", "quintet", "quintuplet", "quintuplicate"] },
+                { id: "np6", greek: "hexa-", latin: "sext-", value: "6", examples: ["hexagon", "hexameter", "sextuplet", "sextet", "sextagenarian"] },
+                { id: "np7", greek: "hepta-", latin: "septem-, septi-", value: "7", examples: ["heptagon", "heptameter", "septuagenarian"] },
+                { id: "np8", greek: "octo-", latin: "octa-, oct-", value: "8", examples: ["octagon", "octogenarian", "octopus", "octahedron", "octant"] },
+                { id: "np9", greek: "ennea-", latin: "novem-", value: "9", examples: ["Novena"] },
+                { id: "np10", greek: "deca-, deci-, decem-", latin: "-", value: "10", examples: ["decade", "decagon", "decahedron", "decalogue", "decimal", "decibel"] },
+                { id: "np11", greek: "hemi-", latin: "semi-", value: "half", examples: ["hemisphere", "semicircle", "semicolon", "semifinal", "semiannual", "semester", "semisweet"] },
+                { id: "np12", greek: "poly-", latin: "multi-", value: "many", examples: ["polygon", "polygamy", "polyester", "polymer", "polynomial", "multiply", "multifaceted", "multilingual", "multitude", "multivitamin", "multiple"] },
+                { id: "np13", greek: "hecto-", latin: "cent-, cente-", value: "100", examples: ["cent", "centennial", "centurion", "centipede", "centenary"] },
+                { id: "np14", greek: "kilo-", latin: "milli-, mille-", value: "1000", examples: ["kilogram", "kilometer", "kilobyte", "milligram", "millisecond", "millennium"] }
+            ],
+
+            suffixes: [
+                { id: "s1", term: "-s, -es", pos: "Noun", meaning: "plural, more than one", examples: ["hotels", "amendments", "wishes", "prefixes"] },
+                { id: "s2", term: "-ed", pos: "Verb", meaning: "past tense in the past", examples: ["walked", "jumped", "helped"] },
+                { id: "s3", term: "-ing", pos: "Verb", meaning: "present tense in the present", examples: ["walking", "jumping", "helping"] },
+                { id: "s4", term: "-ate", pos: "Verb", meaning: "become", examples: ["complicate", "hesitate", "eradicate", "placate", "demonstrate", "procrastinate", "ruminate"] },
+                { id: "s5", term: "-en", pos: "Verb", meaning: "become, to make", examples: ["enlighten", "tighten", "frighten", "brighten", "dampen", "fasten", "heighten", "loosen", "straighten"] },
+                { id: "s6", term: "-ify, -fy", pos: "Verb", meaning: "make or become", examples: ["terrify", "verify", "clarify", "dignify", "rectify", "magnify", "classify"] },
+                { id: "s7", term: "-ize, -ise", pos: "Verb", meaning: "to make; to become", examples: ["chastise", "italicize", "romanticize", "hypnotize", "fertilize", "civilize", "rationalize", "criticize", "categorize", "polarize", "modernize"] },
+                { id: "s8", term: "-ly", pos: "Adverb", meaning: "how something is", examples: ["quickly", "easily", "happily", "majestically", "nonchalantly", "literally", "barely", "carefully", "abruptly"] },
+                { id: "s9", term: "-acy", pos: "Noun", meaning: "state or quality", examples: ["privacy", "occupancy", "democracy", "buoyancy", "saliency", "literacy"] },
+                { id: "s10", term: "-ance, -ence", pos: "Noun", meaning: "state or quality of", examples: ["maintenance", "eminence", "prominence", "dominance", "coincidence", "decadence", "cadence"] },
+                { id: "s11", term: "-dom", pos: "Noun", meaning: "place or state of being", examples: ["freedom", "kingdom", "wisdom", "fiefdom", "boredom", "martyrdom"] },
+                { id: "s12", term: "-er, -or, -ist, -ian, -eer", pos: "Noun", meaning: "one who; what/that/which", examples: ["trainer", "teacher", "toaster", "mentor", "survivor", "orator", "governor", "pianist", "specialist", "dentist", "librarian", "magician", "technician", "engineer", "pioneer"] },
+                { id: "s13", term: "-ism", pos: "Noun", meaning: "doctrine, belief", examples: ["communism", "socialism", "pragmatism", "realism", "feudalism", "racism", "Catholicism", "Buddhism", "capitalism"] },
+                { id: "s14", term: "-ist", pos: "Noun", meaning: "one who", examples: ["chemist", "socialist", "biologist", "publicist", "realist", "romanticist", "pragmatist"] },
+                { id: "s15", term: "-ity, -ty", pos: "Noun", meaning: "quality of", examples: ["veracity", "honesty", "clarity", "laxity", "sanity", "vanity", "rigidity", "velocity", "curiosity", "responsibility"] },
+                { id: "s16", term: "-ment", pos: "Noun", meaning: "condition of", examples: ["argument", "judgment", "apartment", "contentment", "resentment", "basement"] },
+                { id: "s17", term: "-ness", pos: "Noun", meaning: "state of being", examples: ["heaviness", "happiness", "openness", "harshness", "cleanliness", "carelessness"] },
+                { id: "s18", term: "-ion, -sion, -tion", pos: "Noun", meaning: "state of being; quality; act", examples: ["concession", "transition", "action", "erosion", "vision", "invitation", "conclusion", "condemnation"] },
+                { id: "s19", term: "-ology", pos: "Noun", meaning: "study of", examples: ["biology", "mineralogy", "ecology"] },
+                { id: "s20", term: "-age", pos: "Noun", meaning: "result of an action", examples: ["marriage", "pilgrimage"] },
+                { id: "s21", term: "-hood", pos: "Noun", meaning: "condition of being", examples: ["neighborhood", "falsehood", "childhood"] },
+                { id: "s22", term: "-ary", pos: "Noun", meaning: "place for, collection of; one who", examples: ["glossary", "library", "secretary", "dignitary"] },
+                { id: "s23", term: "-ship", pos: "Noun", meaning: "art or skill of, condition, rank, group of", examples: ["leadership", "citizenship", "ownership", "companionship", "friendship"] },
+                { id: "s24", term: "-able, -ible", pos: "Adjective", meaning: "able to be, worthy of, capable of", examples: ["comfortable", "likable", "enjoyable", "honorable", "predictable", "terrible", "sensible", "incredible", "edible", "visible"] },
+                { id: "s25", term: "-ful", pos: "Adjective", meaning: "notable for, full of", examples: ["fanciful", "beautiful", "wonderful", "colorful", "eventful", "fearful", "hateful", "resentful"] },
+                { id: "s26", term: "-ic, -al, -ial, -ical", pos: "Adjective", meaning: "pertaining to, relating to", examples: ["energetic", "historic", "caustic", "volcanic", "refusal", "regional", "proposal", "fatal", "cordial", "territorial", "spatial", "social", "comical", "historical", "magical", "logical", "rehearsal"] },
+                { id: "s27", term: "-ious, -ous", pos: "Adjective", meaning: "characterized by, full of, having", examples: ["nutritious", "portentous", "pretentious", "curious", "furious", "prosperous"] },
+                { id: "s28", term: "-ish", pos: "Adjective", meaning: "having the quality of", examples: ["fiendish", "childish", "selfish", "boyish"] },
+                { id: "s29", term: "-ive", pos: "Adjective", meaning: "having the nature of, somewhat like", examples: ["creative", "festive", "responsive", "positive", "negative", "inventive"] },
+                { id: "s30", term: "-less", pos: "Adjective", meaning: "without", examples: ["endless", "fruitless", "worthless", "powerless", "bottomless", "relentless", "selfless"] },
+                { id: "s31", term: "-y, -ly", pos: "Adjective", meaning: "characterized by; act in a way that", examples: ["sleazy", "pudgy", "funny", "foggy", "risky", "milky", "sudsy", "curly", "crazy", "shiny", "manly", "heavenly"] }
+            ],
+
+            roots: [
+                { id: "r1", term: "aqua", meaning: "water", origin: "Greek", examples: ["aquarium", "aqueduct", "aquaculture", "aquamarine", "aquaplane", "aquatic"] },
+                { id: "r2", term: "aud", meaning: "hearing", origin: "Latin", examples: ["audio", "audition", "audiovisual", "auditorium", "inaudible"] },
+                { id: "r3", term: "auto", meaning: "self", origin: "Greek", examples: ["autograph", "autobiography", "automobile", "autocrat", "autonomy"] },
+                { id: "r4", term: "astro", meaning: "star", origin: "Greek", examples: ["astronomy", "astrophysics", "astrology", "astronaut", "astronomer", "asterisk"] },
+                { id: "r5", term: "biblio", meaning: "book", origin: "Greek", examples: ["Bible", "bibliography", "bibliophobia", "bibliophile", "biblioklept"] },
+                { id: "r6", term: "bio", meaning: "life", origin: "Greek", examples: ["biography", "biology", "autobiography", "bionic", "biotic", "antibiotic", "biometrics"] },
+                { id: "r7", term: "chron", meaning: "time", origin: "Greek", examples: ["synchronize", "chronology", "chronic", "chronicle", "anachronism"] },
+                { id: "r8", term: "cide", meaning: "to kill, a killer", origin: "Latin", examples: ["homicide", "suicide", "genocide"] },
+                { id: "r9", term: "corp", meaning: "body", origin: "Latin", examples: ["corpse", "corporation", "corps", "incorporate", "corporeal", "corpulence"] },
+                { id: "r10", term: "cred", meaning: "to believe", origin: "Latin", examples: ["credit", "credentials", "credulous", "incredible"] },
+                { id: "r11", term: "demo, dem", meaning: "the people", origin: "Greek", examples: ["democracy", "demography", "demagogue", "endemic", "pandemic"] },
+                { id: "r12", term: "dic, dict", meaning: "speak, tell", origin: "Latin", examples: ["dictate", "dictation", "diction", "dictator", "verdict", "predict", "contradict", "benediction", "edict"] },
+                { id: "r13", term: "dorm", meaning: "sleep", origin: "Latin", examples: ["dormant", "dormitory", "dormer", "dormouse"] },
+                { id: "r14", term: "geo", meaning: "earth", origin: "Greek", examples: ["geology", "geologist", "geometry", "geography", "geographer", "geopolitical"] },
+                { id: "r15", term: "graph", meaning: "to write, to draw", origin: "Greek", examples: ["autograph", "biography", "photograph", "telegraph", "lithograph"] },
+                { id: "r16", term: "homo", meaning: "same, alike", origin: "Greek", examples: ["homonym", "homogenize", "homophone"] },
+                { id: "r17", term: "hydro", meaning: "water", origin: "Greek", examples: ["hydroplane", "dehydrate", "hydroelectric", "hydrogen"] },
+                { id: "r18", term: "ject", meaning: "throw", origin: "Latin", examples: ["reject", "deject", "project", "inject", "injection", "projection"] },
+                { id: "r19", term: "junct", meaning: "to join", origin: "Latin", examples: ["junction", "conjunction", "adjunct", "juncture"] },
+                { id: "r20", term: "logos, logy", meaning: "study", origin: "Greek", examples: ["geology", "astrology", "biology", "numerology", "zoology", "technology", "psychology", "anthropology", "mythology"] },
+                { id: "r21", term: "luna", meaning: "moon", origin: "Latin", examples: ["lunar", "lunacy", "lunatic", "interlunar"] },
+                { id: "r22", term: "meter", meaning: "measure", origin: "Greek", examples: ["meter", "thermometer", "diameter", "geometry", "optometry", "barometer", "centimeter", "symmetry", "voltammeter"] },
+                { id: "r23", term: "micro", meaning: "small", origin: "Greek", examples: ["microscopic", "microscope", "microcosm"] },
+                { id: "r24", term: "mega, macro", meaning: "great, large", origin: "Greek", examples: ["macroevolution", "megaphone", "megalith", "megatons", "megalopolis", "macroclimate"] },
+                { id: "r25", term: "min", meaning: "small, little", origin: "Latin", examples: ["minimal", "minimize", "minimum", "mini", "miniature", "minuscule", "minute", "minority"] },
+                { id: "r26", term: "mit, mis", meaning: "send", origin: "Latin", examples: ["mission", "transmit", "transmission", "remit", "missile", "submission", "permit", "emit", "emissary"] },
+                { id: "r27", term: "path", meaning: "feeling, suffering", origin: "Greek", examples: ["pathetic", "pathology", "apathy", "antipathy", "sympathy", "telepathy", "empathy", "sociopath"] },
+                { id: "r28", term: "ped", meaning: "foot", origin: "Latin", examples: ["pedestrian", "pedal", "peddle", "peddler", "pedicure", "pedometer"] },
+                { id: "r29", term: "philia", meaning: "love, friendship", origin: "Greek", examples: ["philosopher", "Philadelphia", "philanthropist", "philharmonic", "Philip"] },
+                { id: "r30", term: "phobia", meaning: "fear, intense dislike", origin: "Greek", examples: ["claustrophobia", "xenophobic", "arachnophobia"] },
+                { id: "r31", term: "phono", meaning: "sound", origin: "Greek", examples: ["phonograph", "microphone", "symphony", "telephone", "phonogram", "megaphone", "phony", "euphony", "xylophone"] },
+                { id: "r32", term: "photo", meaning: "light", origin: "Greek", examples: ["photograph", "photosynthesis", "telephoto", "photometer", "photosensitive"] },
+                { id: "r33", term: "port", meaning: "carry", origin: "Latin", examples: ["port", "transport", "transportation", "portable", "portage", "report"] },
+                { id: "r34", term: "psycho", meaning: "mind, mental", origin: "Greek", examples: ["psychology", "psychic", "psychotropic", "psychologist"] },
+                { id: "r35", term: "rupt", meaning: "to break", origin: "Latin", examples: ["disrupt", "interrupt", "rupture", "corrupt"] },
+                { id: "r36", term: "spect", meaning: "see", origin: "Latin", examples: ["respect", "inspection", "inspector", "spectator", "spectacles", "prospect"] },
+                { id: "r37", term: "scope", meaning: "look at", origin: "Greek", examples: ["microscope", "telescope", "periscope", "kaleidoscope"] },
+                { id: "r38", term: "script", meaning: "to write", origin: "Latin", examples: ["scribble", "manuscript", "scripture", "prescription"] },
+                { id: "r39", term: "sol", meaning: "sun", origin: "Latin", examples: ["solar", "solar system", "solstice", "solarium", "parasol"] },
+                { id: "r40", term: "struct", meaning: "build, form", origin: "Latin", examples: ["instruct", "instruction", "construction", "reconstruction", "destruct", "destruction", "infrastructure", "construe", "instrument", "instrumental"] },
+                { id: "r41", term: "therm", meaning: "heat, warm", origin: "Greek", examples: ["thermostat", "thermal"] },
+                { id: "r42", term: "tele", meaning: "distant", origin: "Greek", examples: ["telephone", "television", "telegraph", "telephoto", "telescope", "telepathy", "telethon"] },
+                { id: "r43", term: "terra", meaning: "land", origin: "Latin", examples: ["terrarium", "extraterrestrial", "Mediterranean Sea", "subterranean", "terrain", "terra firma"] },
+                { id: "r44", term: "vert, vers", meaning: "to turn", origin: "Latin", examples: ["reverse", "versatile", "invert", "convert", "divert"] },
+                { id: "r45", term: "zoo", meaning: "animal", origin: "Greek", examples: ["zoology", "zoogeography", "zootoxin"] }
+            ]
+        };
+
+        // Built-in dictionary of definitions for all example words
+        const WORD_DEFINITIONS = {
+            // Common Prefixes
+            "uncover": "To remove a cover or reveal something hidden.",
+            "unlock": "To open a lock or make accessible.",
+            "unsafe": "Not safe; exposed to danger or risk.",
+            "rewrite": "To write something again or in a different way.",
+            "reread": "To read a text again.",
+            "return": "To go or come back to a place or person.",
+            "incorrect": "Not correct; inaccurate or wrong.",
+            "insert": "To place or put something inside something else.",
+            "inexpensive": "Not costly; affordable or low in price.",
+            "illegal": "Forbidden by law or official rules.",
+            "irregular": "Not conforming to standard rules, shape, or schedule.",
+            "inability": "Lack of ability or capacity to do something.",
+            "disagree": "To hold a different opinion or argument.",
+            "discord": "Lack of harmony or agreement between people.",
+            "discomfort": "A state of physical or mental unease.",
+            "discontent": "Dissatisfaction with one's circumstances.",
+            "distrust": "Lack of trust or suspicion toward someone.",
+            "enjoy": "To take pleasure in an activity or experience.",
+            "endure": "To suffer patiently or withstand difficulty.",
+            "enlighten": "To give spiritual or intellectual insight to someone.",
+            "entail": "To involve or require as a necessary consequence.",
+            "nonsense": "Spoken or written words that have no meaning.",
+            "nonverbal": "Not involving or using spoken words.",
+            "nonstick": "Covered with a substance that prevents sticking.",
+            "nonspecific": "Not detailed or exact; general.",
+            "invade": "To enter forcefully as an enemy or intruder.",
+            "implant": "To insert or fix firmly into a position.",
+            "imperfect": "Not faultless; having flaws or mistakes.",
+            "immoral": "Violating moral principles or standards.",
+            "inedible": "Not suitable or safe to be eaten.",
+            "incapable": "Lacking the capacity, ability, or qualification.",
+            "overload": "To place too heavy a burden or load on something.",
+            "overdo": "To do something to an excessive degree.",
+            "overact": "To act with exaggerated emotion or drama.",
+            "overboard": "Over the side of a ship or boat into water.",
+            "overdose": "An excessive and dangerous intake of a drug.",
+            "misjudge": "To form an incorrect opinion or estimation.",
+            "misinterpret": "To understand or explain incorrectly.",
+            "misguided": "Guided by mistaken ideas or bad judgment.",
+            "mismatch": "A combination of things that do not match.",
+            "misplace": "To put something in the wrong place and lose it.",
+            "submarine": "A vessel designed to operate under water.",
+            "subtext": "An underlying or implicit meaning in text.",
+            "substandard": "Below an established standard or quality.",
+            "substitute": "A person or thing acting in place of another.",
+            "subversive": "Seeking to undermine an established system.",
+            "preview": "An inspection or viewing before formal presentation.",
+            "pretest": "A preliminary test given prior to instruction.",
+            "prevent": "To stop something from happening or arising.",
+            "preplan": "To plan ahead of time.",
+            "interstate": "Connecting or existing between two or more states.",
+            "international": "Existing, occurring, or carried on between nations.",
+            "intermission": "A pause or break between parts of a performance.",
+            "intermingle": "To mix or blend together.",
+            "interface": "A point where two systems or entities meet.",
+            "foreshadow": "To be a warning or indication of a future event.",
+            "foresight": "The ability to predict or plan for what will happen.",
+            "foreseeable": "Capable of being predicted or anticipated.",
+            "forecast": "To predict or estimate a future event or condition.",
+            "foreground": "The part of a view nearest to the observer.",
+            "depose": "To remove from office or power forcefully.",
+            "detour": "A long or roundabout route taken to avoid an obstacle.",
+            "dehydrated": "Suffering from an excessive loss of water.",
+            "decaffeinated": "Having had the caffeine content removed.",
+            "disengage": "To release or detach from a connection.",
+            "transatlantic": "Crossing or extending across the Atlantic Ocean.",
+            "transcend": "To go beyond or rise above a limit.",
+            "transfer": "To move from one place or position to another.",
+            "transact": "To conduct or carry out business affairs.",
+            "transport": "To carry or convey people or goods from one place to another.",
+            "supersonic": "Involving or denoting a speed greater than sound.",
+            "superstar": "An extremely famous and successful performer.",
+            "supernatural": "Attributed to some force beyond scientific understanding.",
+            "superstore": "A very large retail store.",
+            "semicircle": "A half of a circle.",
+            "semiprecious": "Designating gemstones of lower commercial value.",
+            "semicolon": "A punctuation mark (;) indicating a pause.",
+            "semifinal": "A match or round immediately preceding the final.",
+            "antifreeze": "A liquid added to water to lower its freezing point.",
+            "antithesis": "A person or thing that is the direct opposite.",
+            "antitrust": "Relating to legislation preventing monopolies.",
+            "antidote": "A medicine given to counteract a poison.",
+            "antisocial": "Contrary to the laws and customs of society.",
+            "midterm": "An exam given in the middle of an academic term.",
+            "midwest": "A region in the north-central United States.",
+            "midstream": "The middle of a stream or current.",
+            "midway": "At or to a half distance between two points.",
+            "midnight": "Twelve o'clock at night.",
+            "underfed": "Insufficiently nourished or fed.",
+            "underdog": "A competitor thought to have little chance of winning.",
+            "underestimate": "To estimate something to be smaller or less important.",
+            "underage": "Younger than the legal age for a given activity.",
+
+            // Extended Prefixes
+            "antebellum": "Occurring or existing before a particular war (esp. US Civil War).",
+            "antecedent": "A thing that existed before or logically precedes another.",
+            "anterior": "Nearer the front, especially of the body.",
+            "belittle": "To make someone or something seem unimportant.",
+            "befriend": "To act as a friend to someone.",
+            "bejeweled": "Decorated with or as if with jewels.",
+            "beneficial": "Favorable or advantageous; resulting in good.",
+            "benefit": "An advantage or profit gained from something.",
+            "benediction": "The utterance or bestowing of a blessing.",
+            "benevolent": "Well meaning and kindly.",
+            "circumference": "The enclosing boundary of a curved geometric figure.",
+            "circumvent": "To find a way around an obstacle.",
+            "cooperate": "To work jointly toward the same end.",
+            "copilot": "A second pilot in an aircraft.",
+            "committee": "A group of people appointed for a specific function.",
+            "commit": "To carry out or pledge to a course of action.",
+            "concur": "To be of the same opinion; agree.",
+            "concert": "A musical performance given in public.",
+            "collide": "To hit with force when moving.",
+            "collaborate": "To work jointly on an activity or project.",
+            "colleague": "A person with whom one works in a profession.",
+            "diagonal": "Joining two nonadjacent corners of a polygon.",
+            "diameter": "A straight line passing through the center of a circle.",
+            "diagnostic": "Concerned with the diagnosis of illness or problems.",
+            "expel": "To deprive someone of membership or force out.",
+            "excavate": "To make a hole or channel by digging.",
+            "exhale": "To breathe out in respiration.",
+            "homonym": "Words having the same spelling or pronunciation but different meanings.",
+            "homogenize": "To make uniform or similar throughout.",
+            "homophone": "Words having the same pronunciation but different meanings.",
+            "hyperactive": "Abnormally or extremely active.",
+            "hyperventilate": "Breathe at an abnormally rapid rate.",
+            "hypercritical": "Excessively critical or harsh in judgment.",
+            "hyperthermia": "The condition of having a body temperature greatly above normal.",
+            "malicious": "Intending or intended to do harm.",
+            "maladjusted": "Failing or unable to cope with normal social environment.",
+            "malnutrition": "Lack of proper nutrition.",
+            "microscopic": "So small as to be visible only with a microscope.",
+            "microcosm": "A community or situation regarded as encapsulating a miniature world.",
+            "microbiology": "The branch of science that deals with microorganisms.",
+            "microwave": "An electromagnetic wave used in cooking.",
+            "multiply": "To increase in number or quantity.",
+            "multigrain": "Containing several types of grain.",
+            "multiple": "Having or involving several parts or elements.",
+            "paraprofessional": "A person to whom a particular aspect of a professional task is delegated.",
+            "paralegal": "A person trained to assist a lawyer.",
+            "polygon": "A plane figure with at least three straight sides.",
+            "polyester": "A synthetic resin used to make fibers.",
+            "postwar": "Occurring or existing after a war.",
+            "posterior": "Further back in position or coming after.",
+            "postdate": "To assign a date later than the actual date.",
+            "project": "An individual or collaborative enterprise planned to achieve a goal.",
+            "proceed": "To begin or continue a course of action.",
+            "progress": "Forward or onward movement toward a destination.",
+            "retroactive": "Taking effect from a date in the past.",
+            "retrogression": "The process of returning to an earlier, inferior state.",
+            "telephone": "A system for transmitting acoustic signals over distance.",
+            "telegraph": "A system for transmitting messages over wire.",
+            "television": "A system for transmitting visual images and sound.",
+            "thermostat": "A device that automatically regulates temperature.",
+            "thermal": "Relating to or caused by heat.",
+            "universe": "All existing matter and space considered as a whole.",
+            "unicycle": "A cycle with a single wheel.",
+            "unicorn": "A mythical creature resembling a horse with a horn.",
+
+            // Number Prefixes
+            "monotone": "A continuing sound that is unchanging in pitch.",
+            "monopoly": "The exclusive possession or control of the supply of a commodity.",
+            "monologue": "A long speech by one actor in a play or movie.",
+            "monogamy": "The practice of being married to one person at a time.",
+            "monochrome": "A photograph or picture developed in black and white or shades of one color.",
+            "monograph": "A detailed written study on a single specialized subject.",
+            "monomial": "An algebraic expression consisting of one term.",
+            "monotheism": "The doctrine or belief that there is only one God.",
+            "uniform": "Remaining the same in all cases and at all times.",
+            "biology": "The study of living organisms.",
+            "bicycle": "A vehicle composed of two wheels held in a frame.",
+            "dichotomy": "A division or contrast between two things.",
+            "bilingual": "Speaking two languages fluently.",
+            "binary": "Relating to, using, or expressed in a system of numerical notation to the base 2.",
+            "bimonthly": "Occurring every two months or twice a month.",
+            "binoculars": "An optical instrument with a lens for each eye.",
+            "duo": "A pair of people associated in a performance.",
+            "duet": "A performance by two musicians or singers.",
+            "duel": "A contest between two people or parties.",
+            "tricycle": "A vehicle similar to a bicycle, but with three wheels.",
+            "triad": "A group or set of three related people or things.",
+            "triathlon": "An athletic contest consisting of three different events.",
+            "triangle": "A plane figure with three straight sides and three angles.",
+            "tripod": "A three-legged stand for supporting a camera.",
+            "triumvirate": "A board of three officials jointly ruling.",
+            "triple": "Consisting of three parts or things.",
+            "tetrameter": "A line of verse consisting of four metrical feet.",
+            "quadrilateral": "A four-sided polygon.",
+            "quadriplegic": "Paralyzed in all four limbs.",
+            "quadrangle": "A four-sided plane figure, especially a quad.",
+            "quadruple": "Increase by four times as much.",
+            "quarter": "Each of four equal or corresponding parts.",
+            "quarterly": "Done, produced, or occurring once every quarter of a year.",
+            "quartet": "A group of four people playing music.",
+            "quartile": "Each of four equal groups into which a population can be divided.",
+            "pentameter": "A line of verse consisting of five metrical feet.",
+            "pentagon": "A plane figure with five straight sides and five angles.",
+            "quintet": "A group of five people playing music.",
+            "quintuplet": "Each of five children born to the same mother at one birth.",
+            "quintuplicate": "Consisting of five copies or parts.",
+            "hexagon": "A plane figure with six straight sides and six angles.",
+            "hexameter": "A line of verse consisting of six metrical feet.",
+            "sextuplet": "Each of six children born to the same mother at one birth.",
+            "sextet": "A group of six people playing music or singing.",
+            "sextagenarian": "A person who is between 60 and 69 years old.",
+            "heptagon": "A plane figure with seven straight sides and seven angles.",
+            "heptameter": "A line of verse consisting of seven metrical feet.",
+            "septuagenarian": "A person who is between 70 and 79 years old.",
+            "octagon": "A plane figure with eight straight sides and eight angles.",
+            "octogenarian": "A person who is between 80 and 89 years old.",
+            "octopus": "A sea creature with eight soft arms.",
+            "octahedron": "A three-dimensional shape with eight faces.",
+            "octant": "An eighth part of a circle or sphere.",
+            "novena": "A form of worship consisting of special prayers on nine consecutive days.",
+            "decade": "A period of ten years.",
+            "decagon": "A plane figure with ten straight sides and ten angles.",
+            "decahedron": "A three-dimensional shape with ten faces.",
+            "decalogue": "The Ten Commandments.",
+            "decimal": "Relating to or denoting a system of numbers based on 10.",
+            "decibel": "A unit used to measure the intensity of a sound.",
+            "hemisphere": "A half of a sphere or half of the earth.",
+            "semiannual": "Occurring twice a year.",
+            "semester": "A half-year term in a school or college.",
+            "semisweet": "Slightly sweetened chocolate containing little sugar.",
+            "polygamy": "The practice or custom of having more than one wife or husband at the same time.",
+            "polymer": "A substance that has a molecular structure consisting of a large number of similar units.",
+            "polynomial": "An expression of more than two algebraic terms.",
+            "multifaceted": "Having many aspects or phases.",
+            "multilingual": "Involving or using several languages.",
+            "multitude": "A large number of people or things.",
+            "multivitamin": "A pill containing several vitamins.",
+            "cent": "A monetary unit equal to 1/100 of a dollar.",
+            "centennial": "Relating to a hundredth anniversary.",
+            "centurion": "The commander of a century in the ancient Roman army.",
+            "centipede": "A predatory arthropod with a pair of legs for each body segment.",
+            "centenary": "The hundredth anniversary of a significant event.",
+            "kilogram": "A unit of mass equal to 1,000 grams.",
+            "kilometer": "A metric unit of length equal to 1,000 meters.",
+            "kilobyte": "A unit of memory equal to 1,024 bytes.",
+            "milligram": "One thousandth of a gram.",
+            "millisecond": "One thousandth of a second.",
+            "millennium": "A period of a thousand years.",
+
+            // Suffixes
+            "hotels": "Plural of hotel; establishments providing accommodation.",
+            "amendments": "Minor changes or additions designed to improve a text.",
+            "wishes": "Desires or hopes for something to happen.",
+            "prefixes": "Letters placed at the beginning of a word to modify its meaning.",
+            "walked": "Past tense of walk; moved on foot.",
+            "jumped": "Past tense of jump; pushed off a surface into the air.",
+            "helped": "Past tense of help; assisted someone.",
+            "walking": "Present participle of walk; moving on foot.",
+            "jumping": "Present participle of jump; leaping.",
+            "helping": "Present participle of help; assisting.",
+            "complicate": "To make something more difficult or intricate.",
+            "hesitate": "To pause before saying or doing something.",
+            "eradicate": "To destroy completely; put an end to.",
+            "placate": "To make someone less angry or hostile.",
+            "demonstrate": "To clearly show the existence or truth of something.",
+            "procrastinate": "To delay or postpone action.",
+            "ruminate": "To think deeply about something.",
+            "tighten": "To make or become tight or tighter.",
+            "frighten": "To make someone afraid or anxious.",
+            "brighten": "To make or become lighter or brighter.",
+            "dampen": "To make slightly wet or reduce intensity.",
+            "fasten": "To close or join securely.",
+            "heighten": "To make or become higher or intense.",
+            "loosen": "To make or become less tight.",
+            "straighten": "To make or become straight.",
+            "terrify": "To cause to feel extreme fear.",
+            "verify": "To make sure that something is true or accurate.",
+            "clarify": "To make a statement or situation less confused.",
+            "dignify": "To make something seem worthy and impressive.",
+            "rectify": "To put right or correct a mistake.",
+            "magnify": "To make something appear larger than it is.",
+            "classify": "To arrange in classes or categories.",
+            "chastise": "To rebuke or punish severely.",
+            "italicize": "To print text in slanted font.",
+            "romanticize": "To deal with in an idealized or unrealistic fashion.",
+            "hypnotize": "To produce a state of hypnosis in someone.",
+            "fertilize": "To make soil more fertile by adding nutrients.",
+            "civilize": "To bring a place out of a savage state.",
+            "rationalize": "To attempt to explain or justify behavior with logical reasons.",
+            "criticize": "To indicate the faults of someone or something.",
+            "categorize": "To place in a particular class or group.",
+            "polarize": "To divide into two contrasting groups.",
+            "modernize": "To adapt to modern needs or habits.",
+            "quickly": "At a fast speed; rapidly.",
+            "easily": "Without difficulty or effort.",
+            "happily": "In a happy manner or fortunate way.",
+            "majestically": "In a grand, dignified, or majestic manner.",
+            "nonchalantly": "In a casually calm and relaxed manner.",
+            "literally": "In a literal manner or sense; exactly.",
+            "barely": "Only just; almost not.",
+            "carefully": "In a way that avoids harm or errors.",
+            "abruptly": "Suddenly and unexpectedly.",
+            "privacy": "A state in which one is not observed or disturbed.",
+            "occupancy": "The action of living in or using a property.",
+            "democracy": "A system of government by the whole population.",
+            "buoyancy": "The ability or tendency to float in water.",
+            "saliency": "The quality of being particularly noticeable or important.",
+            "literacy": "The ability to read and write.",
+            "maintenance": "The process of preserving something in good condition.",
+            "eminence": "Fame or recognized superiority within a field.",
+            "prominence": "The state of being important or famous.",
+            "dominance": "Power and influence over others.",
+            "coincidence": "A remarkable concurrence of events without causal connection.",
+            "decadence": "Moral or cultural decline as characterized by excessive indulgence.",
+            "cadence": "A modulation or inflection of the voice.",
+            "freedom": "The power or right to act, speak, or think without hindrance.",
+            "kingdom": "A country ruled by a king or queen.",
+            "wisdom": "The quality of having experience, knowledge, and good judgment.",
+            "fiefdom": "An organization controlled by a dominant person or group.",
+            "boredom": "The state of feeling weary and uninterested.",
+            "martyrdom": "The death or suffering of a martyr.",
+            "trainer": "A person who trains people or animals.",
+            "teacher": "A person who teaches, especially in a school.",
+            "toaster": "An electrical appliance for toasting bread.",
+            "mentor": "An experienced and trusted adviser.",
+            "survivor": "A person who survives a dangerous ordeal.",
+            "orator": "A public speaker of great eloquence.",
+            "governor": "The elected executive head of a state.",
+            "pianist": "A person who plays the piano.",
+            "specialist": "A person who concentrates on a specific subject.",
+            "dentist": "A person qualified to treat conditions of the teeth.",
+            "librarian": "A person in charge of or assisting in a library.",
+            "magician": "A person who performs magic tricks.",
+            "technician": "A person skilled in the technique of an art or craft.",
+            "engineer": "A person who designs, builds, or maintains engines.",
+            "pioneer": "A person who is among the first to explore a new area.",
+            "communism": "A political theory advocating class war and common ownership.",
+            "socialism": "A political and economic theory of social organization.",
+            "pragmatism": "An approach that evaluates theories in terms of practical application.",
+            "realism": "The attitude of accepting a situation as it is.",
+            "feudalism": "The dominant social system in medieval Europe.",
+            "racism": "Prejudice or discrimination directed against a person based on race.",
+            "catholicism": "The faith, practice, and order of the Roman Catholic Church.",
+            "buddhism": "A widespread Asian religion founded by Siddhartha Gautama.",
+            "capitalism": "An economic system based on private ownership of wealth.",
+            "chemist": "A person engaged in chemical research or experiments.",
+            "biologist": "An expert in or student of the branch of science concerned with living organisms.",
+            "publicist": "A person responsible for publicizing a product or client.",
+            "romanticist": "A writer or artist of the Romantic movement.",
+            "pragmatist": "A person who is guided by practical considerations.",
+            "veracity": "Conformity to facts; accuracy and truthfulness.",
+            "honesty": "The quality of being honest and truthful.",
+            "clarity": "The quality of being clear and easy to understand.",
+            "laxity": "Lack of strictness or care.",
+            "sanity": "The ability to think and behave in a normal manner.",
+            "vanity": "Excessive pride in or admiration of one's appearance.",
+            "rigidity": "Inability to be to bent or be changed; stiffness.",
+            "velocity": "The speed of something in a given direction.",
+            "curiosity": "A strong desire to know or learn something.",
+            "responsibility": "The state or fact of having a duty to deal with something.",
+            "argument": "An exchange of diverging or opposite views.",
+            "judgment": "The ability to make considered decisions.",
+            "apartment": "A set of rooms forming an individual residence.",
+            "contentment": "A state of happiness and satisfaction.",
+            "resentment": "Bitter indignation at having been treated unfairly.",
+            "basement": "The lowest story of a building, below ground level.",
+            "heaviness": "The quality of being heavy or weighing a lot.",
+            "happiness": "The state of being happy.",
+            "openness": "Lack of secrecy or concealment; frankness.",
+            "harshness": "The quality of being unpleasantly rough or severe.",
+            "cleanliness": "The state or quality of being clean.",
+            "carelessness": "Failure to give sufficient attention to avoiding harm.",
+            "concession": "A thing that is granted, especially in response to demands.",
+            "transition": "The process or a period of changing from one state to another.",
+            "action": "The fact or process of doing something to achieve an aim.",
+            "erosion": "The process of eroding or being eroded by wind or water.",
+            "vision": "The facility or state of being able to see.",
+            "invitation": "A written or verbal request inviting someone to go somewhere.",
+            "conclusion": "The end or finish of an event or process.",
+            "condemnation": "The expression of very strong disapproval.",
+            "mineralogy": "The scientific study of minerals.",
+            "ecology": "The branch of biology dealing with relations of organisms to environment.",
+            "marriage": "The legally or formally recognized union of two people.",
+            "pilgrimage": "A pilgrim's journey to a sacred place.",
+            "neighborhood": "A district or community within a town or city.",
+            "falsehood": "The state of being untrue; a lie.",
+            "childhood": "The state or period of being a child.",
+            "glossary": "An alphabetical list of terms in a domain.",
+            "library": "A building containing collections of books and resources.",
+            "secretary": "A person employed to handle correspondence and administrative tasks.",
+            "dignitary": "A person considered to be important because of high rank.",
+            "leadership": "The action of leading a group of people or an organization.",
+            "citizenship": "The position or status of being a citizen of a country.",
+            "ownership": "The act or state of possessing something.",
+            "companionship": "A feeling of fellowship or friendship.",
+            "friendship": "The emotions or conduct of friends.",
+            "comfortable": "Providing physical ease and relaxation.",
+            "likable": "Pleasant, friendly, and easy to like.",
+            "enjoyable": "Giving delight or pleasure.",
+            "honorable": "Bringing or worthy of honor and respect.",
+            "predictable": "Able to be foreseen or anticipated.",
+            "terrible": "Extremely bad or serious.",
+            "sensible": "Possessing or showing good sense or judgment.",
+            "incredible": "Impossible to believe or extraordinary.",
+            "edible": "Fit or suitable to be eaten.",
+            "visible": "Able to be seen.",
+            "fanciful": "Overly imaginative or unreal.",
+            "beautiful": "Pleasing the senses or mind aesthetically.",
+            "wonderful": "Inspiring delight or admiration.",
+            "colorful": "Having much or varied color.",
+            "eventful": "Marked by interesting or important events.",
+            "fearful": "Feeling or showing fear or anxiety.",
+            "hateful": "Eliciting or deserving hatred.",
+            "resentful": "Feeling or expressing bitterness at having been treated unfairly.",
+            "energetic": "Showing or involving great activity or vitality.",
+            "historic": "Famous or important in history.",
+            "caustic": "Able to burn or corrode organic tissue by chemical action.",
+            "volcanic": "Relating to or produced by a volcano.",
+            "refusal": "An act of showing that one is not willing to do something.",
+            "regional": "Relating to or characteristic of a region.",
+            "proposal": "A plan or suggestion put forward for consideration.",
+            "fatal": "Causing death or disaster.",
+            "cordial": "Warm and friendly.",
+            "territorial": "Relating to the ownership of an area of land.",
+            "spatial": "Relating to or occupying space.",
+            "social": "Relating to society or its organization.",
+            "comical": "Amusing or humorous.",
+            "historical": "Relating to past events.",
+            "magical": "Relating to or produced by magic.",
+            "logical": "According to the rules of logic or formal reasoning.",
+            "rehearsal": "A practice of a play or piece of music.",
+            "nutritious": "Nourishing; efficient as food.",
+            "portentous": "Done in a pompous or overly solemn manner.",
+            "pretentious": "Attempting to impress by affecting greater importance than is possessed.",
+            "curious": "Eager to know or learn something.",
+            "furious": "Extremely angry.",
+            "prosperous": "Successful in material terms; flourishing financially.",
+            "fiendish": "Extremely cruel or unpleasant.",
+            "childish": "Silly and immature.",
+            "selfish": "Lacking consideration for others; concerned chiefly with personal profit.",
+            "boyish": "Belonging to or characteristic of a boy.",
+            "creative": "Relating to or involving the use of imagination.",
+            "festive": "Relating to a festival or celebration.",
+            "responsive": "Reacting quickly and positively.",
+            "positive": "Constructive, optimistic, or confident.",
+            "negative": "Consisting in or characterized by the absence of positive attributes.",
+            "inventive": "Having or showing the ability to think originally.",
+            "endless": "Having or seeming to have no end or limit.",
+            "fruitless": "Failing to achieve the desired results; useless.",
+            "worthless": "Having no real value or use.",
+            "powerless": "Without ability to act or produce an effect.",
+            "bottomless": "Without a bottom or limit.",
+            "relentless": "Unceasingly intense or severe.",
+            "selfless": "Concerned more with the needs and wishes of others than with one's own.",
+            "sleazy": "Sordid, corrupt, or disreputable.",
+            "pudgy": "Slightly fat.",
+            "funny": "Causing laughter or amusement.",
+            "foggy": "Full of or accompanied by fog.",
+            "risky": "Involving the possibility of danger or failure.",
+            "milky": "Resembling milk in color or consistency.",
+            "sudsy": "Full of or covered with lather or foam.",
+            "curly": "Having curls or a curved shape.",
+            "crazy": "Mad, especially as manifested in wild behaviour.",
+            "shiny": "Reflecting light, typically because of being clean or polished.",
+            "manly": "Having traditional masculine qualities.",
+            "heavenly": "Relating to heaven or divine.",
+
+            // Roots
+            "aquarium": "A transparent tank of water in which fish and water creatures are kept.",
+            "aqueduct": "An artificial channel for conveying water.",
+            "aquaculture": "The rearing of aquatic animals or cultivation of aquatic plants for food.",
+            "aquamarine": "A precious stone consisting of a light-blue or bluish-green variety of beryl.",
+            "aquaplane": "A board used for riding over water while pulled by a speedboat.",
+            "aquatic": "Relating to water.",
+            "audio": "Sound, especially when recorded or transmitted.",
+            "audition": "An interview or trial performance for a role.",
+            "audiovisual": "Using both sight and sound.",
+            "auditorium": "The part of a theater or hall in which the audience sits.",
+            "inaudible": "Unable to be heard.",
+            "autograph": "A signature of a famous person.",
+            "autobiography": "An account of a person's life written by that person.",
+            "automobile": "A road vehicle designed to carry passengers.",
+            "autocrat": "A ruler who has absolute power.",
+            "autonomy": "The right or condition of self-government.",
+            "astronomy": "The branch of science which deals with celestial objects and space.",
+            "astrophysics": "The branch of astronomy dealing with the physics of the universe.",
+            "astrology": "The study of the movements and positions of celestial bodies.",
+            "astronaut": "A person who is trained to travel in a spacecraft.",
+            "astronomer": "An expert in astronomy.",
+            "asterisk": "A symbol (*) used in printed text as a reference mark.",
+            "bible": "The Christian scriptures.",
+            "bibliography": "A list of the books referred to in a scholarly work.",
+            "bibliophobia": "Fear or hatred of books.",
+            "bibliophile": "A person who collects or has a great love of books.",
+            "biblioklept": "One who steals books.",
+            "biography": "An account of someone's life written by someone else.",
+            "bionic": "Having artificial body parts that are powered by electricity.",
+            "biotic": "Relating to or resulting from living things.",
+            "antibiotic": "A medicine that inhibits the growth of or destroys microorganisms.",
+            "biometrics": "Measurement and statistical analysis of people's physical characteristics.",
+            "synchronize": "Cause to occur or operate at the same time or rate.",
+            "chronology": "The arrangement of events or dates in the order of their occurrence.",
+            "chronic": "Persisting for a long time or constantly recurring.",
+            "chronicle": "A factual written account of important or historical events.",
+            "anachronism": "A thing belonging or appropriate to a period other than that in which it exists.",
+            "homicide": "The killing of one human being by another.",
+            "suicide": "The action of killing oneself intentionally.",
+            "genocide": "The deliberate killing of a large group of people from a particular nation.",
+            "corpse": "A dead body, especially of a human being.",
+            "corporation": "A large company or group authorized to act as a single entity.",
+            "corps": "A main subdivision of an armed force.",
+            "incorporate": "Take in or contain something as part of a whole.",
+            "corporeal": "Relating to a person's body, as opposed to their spirit.",
+            "corpulence": "The state of being fat; obesity.",
+            "credit": "The ability of a customer to obtain goods before payment.",
+            "credentials": "A qualification, achievement, or personal quality used to indicate suitability.",
+            "credulous": "Having or showing too great a readiness to believe things.",
+            "demography": "The study of statistics such as births, deaths, or income.",
+            "demagogue": "A political leader who seeks support by appealing to popular desires.",
+            "endemic": "Regularly found among particular people or in a certain area.",
+            "pandemic": "An epidemic of an infectious disease that has spread across a large region.",
+            "dictate": "Lay down authoritatively; prescribe.",
+            "dictation": "The action of saying words aloud to be typed or written down.",
+            "diction": "The choice and use of words and phrases in speech or writing.",
+            "dictator": "A ruler with total power over a country.",
+            "verdict": "A decision on a disputed issue in a civil or criminal case.",
+            "predict": "Say or estimate that a specified event will happen in the future.",
+            "contradict": "Deny the truth of a statement by asserting the opposite.",
+            "edict": "An official order or proclamation issued by a person in authority.",
+            "dormant": "Having normal physical functions suspended or slowed down as if in sleep.",
+            "dormitory": "A large bedroom for a number of people in a school or institution.",
+            "dormer": "A window that projects vertically from a sloping roof.",
+            "dormouse": "A small rodent known for long periods of hibernation.",
+            "geology": "The science that deals with the earth's physical structure and substance.",
+            "geologist": "An expert in geology.",
+            "geometry": "The branch of mathematics concerned with shapes and properties of space.",
+            "geography": "The study of the physical features of the earth and its atmosphere.",
+            "geographer": "An expert who studies the earth's features.",
+            "geopolitical": "Relating to politics, especially international relations, as influenced by geographical factors.",
+            "photograph": "A picture produced by a camera.",
+            "lithograph": "A print produced by lithography.",
+            "hydroplane": "A light fast motorboat designed to skim over water.",
+            "hydroelectric": "Relating to or denoting the generation of electricity using water power.",
+            "hydrogen": "A colorless, odorless, highly flammable gas.",
+            "reject": "Dismiss as inadequate, inappropriate, or not useful.",
+            "deject": "Make sad or dispirited.",
+            "inject": "Drive or force a liquid into a person's body.",
+            "injection": "An act of injecting a medication or liquid.",
+            "projection": "An estimate or forecast of a future situation.",
+            "junction": "A point where two or more things are joined.",
+            "conjunction": "The action or an instance of two or more events occurring together.",
+            "adjunct": "A thing added to something else as a supplementary rather than an essential part.",
+            "juncture": "A particular point in time or stage of affairs.",
+            "numerology": "The branch of knowledge that deals with the occult significance of numbers.",
+            "zoology": "The scientific study of the behavior, structure, and classification of animals.",
+            "technology": "The application of scientific knowledge for practical purposes.",
+            "psychology": "The scientific study of the human mind and its functions.",
+            "anthropology": "The study of human societies and cultures and their development.",
+            "mythology": "A collection of myths, especially one belonging to a particular religious tradition.",
+            "lunar": "Relating to the moon.",
+            "lunacy": "Intermittent insanity, once supposed to change with the phases of the moon.",
+            "lunatic": "A person who is mentally ill or wild.",
+            "interlunar": "Relating to the period between the old and new moon.",
+            "meter": "The fundamental unit of length in the metric system.",
+            "thermometer": "An instrument for measuring and indicating temperature.",
+            "optometry": "The practice or profession of examining the eyes for visual defects.",
+            "barometer": "An instrument measuring atmospheric pressure.",
+            "centimeter": "A metric unit of length, equal to one hundredth of a meter.",
+            "symmetry": "The quality of being made up of exactly similar parts facing each other.",
+            "voltammeter": "An instrument for measuring electric potential difference and current.",
+            "microscope": "An optical instrument used for viewing very small objects.",
+            "macroevolution": "Major evolutionary change over long periods of time.",
+            "megaphone": "A large, funnel-shaped device for amplifying the voice.",
+            "megalith": "A large stone that forms a prehistoric monument.",
+            "megatons": "A unit of explosive power equal to one million tons of TNT.",
+            "megalopolis": "A very large, heavily populated city or urban complex.",
+            "macroclimate": "The overall climate of a large geographical area.",
+            "minimal": "Of a minimum amount, quantity, or degree.",
+            "minimize": "Reduce to the smallest possible amount or degree.",
+            "minimum": "The least or smallest amount or quantity possible.",
+            "mini": "Denoting something that is small or miniature.",
+            "miniature": "Very small of its kind.",
+            "minuscule": "Extremely small; tiny.",
+            "minute": "Extremely small in size or duration.",
+            "minority": "The smaller number or part, especially a number that is less than half.",
+            "mission": "An important assignment given to a person or group.",
+            "transmit": "Cause something to pass on from one place to another.",
+            "transmission": "The action or process of transmitting something.",
+            "remit": "Cancel or refrain from exacting a debt or punishment.",
+            "missile": "An object which is forcibly propelled at a target.",
+            "submission": "The action of accepting or yielding to a superior force.",
+            "permit": "Give authorization or consent to someone.",
+            "emit": "Produce and discharge something (especially gas or radiation).",
+            "emissary": "A person sent on a special mission.",
+            "pathetic": "Arousing pity, especially through vulnerability or sadness.",
+            "pathology": "The science of the causes and effects of diseases.",
+            "apathy": "Lack of interest, enthusiasm, or concern.",
+            "antipathy": "A deep-seated feeling of dislike.",
+            "sympathy": "Feelings of pity and sorrow for someone else's misfortune.",
+            "telepathy": "The supposed communication of thoughts directly mind to mind.",
+            "empathy": "The ability to understand and share the feelings of another.",
+            "sociopath": "A person with a personality disorder manifesting in extreme antisocial behavior.",
+            "pedestrian": "A person walking along a road or in developed area.",
+            "pedal": "A foot-operated lever used to control a mechanism.",
+            "peddle": "Try to sell something by going from house to house.",
+            "peddler": "A person who goes from place to place selling small goods.",
+            "pedicure": "A cosmetic treatment of the feet and toenails.",
+            "pedometer": "An instrument for estimating distance traveled on foot.",
+            "philosopher": "A person who seeks wisdom or enlightenment.",
+            "philadelphia": "City of brotherly love (from Greek origins).",
+            "philanthropist": "A person who seeks to promote the welfare of others through donations.",
+            "philharmonic": "Devoted to music (chiefly used in names of orchestras).",
+            "philip": "Lover of horses (from Greek origins).",
+            "claustrophobia": "Extreme or irrational fear of confined places.",
+            "xenophobic": "Having or showing a dislike of or prejudice against people from other countries.",
+            "arachnophobia": "Extreme or irrational fear of spiders.",
+            "phonograph": "An early sound-reproducing machine using records.",
+            "microphone": "An instrument for converting sound waves into electrical energy.",
+            "symphony": "An elaborate musical composition for full orchestra.",
+            "phonogram": "A symbol representing a vocal sound.",
+            "phony": "Not genuine; fraudulent.",
+            "euphony": "The quality of being pleasing to the ear.",
+            "xylophone": "A musical instrument played by striking wooden bars with beaters.",
+            "photosynthesis": "The process by which green plants use sunlight to synthesize nutrients.",
+            "telephoto": "A lens producing a large image of a distant object.",
+            "photometer": "An instrument for measuring the intensity of light.",
+            "photosensitive": "Sensitive to light.",
+            "port": "A harbor town or city where ships load or unload.",
+            "transportation": "The action of transporting someone or something.",
+            "portable": "Able to be easily carried or moved.",
+            "portage": "The carrying of a boat or its cargo between navigable waters.",
+            "report": "Give a spoken or written account of something.",
+            "psychic": "Relating to or denoting faculties that are unaccountable by natural laws.",
+            "psychotropic": "Denoting drugs affecting a person's mental state.",
+            "psychologist": "An expert or specialist in psychology.",
+            "disrupt": "Interrupt an event, activity, or process by causing disturbance.",
+            "interrupt": "Stop the continuous progress of an activity.",
+            "rupture": "Break or burst suddenly.",
+            "corrupt": "Having or showing a willingness to act dishonestly.",
+            "respect": "A feeling of deep admiration for someone or something.",
+            "inspection": "Careful examination or scrutiny.",
+            "inspector": "An official who ensures that regulations are obeyed.",
+            "spectator": "A person who watches at a show, game, or event.",
+            "spectacles": "A pair of eyeglasses.",
+            "prospect": "The possibility or likelihood of some future event occurring.",
+            "periscope": "An apparatus used to see things that are otherwise out of sight.",
+            "kaleidoscope": "A constantly changing pattern or sequence of elements.",
+            "scribble": "Write or draw something carelessly or hurriedly.",
+            "manuscript": "A book, document, or piece of music written by hand.",
+            "scripture": "The sacred writings of Christianity or another religion.",
+            "prescription": "An instruction written by a medical practitioner.",
+            "solar": "Relating to or determined by the sun.",
+            "solar system": "The sun together with all the planets orbiting around it.",
+            "solstice": "Either of the two times in the year when the sun reaches its highest or lowest point.",
+            "solarium": "A room fitted with extensive glass to admit sunlight.",
+            "parasol": "A light umbrella used to give shade from the sun.",
+            "instruct": "Direct or command someone to do something.",
+            "instruction": "A direction or order.",
+            "construction": "The building or creation of something.",
+            "reconstruction": "The action of building something again after it has been damaged.",
+            "destruct": "Cause deliberate destruction to.",
+            "destruction": "The action or process of causing so much damage that it no longer exists.",
+            "infrastructure": "The basic physical and organizational structures needed for operation.",
+            "construe": "Interpret a word or action in a particular way.",
+            "instrument": "A tool or implement, especially one used for delicate work.",
+            "instrumental": "Serving as a means of pursuing an aim.",
+            "telethon": "A long television broadcast to raise money for charity.",
+            "terrarium": "A vivarium for smaller land animals or growing plants.",
+            "extraterrestrial": "Of or from outside the earth or its atmosphere.",
+            "mediterranean sea": "Sea almost enclosed by land (literally 'middle of the land').",
+            "subterranean": "Existing, occurring, or done under the earth's surface.",
+            "terrain": "A stretch of land, especially with regard to its physical features.",
+            "terra firma": "Dry land; solid ground.",
+            "reverse": "Move backward or turn inside out.",
+            "versatile": "Able to adapt or be adapted to many different functions or activities.",
+            "invert": "Put upside down or in the opposite position.",
+            "convert": "Cause to change in form, character, or function.",
+            "divert": "Cause someone or something to change course.",
+            "zoogeography": "The geographical distribution of animal species.",
+            "zootoxin": "A toxin or poison produced by an animal."
+        };
+
+        let activeTab = 'common-prefixes';
+        let searchQuery = '';
+        let bookmarks = JSON.parse(localStorage.getItem('lexicon_bookmarks') || '[]');
+        let currentFlashcardDeck = [];
+        let currentFlashcardIndex = 0;
+        let isCardFlipped = false;
+
+        let britishFemaleVoice = null;
+        let selectedVoiceName = localStorage.getItem('lexicon_voice_name') || '';
+
+        function getBritishFemaleVoice(voicesList) {
+            const voices = voicesList || (speechSynthesis ? speechSynthesis.getVoices() : []);
+            if (!voices || voices.length === 0) return null;
+
+            const isMale = (name) => {
+                const n = name.toLowerCase();
+                return n.includes('male') || n.includes('george') || n.includes('david') || 
+                       n.includes('mark') || n.includes('james') || n.includes('richard') || 
+                       n.includes('stefan') || n.includes('guy') || n.includes('ryan') || 
+                       n.includes('sean') || n.includes('oliver') || n.includes('daniel') ||
+                       n.includes('brian') || n.includes('arthur') || n.includes('liam');
+            };
+
+            const isFemaleHint = (name) => {
+                const n = name.toLowerCase();
+                return n.includes('female') || n.includes('sonia') || n.includes('hazel') || 
+                       n.includes('maisie') || n.includes('mia') || n.includes('libby') || 
+                       n.includes('victoria') || n.includes('zira') || n.includes('samantha') || 
+                       n.includes('karen') || n.includes('fiona') || n.includes('moira') || 
+                       n.includes('veena') || n.includes('tessa') || n.includes('catherine') ||
+                       n.includes('serena') || n.includes('stephanie') || n.includes('emily');
+            };
+
+            // 1. Match for "Google UK English Female"
+            let match = voices.find(v => v.name.toLowerCase().includes('google') && v.name.toLowerCase().includes('uk') && v.name.toLowerCase().includes('female'));
+            if (match) return match;
+
+            // 2. Any Google UK voice (en-GB) that is NOT male
+            match = voices.find(v => v.name.toLowerCase().includes('google') && (v.lang === 'en-GB' || v.lang === 'en_GB') && !isMale(v.name));
+            if (match) return match;
+
+            // 3. Any British voice (en-GB) with explicit female hint
+            match = voices.find(v => (v.lang === 'en-GB' || v.lang === 'en_GB') && isFemaleHint(v.name));
+            if (match) return match;
+
+            // 4. Any British voice (en-GB) that is NOT male
+            match = voices.find(v => (v.lang === 'en-GB' || v.lang === 'en_GB') && !isMale(v.name));
+            if (match) return match;
+
+            // 5. Any English voice with female hint
+            match = voices.find(v => v.lang.startsWith('en') && isFemaleHint(v.name));
+            if (match) return match;
+
+            // 6. Any English voice that is NOT male
+            match = voices.find(v => v.lang.startsWith('en') && !isMale(v.name));
+            if (match) return match;
+
+            // 7. Fallback to any en-GB voice
+            match = voices.find(v => v.lang === 'en-GB' || v.lang === 'en_GB');
+            if (match) return match;
+
+            return voices[0] || null;
+        }
+
+        function populateVoiceList() {
+            if (!('speechSynthesis' in window)) return;
+            const voices = speechSynthesis.getVoices();
+            if (!voices || voices.length === 0) return;
+
+            const voiceSelects = [
+                document.getElementById('voiceSelect'),
+                document.getElementById('voiceSelectMobile')
+            ].filter(Boolean);
+
+            let currentVoiceObj = voices.find(v => v.name === selectedVoiceName);
+            if (!currentVoiceObj) {
+                currentVoiceObj = getBritishFemaleVoice(voices);
+                if (currentVoiceObj) {
+                    selectedVoiceName = currentVoiceObj.name;
+                }
+            }
+
+            britishFemaleVoice = currentVoiceObj;
+
+            const englishVoices = voices.filter(v => v.lang.startsWith('en'));
+            const optionsHTML = englishVoices.map(v => {
+                const isSelected = v.name === selectedVoiceName ? 'selected' : '';
+                const isUK = v.lang.includes('GB') || v.lang.includes('gb');
+                const badge = isUK ? '🇬🇧' : '🌐';
+                return `<option value="${v.name.replace(/"/g, '&quot;')}" ${isSelected}>${badge} ${v.name}</option>`;
+            }).join('');
+
+            voiceSelects.forEach(select => {
+                select.innerHTML = optionsHTML;
+                select.value = selectedVoiceName;
+            });
+        }
+
+        function initVoices() {
+            if (!('speechSynthesis' in window)) return;
+            
+            populateVoiceList();
+            if (speechSynthesis.onvoiceschanged !== undefined) {
+                speechSynthesis.onvoiceschanged = populateVoiceList;
+            }
+
+            const onVoiceChange = (e) => {
+                selectedVoiceName = e.target.value;
+                localStorage.setItem('lexicon_voice_name', selectedVoiceName);
+                const voices = speechSynthesis.getVoices();
+                britishFemaleVoice = voices.find(v => v.name === selectedVoiceName) || getBritishFemaleVoice(voices);
+                speakWord("Voice updated");
+            };
+
+            const vsDesktop = document.getElementById('voiceSelect');
+            const vsMobile = document.getElementById('voiceSelectMobile');
+            if (vsDesktop) vsDesktop.addEventListener('change', onVoiceChange);
+            if (vsMobile) vsMobile.addEventListener('change', onVoiceChange);
+        }
+
+        function speakWord(text, btnElement = null) {
+            if (!('speechSynthesis' in window)) return;
+            
+            speechSynthesis.cancel(); // Cancel any current speech
+
+            const voices = speechSynthesis.getVoices();
+            if (voices && voices.length > 0) {
+                let targetVoice = null;
+                if (selectedVoiceName) {
+                    targetVoice = voices.find(v => v.name === selectedVoiceName);
+                }
+                if (!targetVoice) {
+                    targetVoice = getBritishFemaleVoice(voices);
+                    if (targetVoice) {
+                        selectedVoiceName = targetVoice.name;
+                    }
+                }
+                if (targetVoice) {
+                    britishFemaleVoice = targetVoice;
+                }
+            }
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            if (britishFemaleVoice) {
+                utterance.voice = britishFemaleVoice;
+                utterance.lang = britishFemaleVoice.lang || 'en-GB';
+            } else {
+                utterance.lang = 'en-GB';
+            }
+            utterance.rate = 0.9;
+            utterance.pitch = 1.05;
+
+            if (btnElement) {
+                const icon = btnElement.querySelector('i');
+                if (icon) icon.classList.add('text-brand-500', 'animate-pulse');
+                utterance.onend = () => {
+                    if (icon) icon.classList.remove('text-brand-500', 'animate-pulse');
+                };
+                utterance.onerror = () => {
+                    if (icon) icon.classList.remove('text-brand-500', 'animate-pulse');
+                };
+            }
+
+            speechSynthesis.speak(utterance);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initVoices();
+            // Re-render icons
+            lucide.createIcons();
+
+            // Set Initial Counts
+            updateTabCounts();
+            
+            // Build Grids & Tables
+            renderCommonPrefixes();
+            renderOtherPrefixes();
+            renderNumberPrefixes();
+            renderSuffixes();
+            renderRoots();
+            renderBookmarks();
+
+            // Setup Event Handlers
+            setupNavigation();
+            setupSearch();
+            setupFilters();
+            setupThemeToggle();
+            setupFlashcards();
+            setupQuiz();
+
+            // Modal Handlers
+            document.getElementById('closeModal').addEventListener('click', closeModal);
+            document.getElementById('wordModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('wordModal')) closeModal();
+            });
+        });
+
+        function setupNavigation() {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const tabId = btn.getAttribute('data-tab');
+                    switchTab(tabId);
+                });
+            });
+        }
+
+        function switchTab(tabId) {
+            activeTab = tabId;
+            
+            // UI Button states
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                if (btn.getAttribute('data-tab') === tabId) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            // Hide all tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+
+            // Show current tab
+            const targetContent = document.getElementById(`tab-${tabId}`);
+            if (targetContent) targetContent.classList.remove('hidden');
+
+            // Update Tab Headers & Filter Selectors Visibility
+            const titleEl = document.getElementById('currentTabTitle');
+            const descEl = document.getElementById('currentTabDesc');
+            const originFilterWrapper = document.getElementById('originFilterWrapper');
+            const posFilterWrapper = document.getElementById('posFilterWrapper');
+
+            originFilterWrapper.classList.add('hidden');
+            posFilterWrapper.classList.add('hidden');
+
+            switch (tabId) {
+                case 'common-prefixes':
+                    titleEl.innerText = 'Common Prefixes';
+                    descEl.innerText = 'Frequently used prefixes that modify or negate root words.';
+                    break;
+                case 'other-prefixes':
+                    titleEl.innerText = 'Extended Prefixes';
+                    descEl.innerText = 'Secondary list of specialized prefixes and origins.';
+                    break;
+                case 'number-prefixes':
+                    titleEl.innerText = 'Common Number Prefixes';
+                    descEl.innerText = 'Comparative Greek vs. Latin prefixes representing quantitative values.';
+                    break;
+                case 'suffixes':
+                    titleEl.innerText = 'Common Suffixes';
+                    descEl.innerText = 'Word endings that indicate part of speech or state of being.';
+                    posFilterWrapper.classList.remove('hidden');
+                    break;
+                case 'roots':
+                    titleEl.innerText = 'Greek and Latin Roots';
+                    descEl.innerText = 'Core word stems formed from classical Greek and Latin languages.';
+                    originFilterWrapper.classList.remove('hidden');
+                    break;
+                case 'flashcards':
+                    titleEl.innerText = 'Interactive Study & Flashcards';
+                    descEl.innerText = 'Test your memory and reinforce affix definitions.';
+                    break;
+                case 'bookmarks':
+                    titleEl.innerText = 'Saved Bookmarks';
+                    descEl.innerText = 'Your custom study list of saved affixes and roots.';
+                    break;
+            }
+
+            // Apply search or filter updates
+            applySearchFilter();
+        }
+
+        function toggleBookmark(id) {
+            const index = bookmarks.indexOf(id);
+            if (index > -1) {
+                bookmarks.splice(index, 1);
+            } else {
+                bookmarks.push(id);
+            }
+            localStorage.setItem('lexicon_bookmarks', JSON.stringify(bookmarks));
+            updateBookmarkButtons();
+            updateTabCounts();
+            renderBookmarks();
+        }
+
+        function updateBookmarkButtons() {
+            document.querySelectorAll('.bookmark-btn').forEach(btn => {
+                const id = btn.getAttribute('data-id');
+                const isBookmarked = bookmarks.includes(id);
+                if (isBookmarked) {
+                    btn.classList.add('text-amber-500', 'fill-amber-500');
+                    btn.classList.remove('text-slate-400');
+                } else {
+                    btn.classList.remove('text-amber-500', 'fill-amber-500');
+                    btn.classList.add('text-slate-400');
+                }
+            });
+            document.getElementById('bookmark-count').innerText = bookmarks.length;
+        }
+
+        function updateTabCounts() {
+            document.getElementById('count-common-prefixes').innerText = AFFIX_DATA.commonPrefixes.length;
+            document.getElementById('count-other-prefixes').innerText = AFFIX_DATA.otherPrefixes.length;
+            document.getElementById('count-number-prefixes').innerText = AFFIX_DATA.numberPrefixes.length;
+            document.getElementById('count-suffixes').innerText = AFFIX_DATA.suffixes.length;
+            document.getElementById('count-roots').innerText = AFFIX_DATA.roots.length;
+            document.getElementById('bookmark-count').innerText = bookmarks.length;
+        }
+
+        function createCardHTML(item, badgeText, badgeColorClass) {
+            const isBookmarked = bookmarks.includes(item.id);
+            const examplesHTML = item.examples.map(ex => {
+                const def = WORD_DEFINITIONS[ex.toLowerCase()] || 'Click to view definition and analysis';
+                const safeDef = def.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                return `<button onclick="openWordModal('${item.term}', '${item.meaning.replace(/'/g, "\\'")}', '${ex}')" title="${ex}: ${safeDef}" class="px-2.5 py-1 text-xs font-medium bg-slate-100 hover:bg-brand-50 hover:text-brand-600 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg transition-colors flex items-center gap-1 group">
+                    <span>${ex}</span>
+                    <i data-lucide="sparkles" class="w-3 h-3 opacity-0 group-hover:opacity-100 text-brand-500"></i>
+                </button>`;
+            }).join('');
+
+            return `
+                <div class="affix-card bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between" data-id="${item.id}" data-term="${item.term.toLowerCase()}" data-meaning="${item.meaning.toLowerCase()}" data-examples="${item.examples.join(' ').toLowerCase()}" data-origin="${item.origin || ''}" data-pos="${item.pos || ''}">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full ${badgeColorClass}">
+                                ${badgeText}
+                            </span>
+                            <button onclick="toggleBookmark('${item.id}')" data-id="${item.id}" class="bookmark-btn p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors ${isBookmarked ? 'text-amber-500 fill-amber-500' : 'text-slate-400'}">
+                                <i data-lucide="bookmark" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <div class="flex items-center justify-between gap-2 mb-1">
+                            <h3 class="text-2xl font-bold font-display text-slate-900 dark:text-white tracking-tight">
+                                ${item.term}
+                            </h3>
+                            <button onclick="event.stopPropagation(); speakWord('${item.term.replace(/'/g, "\\'")}', this)" class="p-1.5 text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Listen with British Female Voice">
+                                <i data-lucide="volume-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <p class="text-sm font-medium text-slate-600 dark:text-slate-300 mb-4">
+                            ${item.meaning}
+                        </p>
+                    </div>
+
+                    <div>
+                        <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">Examples</div>
+                        <div class="flex flex-wrap gap-1.5">
+                            ${examplesHTML}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCommonPrefixes() {
+            const container = document.getElementById('grid-common-prefixes');
+            container.innerHTML = AFFIX_DATA.commonPrefixes.map(item => 
+                createCardHTML(item, 'Prefix', 'bg-sky-100 dark:bg-sky-950/60 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800')
+            ).join('');
+        }
+
+        function renderOtherPrefixes() {
+            const container = document.getElementById('grid-other-prefixes');
+            container.innerHTML = AFFIX_DATA.otherPrefixes.map(item => 
+                createCardHTML(item, 'Prefix', 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800')
+            ).join('');
+        }
+
+        function renderNumberPrefixes() {
+            const container = document.getElementById('table-number-prefixes');
+            container.innerHTML = AFFIX_DATA.numberPrefixes.map(item => {
+                const isBookmarked = bookmarks.includes(item.id);
+                const examplesHTML = item.examples.map(ex => {
+                    const def = WORD_DEFINITIONS[ex.toLowerCase()] || 'Click to view definition and analysis';
+                    const safeDef = def.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                    return `<button onclick="openWordModal('Greek: ${item.greek} / Latin: ${item.latin}', 'Quantity: ${item.value}', '${ex}')" title="${ex}: ${safeDef}" class="inline-block px-2 py-0.5 text-xs bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded mr-1 mb-1 font-medium transition-colors">
+                        ${ex}
+                    </button>`;
+                }).join('');
+
+                return `
+                    <tr class="affix-row hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors" data-id="${item.id}" data-term="${item.greek.toLowerCase()} ${item.latin.toLowerCase()}" data-meaning="${item.value.toLowerCase()}" data-examples="${item.examples.join(' ').toLowerCase()}">
+                        <td class="p-4 font-bold text-slate-900 dark:text-white">
+                            <span class="px-2.5 py-1 bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 rounded-lg text-xs font-bold">
+                                ${item.value}
+                            </span>
+                        </td>
+                        <td class="p-4 font-mono font-bold text-sky-600 dark:text-sky-400">${item.greek}</td>
+                        <td class="p-4 font-mono font-bold text-purple-600 dark:text-purple-400">${item.latin}</td>
+                        <td class="p-4 max-w-md">${examplesHTML}</td>
+                        <td class="p-4 text-right">
+                            <button onclick="toggleBookmark('${item.id}')" data-id="${item.id}" class="bookmark-btn p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors ${isBookmarked ? 'text-amber-500 fill-amber-500' : 'text-slate-400'}">
+                                <i data-lucide="bookmark" class="w-4 h-4"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderSuffixes() {
+            const container = document.getElementById('grid-suffixes');
+            container.innerHTML = AFFIX_DATA.suffixes.map(item => 
+                createCardHTML(item, `${item.pos} Suffix`, 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800')
+            ).join('');
+        }
+
+        function renderRoots() {
+            const container = document.getElementById('grid-roots');
+            container.innerHTML = AFFIX_DATA.roots.map(item => 
+                createCardHTML(item, `${item.origin} Root`, item.origin === 'Greek' ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800' : 'bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800')
+            ).join('');
+        }
+
+        function renderBookmarks() {
+            const container = document.getElementById('grid-bookmarks');
+            const emptyEl = document.getElementById('bookmarksEmpty');
+
+            // Find all bookmarked items
+            const allItems = [
+                ...AFFIX_DATA.commonPrefixes,
+                ...AFFIX_DATA.otherPrefixes,
+                ...AFFIX_DATA.suffixes,
+                ...AFFIX_DATA.roots
+            ];
+
+            const bookmarkedItems = allItems.filter(item => bookmarks.includes(item.id));
+
+            if (bookmarkedItems.length === 0) {
+                emptyEl.classList.remove('hidden');
+                container.innerHTML = '';
+            } else {
+                emptyEl.classList.add('hidden');
+                container.innerHTML = bookmarkedItems.map(item => 
+                    createCardHTML(item, 'Saved', 'bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800')
+                ).join('');
+            }
+            lucide.createIcons();
+        }
+
+        function setupSearch() {
+            const input = document.getElementById('searchInput');
+            const clearBtn = document.getElementById('clearSearch');
+            const resetBtn = document.getElementById('resetSearchBtn');
+
+            input.addEventListener('input', (e) => {
+                searchQuery = e.target.value.trim().toLowerCase();
+                if (searchQuery.length > 0) {
+                    clearBtn.classList.remove('hidden');
+                } else {
+                    clearBtn.classList.add('hidden');
+                }
+                applySearchFilter();
+            });
+
+            clearBtn.addEventListener('click', () => {
+                input.value = '';
+                searchQuery = '';
+                clearBtn.classList.add('hidden');
+                applySearchFilter();
+            });
+
+            resetBtn.addEventListener('click', () => {
+                input.value = '';
+                searchQuery = '';
+                clearBtn.classList.add('hidden');
+                applySearchFilter();
+            });
+        }
+
+        function setupFilters() {
+            document.getElementById('originFilter').addEventListener('change', applySearchFilter);
+            document.getElementById('posFilter').addEventListener('change', applySearchFilter);
+        }
+
+        function applySearchFilter() {
+            const searchAlert = document.getElementById('searchAlert');
+            const searchQueryText = document.getElementById('searchQueryText');
+            const noResults = document.getElementById('noResults');
+
+            if (searchQuery) {
+                searchAlert.classList.remove('hidden');
+                searchQueryText.innerText = searchQuery;
+            } else {
+                searchAlert.classList.add('hidden');
+            }
+
+            let visibleCount = 0;
+
+            if (activeTab === 'number-prefixes') {
+                // Table rows
+                const rows = document.querySelectorAll('#table-number-prefixes .affix-row');
+                rows.forEach(row => {
+                    const term = row.getAttribute('data-term');
+                    const meaning = row.getAttribute('data-meaning');
+                    const examples = row.getAttribute('data-examples');
+
+                    const matches = !searchQuery || term.includes(searchQuery) || meaning.includes(searchQuery) || examples.includes(searchQuery);
+
+                    if (matches) {
+                        row.classList.remove('hidden');
+                        visibleCount++;
+                    } else {
+                        row.classList.add('hidden');
+                    }
+                });
+            } else if (activeTab === 'bookmarks') {
+                const cards = document.querySelectorAll('#grid-bookmarks .affix-card');
+                cards.forEach(card => {
+                    const term = card.getAttribute('data-term');
+                    const meaning = card.getAttribute('data-meaning');
+                    const examples = card.getAttribute('data-examples');
+
+                    const matches = !searchQuery || term.includes(searchQuery) || meaning.includes(searchQuery) || examples.includes(searchQuery);
+
+                    if (matches) {
+                        card.classList.remove('hidden');
+                        visibleCount++;
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            } else if (activeTab !== 'flashcards') {
+                // Grid cards
+                const containerId = `grid-${activeTab}`;
+                const cards = document.querySelectorAll(`#${containerId} .affix-card`);
+                const originVal = document.getElementById('originFilter').value;
+                const posVal = document.getElementById('posFilter').value;
+
+                cards.forEach(card => {
+                    const term = card.getAttribute('data-term');
+                    const meaning = card.getAttribute('data-meaning');
+                    const examples = card.getAttribute('data-examples');
+                    const origin = card.getAttribute('data-origin');
+                    const pos = card.getAttribute('data-pos');
+
+                    const matchesSearch = !searchQuery || term.includes(searchQuery) || meaning.includes(searchQuery) || examples.includes(searchQuery);
+                    const matchesOrigin = originVal === 'all' || origin === originVal;
+                    const matchesPos = posVal === 'all' || pos === posVal;
+
+                    if (matchesSearch && matchesOrigin && matchesPos) {
+                        card.classList.remove('hidden');
+                        visibleCount++;
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            }
+
+            document.getElementById('visibleCount').innerText = visibleCount;
+
+            if (visibleCount === 0 && activeTab !== 'flashcards') {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
+        }
+
+        async function openWordModal(affixTerm, affixMeaning, word) {
+            const modal = document.getElementById('wordModal');
+            const modalWord = document.getElementById('modalWord');
+            const modalBreakdown = document.getElementById('modalBreakdown');
+            const modalAffix = document.getElementById('modalAffix');
+            const modalMeaning = document.getElementById('modalMeaning');
+            const modalWordDef = document.getElementById('modalWordDefinition');
+            const audioBtn = document.getElementById('modalAudioBtn');
+
+            modalWord.innerText = word;
+            modalAffix.innerText = `${affixTerm}`;
+            modalMeaning.innerText = affixMeaning;
+
+            const lowerWord = word.trim().toLowerCase();
+            const localDef = WORD_DEFINITIONS[lowerWord];
+
+            if (localDef) {
+                modalWordDef.innerText = localDef;
+            } else {
+                modalWordDef.innerText = 'Searching dictionary definition...';
+                try {
+                    const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(lowerWord)}`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        const firstMeaning = data[0]?.meanings[0];
+                        const defText = firstMeaning?.definitions[0]?.definition;
+                        const pos = firstMeaning?.partOfSpeech;
+                        if (defText) {
+                            modalWordDef.innerText = pos ? `(${pos}) ${defText}` : defText;
+                        } else {
+                            modalWordDef.innerText = 'Definition not found.';
+                        }
+                    } else {
+                        modalWordDef.innerText = 'Definition unavailable.';
+                    }
+                } catch (e) {
+                    modalWordDef.innerText = 'Definition unavailable.';
+                }
+            }
+
+            // Simple visual breakdown generator
+            const cleanAffix = affixTerm.replace(/[-,\s]/g, '').toLowerCase();
+
+            let breakdownHTML = '';
+            if (lowerWord.startsWith(cleanAffix.substring(0, 3))) {
+                const prefixPart = word.substring(0, cleanAffix.length);
+                const rootPart = word.substring(cleanAffix.length);
+                breakdownHTML = `<span class="bg-brand-100 dark:bg-brand-900/80 text-brand-700 dark:text-brand-300 px-2 py-0.5 rounded font-bold">${prefixPart}</span><span class="text-slate-500 font-semibold">${rootPart}</span>`;
+            } else if (lowerWord.endsWith(cleanAffix.substring(0, 3))) {
+                const rootPart = word.substring(0, word.length - cleanAffix.length);
+                const suffixPart = word.substring(word.length - cleanAffix.length);
+                breakdownHTML = `<span class="text-slate-500 font-semibold">${rootPart}</span><span class="bg-emerald-100 dark:bg-emerald-900/80 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded font-bold">${suffixPart}</span>`;
+            } else {
+                breakdownHTML = `<span class="bg-purple-100 dark:bg-purple-900/80 text-purple-700 dark:text-purple-300 px-2 py-0.5 rounded font-bold">${word}</span>`;
+            }
+
+            modalBreakdown.innerHTML = `<span class="text-xs text-slate-400 font-sans font-normal">Structure:</span> ${breakdownHTML}`;
+
+            audioBtn.onclick = () => speakWord(word);
+
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeModal() {
+            document.getElementById('wordModal').classList.add('hidden');
+        }
+
+        function setupFlashcards() {
+            const container = document.getElementById('flashcardContainer');
+            const inner = document.getElementById('flashcardInner');
+            const deckSelect = document.getElementById('flashcardDeck');
+            const shuffleBtn = document.getElementById('shuffleDeckBtn');
+            const prevBtn = document.getElementById('prevCardBtn');
+            const nextBtn = document.getElementById('nextCardBtn');
+            const speakBtn = document.getElementById('speakCardBtn');
+
+            // Flip card on click
+            container.addEventListener('click', (e) => {
+                // Prevent flip if clicking speak button inside card
+                if (e.target.closest('#speakCardBtn')) return;
+                isCardFlipped = !isCardFlipped;
+                if (isCardFlipped) {
+                    inner.classList.add('rotate-y-180');
+                } else {
+                    inner.classList.remove('rotate-y-180');
+                }
+            });
+
+            deckSelect.addEventListener('change', buildFlashcardDeck);
+            shuffleBtn.addEventListener('click', () => {
+                shuffleArray(currentFlashcardDeck);
+                currentFlashcardIndex = 0;
+                renderFlashcard();
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentFlashcardIndex > 0) {
+                    currentFlashcardIndex--;
+                    renderFlashcard();
+                }
+            });
+
+            nextBtn.addEventListener('click', () => {
+                if (currentFlashcardIndex < currentFlashcardDeck.length - 1) {
+                    currentFlashcardIndex++;
+                    renderFlashcard();
+                }
+            });
+
+            speakBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const card = currentFlashcardDeck[currentFlashcardIndex];
+                if (card) speakWord(card.term, speakBtn);
+            });
+
+            buildFlashcardDeck();
+        }
+
+        let quizScore = 0;
+        let quizStreak = 0;
+        let currentQuizQuestion = null;
+
+        function setupQuiz() {
+            const flashcardSec = document.getElementById('flashcardSection');
+            const quizSec = document.getElementById('quizSection');
+            const modeFlashcardsBtn = document.getElementById('modeFlashcardsBtn');
+            const modeQuizBtn = document.getElementById('modeQuizBtn');
+            const nextQuizBtn = document.getElementById('nextQuizBtn');
+
+            modeFlashcardsBtn.addEventListener('click', () => {
+                flashcardSec.classList.remove('hidden');
+                quizSec.classList.add('hidden');
+                modeFlashcardsBtn.className = "px-4 py-2 text-xs sm:text-sm font-semibold rounded-xl bg-white dark:bg-slate-900 text-brand-600 dark:text-brand-400 shadow-sm transition-all flex items-center gap-2";
+                modeQuizBtn.className = "px-4 py-2 text-xs sm:text-sm font-semibold rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all flex items-center gap-2";
+            });
+
+            modeQuizBtn.addEventListener('click', () => {
+                flashcardSec.classList.add('hidden');
+                quizSec.classList.remove('hidden');
+                modeQuizBtn.className = "px-4 py-2 text-xs sm:text-sm font-semibold rounded-xl bg-white dark:bg-slate-900 text-brand-600 dark:text-brand-400 shadow-sm transition-all flex items-center gap-2";
+                modeFlashcardsBtn.className = "px-4 py-2 text-xs sm:text-sm font-semibold rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all flex items-center gap-2";
+                if (!currentQuizQuestion) loadNextQuizQuestion();
+            });
+
+            nextQuizBtn.addEventListener('click', loadNextQuizQuestion);
+        }
+
+        function loadNextQuizQuestion() {
+            const allItems = [
+                ...AFFIX_DATA.commonPrefixes.map(i => ({ ...i, type: 'Prefix' })),
+                ...AFFIX_DATA.otherPrefixes.map(i => ({ ...i, type: 'Prefix' })),
+                ...AFFIX_DATA.suffixes.map(i => ({ ...i, type: 'Suffix' })),
+                ...AFFIX_DATA.roots.map(i => ({ ...i, type: 'Root' }))
+            ];
+
+            const target = allItems[Math.floor(Math.random() * allItems.length)];
+            
+            // Pick 3 distractors
+            const distractors = allItems
+                .filter(i => i.id !== target.id && i.meaning !== target.meaning)
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 3);
+
+            const choices = [target, ...distractors].sort(() => 0.5 - Math.random());
+            currentQuizQuestion = { target, choices };
+
+            document.getElementById('quizCategoryTag').innerText = target.type;
+            document.getElementById('quizQuestionTerm').innerText = target.term;
+            
+            const feedbackEl = document.getElementById('quizFeedback');
+            feedbackEl.classList.add('hidden');
+            document.getElementById('nextQuizBtn').classList.add('hidden');
+
+            const optionsContainer = document.getElementById('quizOptions');
+            optionsContainer.innerHTML = choices.map(choice => `
+                <button onclick="handleQuizAnswer('${choice.id}')" class="quiz-option-btn w-full p-3.5 text-xs sm:text-sm font-medium text-left bg-slate-50 dark:bg-slate-800/80 hover:bg-brand-50 dark:hover:bg-brand-950/60 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-xl transition-all">
+                    ${choice.meaning}
+                </button>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        function handleQuizAnswer(selectedId) {
+            const { target } = currentQuizQuestion;
+            const optionBtns = document.querySelectorAll('.quiz-option-btn');
+            optionBtns.forEach(btn => btn.disabled = true);
+
+            const feedbackEl = document.getElementById('quizFeedback');
+            feedbackEl.classList.remove('hidden');
+
+            if (selectedId === target.id) {
+                quizScore += 10;
+                quizStreak += 1;
+                feedbackEl.className = 'p-3 rounded-xl text-xs font-semibold mb-4 text-center bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800';
+                feedbackEl.innerHTML = `✨ Correct! <strong>${target.term}</strong> means "${target.meaning}". (+10 pts)`;
+                speakWord(`Correct! ${target.term}`);
+            } else {
+                quizStreak = 0;
+                feedbackEl.className = 'p-3 rounded-xl text-xs font-semibold mb-4 text-center bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-300 dark:border-rose-800';
+                feedbackEl.innerHTML = `❌ Not quite! <strong>${target.term}</strong> means "${target.meaning}".`;
+            }
+
+            document.getElementById('quizScore').innerText = quizScore;
+            document.getElementById('quizStreak').innerText = `🔥 ${quizStreak}`;
+            document.getElementById('nextQuizBtn').classList.remove('hidden');
+        }
+
+        function buildFlashcardDeck() {
+            const deckType = document.getElementById('flashcardDeck').value;
+            let items = [];
+
+            if (deckType === 'prefixes' || deckType === 'all') {
+                items.push(...AFFIX_DATA.commonPrefixes.map(i => ({ ...i, type: 'Prefix' })));
+                items.push(...AFFIX_DATA.otherPrefixes.map(i => ({ ...i, type: 'Prefix' })));
+            }
+            if (deckType === 'suffixes' || deckType === 'all') {
+                items.push(...AFFIX_DATA.suffixes.map(i => ({ ...i, type: 'Suffix' })));
+            }
+            if (deckType === 'roots' || deckType === 'all') {
+                items.push(...AFFIX_DATA.roots.map(i => ({ ...i, type: 'Root' })));
+            }
+
+            currentFlashcardDeck = items;
+            shuffleArray(currentFlashcardDeck);
+            currentFlashcardIndex = 0;
+            renderFlashcard();
+        }
+
+        function renderFlashcard() {
+            const inner = document.getElementById('flashcardInner');
+            isCardFlipped = false;
+            inner.classList.remove('rotate-y-180');
+
+            if (currentFlashcardDeck.length === 0) return;
+
+            const card = currentFlashcardDeck[currentFlashcardIndex];
+
+            document.getElementById('cardCurrentIndex').innerText = currentFlashcardIndex + 1;
+            document.getElementById('cardTotalCount').innerText = currentFlashcardDeck.length;
+            document.getElementById('cardCategoryTag').innerText = card.type || 'Affix';
+            document.getElementById('cardFrontText').innerText = card.term;
+            document.getElementById('cardSubTag').innerText = card.origin ? `${card.origin} Origin` : (card.pos ? `${card.pos} Suffix` : 'Affix');
+
+            document.getElementById('cardBackMeaning').innerText = card.meaning;
+            
+            const examplesContainer = document.getElementById('cardBackExamples');
+            examplesContainer.innerHTML = card.examples.map(ex => 
+                `<span class="px-2.5 py-1 bg-white/10 rounded-lg font-mono text-xs text-brand-100">${ex}</span>`
+            ).join('');
+
+            document.getElementById('cardBackOrigin').innerText = card.origin ? `Origin: ${card.origin}` : 'Standard English Morphology';
+            lucide.createIcons();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function setupThemeToggle() {
+            const themeToggle = document.getElementById('themeToggle');
+            const themeToggleMobile = document.getElementById('themeToggleMobile');
+
+            const toggle = () => {
+                document.documentElement.classList.toggle('dark');
+                const isDark = document.documentElement.classList.contains('dark');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            };
+
+            if (themeToggle) themeToggle.addEventListener('click', toggle);
+            if (themeToggleMobile) themeToggleMobile.addEventListener('click', toggle);
+
+            // System default or stored theme check
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+    </script>
+    <style>
+        .tab-btn {
+            display: inline-flex;
+            items-center: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.875rem;
+            border-radius: 0.75rem;
+            color: #64748b;
+            white-space: nowrap;
+            transition: all 0.15s ease;
+            font-weight: 600;
+        }
+        .dark .tab-btn {
+            color: #94a3b8;
+        }
+        .tab-btn:hover {
+            color: #0284c7;
+            background-color: #f1f5f9;
+        }
+        .dark .tab-btn:hover {
+            color: #38bdf8;
+            background-color: #1e293b;
+        }
+        .tab-btn.active {
+            color: #0284c7;
+            background-color: #e0effe;
+        }
+        .dark .tab-btn.active {
+            color: #38bdf8;
+            background-color: #0c4a6e;
+        }
+        .tab-badge {
+            font-size: 0.7rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: 9999px;
+            background-color: rgba(203, 213, 225, 0.5);
+            color: #475569;
+        }
+        .dark .tab-badge {
+            background-color: rgba(51, 65, 85, 0.8);
+            color: #cbd5e1;
+        }
+        .tab-btn.active .tab-badge {
+            background-color: #0284c7;
+            color: #ffffff;
+        }
+        .dark .tab-btn.active .tab-badge {
+            background-color: #38bdf8;
+            color: #0f172a;
+        }
+    </style>
+</body>
+</html>
