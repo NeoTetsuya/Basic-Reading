@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Practice — Day 2: Note & Table Completion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --app-font-size: 17px;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            overscroll-behavior: none;
+            background-color: #f8fafc;
+        }
+        .ielts-container {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            height: 100vh;
+        }
+        .content-panes {
+            display: grid;
+            grid-template-columns: 1fr 5px 1fr;
+            overflow: hidden;
+        }
+        .pane {
+            overflow-y: auto;
+            padding: 2rem 2.5rem;
+            font-size: var(--app-font-size);
+            scroll-behavior: smooth;
+        }
+        #left-pane {
+            background-color: #ffffff;
+        }
+        #right-pane {
+            background-color: #f8fafc;
+        }
+        .splitter {
+            background-color: #cbd5e1;
+            cursor: col-resize;
+            z-index: 10;
+            transition: background-color 0.2s;
+        }
+        .splitter:hover, .splitter:active {
+            background-color: #0284c7;
+        }
+        
+        /* Reading Passage Typography - Left Aligned for legibility */
+        .reading-passage {
+            font-family: 'Merriweather', serif;
+            line-height: 1.95;
+            color: #334155;
+            text-align: left;
+            margin-bottom: 2rem;
+            max-width: 820px;
+            margin: 0 auto;
+        }
+        .reading-passage p {
+            margin-bottom: 1.5rem;
+            text-indent: 1.5rem;
+        }
+        .reading-passage h3 {
+            font-family: 'Inter', sans-serif;
+            color: #0f172a;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            font-size: 1.55em;
+            text-align: center;
+            text-indent: 0;
+            letter-spacing: -0.01em;
+        }
+        .paragraph-label {
+            float: left;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 1.05em;
+            margin-right: 0.5rem;
+            color: #0284c7;
+            text-indent: 0;
+            background: #e0f2fe;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        /* Question & Input Styling */
+        .q-card {
+            padding: 1.25rem;
+            border-radius: 0.75rem;
+            transition: all 0.2s;
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+        }
+        .text-input {
+            border: 2px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 5px 10px;
+            font-weight: 600;
+            color: #0f172a;
+            transition: all 0.2s;
+            background-color: #ffffff;
+        }
+        .text-input:focus {
+            outline: none;
+            border-color: #0284c7;
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+        .inline-input {
+            display: inline-block;
+            margin: 0 4px;
+            width: 150px;
+            vertical-align: middle;
+        }
+
+        /* Interactive Vocabulary Terms */
+        .vocab-word {
+            color: #0284c7;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 2px dotted #38bdf8;
+            transition: all 0.2s ease-in-out;
+            padding: 0 2px;
+        }
+        .vocab-word:hover {
+            background-color: #e0f2fe;
+            border-bottom-style: solid;
+            border-radius: 2px;
+        }
+
+        /* Highlighting Tool */
+        .highlight-tooltip {
+            position: absolute;
+            background-color: #0f172a;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            z-index: 100;
+            cursor: pointer;
+            display: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+        }
+        mark {
+            background-color: #fef08a;
+            border-radius: 3px;
+            padding: 2px 0;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        mark:hover {
+            background-color: #fca5a5;
+            color: #7f1d1d;
+        }
+
+        /* Navigation Tab Buttons */
+        .tab-btn {
+            transition: all 0.2s;
+        }
+        .tab-btn.active {
+            background-color: #0284c7;
+            color: #ffffff;
+            border-color: #0284c7;
+            box-shadow: 0 2px 4px rgba(2, 132, 199, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .content-panes {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr 5px 1fr;
+            }
+            .splitter {
+                cursor: row-resize;
+            }
+            .pane {
+                padding: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="test-container" class="ielts-container">
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 px-4 sm:px-6 py-3.5 flex justify-between items-center z-20 shadow-sm">
+        <div class="flex items-center space-x-3">
+            <div class="bg-sky-600 text-white p-2 rounded-lg hidden sm:block">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+            </div>
+            <div>
+                <h1 class="text-lg sm:text-xl font-bold text-gray-800">IELTS Academic Reading <span class="text-sky-600 font-medium hidden md:inline">| Day 2: Note & Table Completion</span></h1>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-3 sm:space-x-4">
+            <div class="flex items-center space-x-2 border-r border-gray-200 pr-3 sm:pr-4">
+                <span class="text-sm text-gray-500 font-medium hidden sm:inline">Name:</span>
+                <input type="text" id="student-name" class="border border-gray-300 rounded px-2.5 py-1 text-sm w-28 sm:w-40 focus:outline-none focus:ring-2 focus:ring-sky-400" placeholder="Your Name">
+            </div>
+
+            <button id="clear-highlights-btn" class="hidden sm:flex items-center justify-center px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-700 transition-colors focus:outline-none border border-amber-200 text-xs font-semibold" title="Clear Highlights">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                Clear
+            </button>
+
+            <div class="flex items-center space-x-1 bg-gray-100 p-1 rounded-lg border border-gray-200">
+                <button id="decrease-font-btn" class="w-8 h-8 flex items-center justify-center rounded bg-white shadow-sm hover:bg-gray-50 text-gray-700 transition-colors focus:outline-none font-bold text-sm" title="Decrease Font Size">A-</button>
+                <button id="increase-font-btn" class="w-8 h-8 flex items-center justify-center rounded bg-white shadow-sm hover:bg-gray-50 text-gray-700 transition-colors focus:outline-none font-bold text-sm" title="Increase Font Size">A+</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Content Panes -->
+    <main id="content-panes" class="content-panes">
+        <!-- Left Pane: Reading Passage -->
+        <div id="left-pane" class="pane">
+            <div id="passage-container" class="reading-passage">
+                <!-- Loaded dynamically by JS -->
+            </div>
+        </div>
+
+        <!-- Splitter -->
+        <div id="splitter" class="splitter relative flex items-center justify-center">
+            <div class="w-1 h-8 bg-gray-400 rounded-full opacity-50"></div>
+        </div>
+
+        <!-- Right Pane: Questions & Exercises -->
+        <div id="right-pane" class="pane">
+            <div id="questions-container" class="max-w-2xl mx-auto pb-10">
+                <!-- Loaded dynamically by JS -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Tabs Navigation -->
+    <footer class="bg-white border-t border-gray-200 p-3 flex flex-wrap justify-center items-center gap-2 z-20 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <div id="tab-navigation" class="flex flex-wrap justify-center gap-1.5 sm:gap-2">
+            <!-- Tabs generated dynamically by JS -->
+        </div>
+    </footer>
+</div>
+
+<!-- Highlight Tooltip -->
+<div id="highlight-tooltip" class="highlight-tooltip">Highlight Text</div>
+
+<!-- Vocabulary Modal -->
+<div id="vocab-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4 hidden z-50 transition-opacity">
+    <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md relative transform transition-all scale-95 opacity-0" id="vocab-modal-content">
+        <button id="close-vocab-modal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center transition-colors">&times;</button>
+        <div class="flex items-center mb-6 border-b pb-4">
+            <h3 id="vocab-word" class="text-3xl font-extrabold text-gray-900 capitalize tracking-tight"></h3>
+        </div>
+        <div class="flex items-center mb-5">
+            <button id="play-audio-btn" class="flex items-center justify-center h-12 w-12 rounded-full bg-sky-50 text-sky-600 hover:bg-sky-600 hover:text-white mr-4 transition-all shadow-sm border border-sky-100" title="Listen to pronunciation">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>
+            </button>
+            <p id="vocab-pronunciation-text" class="text-gray-500 font-mono text-lg bg-gray-50 px-3 py-1 rounded-md border border-gray-100"></p>
+        </div>
+        <p id="vocab-meaning" class="text-gray-700 text-lg leading-relaxed"></p>
+    </div>
+</div>
+
+<script>
+    const vocabularyDict = {
+        'rebelling': { meaning: 'Resisting or challenging authority, control, or traditional rules.', phonetic: '/rɪˈbelɪŋ/' },
+        'flappers': { meaning: 'Young women in the 1920s who wore short skirts and behaved in a fashionable, unconventional manner.', phonetic: '/ˈflæpəz/' },
+        'obnoxious': { meaning: 'Extremely unpleasant, offensive, or objectionable.', phonetic: '/əbˈnɒkʃəs/' },
+        'novices': { meaning: 'People new to or inexperienced in a field or situation.', phonetic: '/ˈnɒvɪsɪz/' },
+        'equilibrium': { meaning: 'A state in which opposing forces or influences are balanced.', phonetic: '/ˌiːkwɪˈlɪbriəm/' },
+        'solitary': { meaning: 'Done or existing alone; living without others.', phonetic: '/ˈsɒlətri/' },
+        'incubation': { meaning: 'The process of sitting on eggs to keep them warm until they hatch.', phonetic: '/ˌɪnkjuˈbeɪʃn/' },
+        'vulnerable': { meaning: 'Exposed to the possibility of being attacked or harmed.', phonetic: '/ˈvʌlnərəbl/' },
+        'colonisers': { meaning: 'People or nations that establish control over indigenous people of an area.', phonetic: '/ˈkɒlənaɪzəz/' },
+        'depleted': { meaning: 'Used up or reduced significantly in quantity.', phonetic: '/dɪˈpliːtɪd/' },
+        'sanctuaries': { meaning: 'Safe places or reserves set aside for protection.', phonetic: '/ˈsæŋktʃuəriz/' },
+        'propulsion': { meaning: 'The action of driving or pushing forward.', phonetic: '/prəˈpʌlʃn/' },
+        'omnivorous': { meaning: 'Feeding on food of both plant and animal origin.', phonetic: '/ɒmˈnɪvərəs/' },
+        'buoyancy': { meaning: 'The ability or tendency to float in water or other fluids.', phonetic: '/ˈbɔɪənsi/' },
+        'phenology': { meaning: 'The study of cyclic and seasonal natural phenomena in relation to climate and plant/animal life.', phonetic: '/fəˈnɒlədʒi/' },
+        'coppiced': { meaning: 'Woodland managed by periodically cutting back trees to ground level to stimulate growth.', phonetic: '/ˈkɒpɪst/' },
+        'foraging': { meaning: 'Searching for food or provisions.', phonetic: '/ˈfɒrɪdʒɪŋ/' },
+        'susceptible': { meaning: 'Likely or liable to be influenced or harmed by a particular thing.', phonetic: '/səˈseptəbl/' },
+        'roosting': { meaning: 'Settling or resting, especially birds or bats at night.', phonetic: '/ˈruːstɪŋ/' },
+        'megalithic': { meaning: 'Relating to or denoting structures made of large stones.', phonetic: '/ˌmeɡəˈlɪθɪk/' },
+        'solstice': { meaning: 'Either of the two times in the year when the sun reaches its highest or lowest point in the sky at noon.', phonetic: '/ˈsɒlstɪs/' }
+    };
+
+    const tabsData = [
+        // Tab 1: Example 1 - Women's Fashion
+        {
+            id: 'ex1',
+            label: 'Ex 1: Women\'s Fashion',
+            title: 'Fashion History Note Completion',
+            passage: `
+                <h3>Women's Fashion History</h3>
+                <p>From 1920, women started <span class="vocab-word" data-word="rebelling">rebelling</span> against old restricted clothes and started wearing casual clothes such as trousers and short skirts. A big development came when women were starting to be called “<span class="vocab-word" data-word="flappers">Flappers</span>” for their new breed of young women that decided to go against outdated regulations by flaunting their skin that was known to be unacceptable.</p>
+                <p>In the 1930’s the big thing was that dresses often included an overcoat. They were very popular in the thirties with any pattern that wasn’t too <span class="vocab-word" data-word="obnoxious">obnoxious</span> and was very popular for women, like flowery dresses for instance. Although women were wearing dresses they were still not allowed to show much skin. Even celebrities wore long dresses with their hair close to their head.</p>
+                <p>Women’s fashion in the 1940’s defiantly got a little bit more modern. Although the fashion industry was held down by World War 2 regulations, that didn’t stop women from wearing and making their elegant clothes, which was then often accompanied with certain accessories like gloves. They were a well-known thing in the forties, which is why in almost every photos back then, women are pictured wearing gloves. Also, a big thing was rain-jackets with fur. This was to keep women warm throughout the rain and snow. Later on, due to the high demand in fabrics for World War 2, there were limited quantities of fabric for women to use, so they had to stick with a simple outfit.</p>
+                <p>The early sixties women’s fashion was more conservative and formal. However, that quickly changed when music started influencing society. Women started wearing short skirts, tie-dye shirts, basically anything with bright and swirling colours. This was a big event in fashion history because women were baring their skin like never before.</p>
+            `,
+            questions: `
+                <div class="q-card">
+                    <div class="flex items-center mb-3">
+                        <span class="bg-sky-100 text-sky-800 text-xs font-bold px-3 py-1 rounded-full mr-2 uppercase">Questions 1–3</span>
+                        <h4 class="font-bold text-gray-800 text-sm sm:text-base">Notes Completion</h4>
+                    </div>
+                    <p class="text-sm text-gray-600 bg-sky-50/70 p-3 rounded-lg border border-sky-100 mb-4">
+                        Complete the notes below. Choose <strong>NO MORE THAN TWO WORDS</strong> from the passage for each answer.
+                    </p>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm border-collapse border border-gray-200">
+                            <thead>
+                                <tr class="bg-sky-50 text-sky-900 border-b border-gray-200">
+                                    <th class="p-3 border-r border-gray-200 font-bold w-1/4">Decade</th>
+                                    <th class="p-3 font-bold">Fashion Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 text-gray-800">
+                                <tr>
+                                    <td class="p-3 border-r border-gray-200 font-semibold bg-gray-50">1920</td>
+                                    <td class="p-3 leading-relaxed">
+                                        Women preferred <strong>1.</strong> <input type="text" class="text-input inline-input" placeholder="..."> to restricted ones.<br>
+                                        Young women who rebelled against outdated rules were called “Flappers”.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-r border-gray-200 font-semibold bg-gray-50">1930</td>
+                                    <td class="p-3 leading-relaxed">
+                                        Dresses (include an overcoat): popular with simple <strong>2.</strong> <input type="text" class="text-input inline-input" placeholder="...">.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-r border-gray-200 font-semibold bg-gray-50">1940</td>
+                                    <td class="p-3 leading-relaxed">
+                                        Clothes: become more modern, often worn with <strong>3.</strong> <input type="text" class="text-input inline-input" placeholder="...">.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `
+        },
+        // Tab 2: Practice 1 - Dartmouth Test
+        {
+            id: 'prac1',
+            label: 'Prac 1: Dartmouth Study',
+            title: 'Engineering & Physics Study Note Completion',
+            passage: `
+                <h3>Dartmouth Engineering Study</h3>
+                <p><span class="paragraph-label">D</span> Twenty-eight Dartmouth students participated in the study, broken into two equal groups: engineering students and <span class="vocab-word" data-word="novices">novices</span>. Engineering students had taken at least one mechanical engineering course and an advanced physics course, whereas novices had not taken any college-level engineering or physics classes. The study was comprised of three tests, which focused on how structures were built and assessed participants’ understanding of Newton’s third law - for every action there is an equal and opposite reaction. Newton’s third law is often used to describe the interactions of objects in motion, but it also applies to objects that are static, or non-moving: all of the forces in a static structure need to be in <span class="vocab-word" data-word="equilibrium">equilibrium</span>, a principle fundamental to understanding whether a structure will collapse under its own weight or whether it can support more weight.</p>
+                <p><span class="paragraph-label">E</span> At the start of the study, participants were provided with a brief overview of the different types of forces in mechanical engineering. In an fMRI scanner, they were presented with images of real-world structures (bridges, lampposts, buildings, and more) and were asked to think about how the forces in a given structure balanced out to keep the structure in equilibrium. Then, participants were prompted with a subsequent image of the same structure, where arrows representing forces were overlaid onto the structure. Participants were asked to identify if the Newtonian forces had been labelled correctly in this diagram. Engineering students (intermediate learners) answered 75 percent of the diagrams correctly and outperformed the novices, who answered 53.6 percent correctly.</p>
+            `,
+            questions: `
+                <div class="q-card">
+                    <div class="flex items-center mb-3">
+                        <span class="bg-sky-100 text-sky-800 text-xs font-bold px-3 py-1 rounded-full mr-2 uppercase">Questions 1–5</span>
+                        <h4 class="font-bold text-gray-800 text-sm sm:text-base">Notes Completion</h4>
+                    </div>
+                    <p class="text-sm text-gray-600 bg-sky-50/70 p-3 rounded-lg border border-sky-100 mb-4">
+                        Complete the notes below. Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.
+                    </p>
+
+                    <div class="space-y-4 bg-gray-50 p-4 rounded-xl border border-gray-200 text-gray-800">
+                        <h5 class="font-bold text-sky-800 border-b pb-1 text-base">Dartmouth Test Details</h5>
+                        <p><strong>Participants:</strong> 28 students divided into <strong>1.</strong> <input type="text" class="text-input inline-input" placeholder="..."> groups with the same number of members.</p>
+                        <p><strong>Engineering students:</strong> had knowledge about mechanical engineering and physics.</p>
+                        <p><strong>Novices:</strong> had not done any engineering and physics courses in <strong>2.</strong> <input type="text" class="text-input inline-input" placeholder="...">.</p>
+                        <p><strong>Tests:</strong> the students looked at photographs of buildings, bridges and other similar <strong>3.</strong> <input type="text" class="text-input inline-input" placeholder="..."> in an fMRI scanner. After that, the participants looked at the subsequent images with arrow showing <strong>4.</strong> <input type="text" class="text-input inline-input" placeholder="..."> forces. Then they were asked whether the labels were right.</p>
+                        <p><strong>Result:</strong> the intermediate students <strong>5.</strong> <input type="text" class="text-input inline-input" placeholder="..."> the novices.</p>
+                    </div>
+                </div>
+            `
+        },
+        // Tab 3: Practice 2 - Kakapo
+        {
+            id: 'prac2',
+            label: 'Prac 2: Kākāpō',
+            title: 'New Zealand’s Kākāpō Note Completion',
+            passage: `
+                <h3>New Zealand’s Kākāpō</h3>
+                <p>Kākāpō are <span class="vocab-word" data-word="solitary">solitary</span> birds and tend to occupy the same home range for many years. They forage on the ground and climb high into trees. They often leap from trees and flap their wings, but at best manage a controlled descent to the ground. They are entirely vegetarian, with their diet including the leaves, roots and bark of trees as well as bulbs, and fern fronds.</p>
+                <p>Kākāpō breed in summer and autumn, but only in years when food is plentiful. Males play no part in <span class="vocab-word" data-word="incubation">incubation</span> or chick-rearing – females alone incubate eggs and feed the chicks. The 1-4 eggs are laid in soil, which is repeatedly turned over before and during incubation. The female kākāpō has to spend long periods away from the nest searching for food, which leaves the unattended eggs and chicks particularly <span class="vocab-word" data-word="vulnerable">vulnerable</span> to predators.</p>
+                <p>Before humans arrived, kākāpō were common throughout New Zealand’s forests. However, this all changed with the arrival of the first Polynesian settlers about 700 years ago. For the early settlers, the flightless kākāpō was easy prey. They ate its meat and used its feathers to make soft cloaks. With them came the Polynesian dog and rat, which also preyed on kākāpō. By the time European <span class="vocab-word" data-word="colonisers">colonisers</span> arrived in the early 1800s, kākāpō had become confined to the central North Island and forested parts of the South Island. The fall in kākāpō numbers was accelerated by European colonisation. A great deal of habitat was lost through forest clearance, and introduced species such as deer <span class="vocab-word" data-word="depleted">depleted</span> the remaining forests of food. Other predators such as cats, stoats and two more species of rat were also introduced. The kākāpō were in serious trouble.</p>
+                <p>In 1894, the New Zealand government launched its first attempt to save the kākāpō. Conservationist Richard Henry led an effort to relocate several hundred of the birds to predator-free Resolution Island in Fiordland. Unfortunately, the island didn’t remain predator free – stoats arrived within six years, eventually destroying the kākāpō population. By the mid-1900s, the kākāpō was practically a lost species. Only a few clung to life in the most isolated parts of New Zealand.</p>
+                <p>Unfortunately, predation by feral cats on Rakiura Island led to a rapid decline in kākāpō numbers. As a result, during 1980-97, the surviving population was evacuated to three island <span class="vocab-word" data-word="sanctuaries">sanctuaries</span>: Codfish Island, Maud Island and Little Barrier Island. However, breeding success was hard to achieve. Rats were found to be a major predator of kākāpō chicks and an insufficient number of chicks survived to offset adult mortality. By 1995, although at least 12 chicks had been produced on the islands, only three had survived. The kākāpō population had dropped to 51 birds. The critical situation prompted an urgent review of kākāpō management in New Zealand.</p>
+                <p>After the first five years of the Recovery Plan, the population was on target. By 2000, five new females had been produced, and the total population had grown to 62 birds. For the first time, there was cautious optimism for the future of kākāpō and by June 2020, a total of 210 birds was recorded.</p>
+                <p>Today, kākāpō management continues to be guided by the kākāpō Recovery Plan. Its key goals are: minimise the loss of genetic diversity in the kākāpō population, restore or maintain sufficient habitat to accommodate the expected increase in the kākāpō population, and ensure stakeholders continue to be fully engaged in the preservation of the species.</p>
+            `,
+            questions: `
+                <div class="q-card">
+                    <div class="flex items-center mb-3">
+                        <span class="bg-sky-100 text-sky-800 text-xs font-bold px-3 py-1 rounded-full mr-2 uppercase">Questions 7–13</span>
+                        <h4 class="font-bold text-gray-800 text-sm sm:text-base">Notes Completion</h4>
+                    </div>
+                    <p class="text-sm text-gray-600 bg-sky-50/70 p-3 rounded-lg border border-sky-100 mb-4">
+                        Complete the notes below. Choose <strong>ONE WORD AND/OR A NUMBER</strong> from the passage for each answer.
+                    </p>
+
+                    <div class="space-y-4 bg-gray-50 p-4 rounded-xl border border-gray-200 text-gray-800">
+                        <h5 class="font-bold text-sky-800 border-b pb-1">New Zealand’s kākāpō</h5>
+                        
+                        <div>
+                            <p class="font-semibold text-sky-700">A type of parrot:</p>
+                            <ul class="list-disc pl-5 space-y-2 mt-1">
+                                <li>diet consists of fern fronds, various parts of a tree and <strong>7.</strong> <input type="text" class="text-input inline-input" placeholder="..."></li>
+                                <li>nests are created in <strong>8.</strong> <input type="text" class="text-input inline-input" placeholder="..."> where eggs are laid.</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p class="font-semibold text-sky-700">Arrival of Polynesian settlers:</p>
+                            <ul class="list-disc pl-5 space-y-2 mt-1">
+                                <li>the <strong>9.</strong> <input type="text" class="text-input inline-input" placeholder="..."> of the kākāpō were used to make clothes.</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p class="font-semibold text-sky-700">Arrival of European colonisers:</p>
+                            <ul class="list-disc pl-5 space-y-2 mt-1">
+                                <li><strong>10.</strong> <input type="text" class="text-input inline-input" placeholder="..."> were an animal which they introduced that ate the kākāpō’s food sources.</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p class="font-semibold text-sky-700">Protecting kākāpō:</p>
+                            <ul class="list-disc pl-5 space-y-2 mt-1">
+                                <li>Richard Henry, a conservationist, tried to protect the kākāpō.</li>
+                                <li>a definite sighting of female kākāpō on Rakiura Island was reported in the year <strong>11.</strong> <input type="text" class="text-input inline-input" placeholder="..."></li>
+                                <li>the Recovery Plan included an increase in <strong>12.</strong> <input type="text" class="text-input inline-input" placeholder="..."></li>
+                                <li>a current goal of the Recovery Plan is to maintain the involvement of <strong>13.</strong> <input type="text" class="text-input inline-input" placeholder="..."> in kākāpō protection.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `
+        },
+        // Tab 4: Practice 3 - Manatees
+        {
+            id: 'prac3',
+            label: 'Prac 3: Manatees',
+            title: 'Manatees Note Completion',
+            passage: `
+                <h3>Manatees</h3>
+                <p>Manatees, also known as sea cows, are aquatic mammals that belong to a group of animals called Sirenia. This group also contains dugongs. Dugongs and manatees look quite alike – they are similar in size, colour and shape, and both have flexible flippers for forelimbs. However, the manatee has a broad, rounded tail, whereas the dugong’s is fluked, like that of a whale. There are three species of manatees: the West Indian manatee (Trichechus manatus), the African manatee (Trichechus senegalensis) and the Amazonian manatee (Trichechus inunguis).</p>
+                <p>Unlike most mammals, manatees have only six bones in their neck – most others, including humans and giraffes, have seven. This short neck allows a manatee to move its head up and down, but not side to side. To see something on its left or its right, a manatee must turn its entire body, steering with its flippers. Manatees have pectoral flippers but no back limbs, only a tail for <span class="vocab-word" data-word="propulsion">propulsion</span>. They do have pelvic bones, however – a leftover from their evolution from a four-legged to a fully aquatic animal. Manatees share some visual similarities to elephants. Like elephants, manatees have thick, wrinkled skin. They also have some hairs covering their bodies which help them sense vibrations in the water around them.</p>
+                <p>Seagrasses and other marine plants make up most of a manatee’s diet. Manatees spend about eight hours each day grazing and uprooting plants. They eat up to 15% of their weight in food each day. African manatees are <span class="vocab-word" data-word="omnivorous">omnivorous</span> – studies have shown that molluscs and fish make up a small part of their diets. West Indian and Amazonian manatees are both herbivores.</p>
+                <p>Manatees’ teeth are all molars – flat, rounded teeth for grinding food. Due to manatees’ abrasive aquatic plant diet, these teeth get worn down and they eventually fall out, so they continually grow new teeth that get pushed forward to replace the ones they lose. Instead of having incisors to grasp their food, manatees have lips which function like a pair of hands to help tear food away from the seafloor.</p>
+                <p>Manatees are fully aquatic, but as mammals, they need to come up to the surface to breathe. When awake, they typically surface every two to four minutes, but they can hold their breath for much longer. Adult manatees sleep underwater for 10–12 hours a day, but they come up for air every 15 – 20 minutes. Active manatees need to breathe more frequently. It’s thought that manatees use their muscular diaphragm and breathing to adjust their <span class="vocab-word" data-word="buoyancy">buoyancy</span>. They may use diaphragm contractions to compress and store gas in folds in their large intestine to help them float.</p>
+            `,
+            questions: `
+                <div class="q-card">
+                    <div class="flex items-center mb-3">
+                        <span class="bg-sky-100 text-sky-800 text-xs font-bold px-3 py-1 rounded-full mr-2 uppercase">Questions 1–6</span>
+                        <h4 class="font-bold text-gray-800 text-sm sm:text-base">Notes Completion</h4>
+                    </div>
+                    <p class="text-sm text-gray-600 bg-sky-50/70 p-3 rounded-lg border border-sky-100 mb-4">
+                        Complete the notes below. Choose <strong>ONE WORD AND/OR A NUMBER</strong> from the passage for each answer.
+                    </p>
+
+                    <div class="space-y-4 bg-gray-50 p-4 rounded-xl border border-gray-200 text-gray-800">
+                        <h5 class="font-bold text-sky-800 border-b pb-1">Manatees</h5>
+                        
+                        <div>
+                            <p class="font-semibold text-sky-700">Appearance</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>look similar to dugongs, but with a differently shaped <strong>1.</strong> <input type="text" class="text-input inline-input" placeholder="..."></li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p class="font-semibold text-sky-700">Movement</p>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>have fewer neck bones than most mammals</li>
+                                <li>need to use their <strong>2.</strong> <input type="text" class="text-input inline-input" placeholder="..."> to help to turn their bodies around in order to look sideways</li>
+                                <li>sense vibrations in the water by means of <strong>3.</strong> <input type="text" class="text-input inline-input" placeholder="..."> on their skin</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p class="font-semibold text-sky-700">Feeding</p>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>eat mainly aquatic vegetation, such as <strong>4.</strong> <input type="text" class="text-input inline-input" placeholder="..."></li>
+                                <li>grasp and pull up plants with their <strong>5.</strong> <input type="text" class="text-input inline-input" placeholder="..."></li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p class="font-semibold text-sky-700">Breathing</p>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>come to the surface for air every 2–4 minutes when awake and every 15–20 while sleeping</li>
+                                <li>may regulate the <strong>6.</strong> <input type="text" class="text-input inline-input" placeholder="..."> of their bodies by using muscles of diaphragm to store air internally</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `
+        },
+        // Tab 5: Practice 4 - Butterflies in the UK
+        {
+            id: 'prac4',
+            label: 'Prac 4: UK Butterflies',
+            title: 'Butterflies in the UK Note Completion',
+            passage: `
+                <h3>Butterflies in the UK</h3>
+                <p>Among these species, researchers observed that those which have been advancing their <span class="vocab-word" data-word="phenology">phenology</span> the most over the 20-year study period also had the most positive trends in abundance, distribution and northwards extent. For these species, such as Britain's tiniest butterfly, the dainty Small Blue, whose colonies are up to a hundred strong, some develop into butterflies early in spring, allowing their summer generations to complete another reproductive cycle by autumn so that more population growth occurs.</p>
+                <p>Other species, however, are less flexible and restricted to a single reproductive cycle per year. For these species, there was no evidence of any benefit to emerging earlier. Indeed, worryingly, it was found that the species in this group that specialize in very specific habitat types, often related to the caterpillar's preferred diet, actually tended to be most at harm from advancing phenology. The beautiful High Brown Fritillary, often described as Britain's most endangered butterfly, is in this group. It is found only in <span class="vocab-word" data-word="coppiced">coppiced</span> woodland and limestone pavement habitats. It is also a single-generation butterfly that has advanced its phenology. This suggests that climate change, while undoubtedly not the sole cause, might have played a part in the downfall of this species.</p>
+                <p>All is not lost, however. Many of Britain's single-generation species show the capacity, in continental Europe, to add a second generation in years that are sufficiently warm. Therefore, as the climate continues to warm, species like the Silver-studded Blue might be able to switch to multiple generations in the UK as well, and so begin to extract benefits from the additional warmth, potentially leading to population increases.</p>
+                <p>More immediately, conservationists can arm themselves with all this knowledge to spot the warning signs of species that may be at risk. The White Admiral of southern England, a much sought-after butterfly, experienced a significant increase in numbers from the 1920s but has shown a considerable decline in the past 20 years. This may be because the caterpillar exists solely on a diet of a plant called honeysuckle. But it is also likely to be due to climate change.</p>
+            `,
+            questions: `
+                <div class="q-card">
+                    <div class="flex items-center mb-3">
+                        <span class="bg-sky-100 text-sky-800 text-xs font-bold px-3 py-1 rounded-full mr-2 uppercase">Questions 7–13</span>
+                        <h4 class="font-bold text-gray-800 text-sm sm:text-base">Notes Completion</h4>
+                    </div>
+                    <p class="text-sm text-gray-600 bg-sky-50/70 p-3 rounded-lg border border-sky-100 mb-4">
+                        Complete the notes below. Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.
+                    </p>
+
+                    <div class="space-y-4 bg-gray-50 p-4 rounded-xl border border-gray-200 text-gray-800">
+                        <h5 class="font-bold text-sky-800 border-b pb-1">Butterflies in the UK</h5>
+                        
+                        <div>
+                            <p class="font-semibold text-sky-700">The Small Blue</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>lives in large <strong>7.</strong> <input type="text" class="text-input inline-input" placeholder="..."></li>
+                                <li>first appears at the start of <strong>8.</strong> <input type="text" class="text-input inline-input" placeholder="..."></li>
+                                <li>completes more than one reproductive cycle per year</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p class="font-semibold text-sky-700">The High Brown Fritillary</p>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>has one reproductive cycle</li>
+                                <li>is considered to be more <strong>9.</strong> <input type="text" class="text-input inline-input" placeholder="..."> than other species</li>
+                                <li>its caterpillars occupy a limited range of <strong>10.</strong> <input type="text" class="text-input inline-input" placeholder="..."></li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p class="font-semibold text-sky-700">The Silver-studded Blue</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>is already able to reproduce twice a year in warm areas of <strong>11.</strong> <input type="text" class="text-input inline-input" placeholder="..."></li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p class="font-semibold text-sky-700">The White Admiral</p>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>is found in <strong>12.</strong> <input type="text" class="text-input inline-input" placeholder="..."> areas of England</li>
+                                <li>both climate change and the <strong>13.</strong> <input type="text" class="text-input inline-input" placeholder="..."> of the caterpillar are possible reasons for decline</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `
+        },
+        // Tab 6: Practice 5 - Bats in Madagascar
+        {
+            id: 'prac5',
+            label: 'Prac 5: Madagascar Bats',
+            title: 'Bat Population & Farmland Table Completion',
+            passage: `
+                <h3>Bat Foraging in Madagascar</h3>
+                <p>The recordings revealed that bat activity over rice fields was much higher than it was in continuous forest – seven times higher over rice fields which were on flat ground, and sixteen times higher over fields on the sides of hills – leaving no doubt that the animals are preferentially <span class="vocab-word" data-word="foraging">foraging</span> in these man-made ecosystems. The researchers suggest that the bats favour these fields because lack of water and nutrient run-off make these crops more <span class="vocab-word" data-word="susceptible">susceptible</span> to insect pest infestations. DNA analysis showed that all six species of bat had fed on economically important insect pests. While the findings indicated that rice farming benefits most from the bats, the scientists also found indications that the bats were consuming pests of other crops, including the black twig borer (which infests coffee plants), the sugarcane cicada, the macadamia nut-borer, and the sober tabby (a pest of citrus fruits).</p>
+                <p>The effectiveness of bats as pest controllers has already been proven in the USA and Catalonia,’ said co-author James Kemp, from the University of Lisbon. ‘But our study is the first to show this happening in Madagascar, where the stakes for both farmers and conservationists are so high.’</p>
+                <p>Local people may have a further reason to be grateful to their bats. While the animal is often associated with spreading disease, Rocha and his team found evidence that Malagasy bats feed not just on crop pests but also on mosquitoes – carriers of malaria, Rift Valley fever virus and elephantiasis – as well as blackflies, which spread river blindness.</p>
+                <p>Rocha points out that the relationship is complicated. When food is scarce, bats become a crucial source of protein for local people. Even the children will hunt them. And as well as <span class="vocab-word" data-word="roosting">roosting</span> in trees, the bats sometimes roost in buildings, but are not welcomed there because they make them unclean. At the same time, however, they are associated with sacred caves and the ancestors, so they can be viewed as beings between worlds, which makes them very significant in the culture of the people. And one potential problem is that while these bats are benefiting from farming, at the same time deforestation is reducing the places where they can roost, which could have long-term effects on their numbers. Rocha says, ‘With the right help, we hope that farmers can promote this mutually beneficial relationship by installing bat houses.’</p>
+                <p>Rocha and his colleagues believe that maximising bat populations can help to boost crop yields and promote sustainable livelihoods. The team is now calling for further research to quantify this contribution. ‘I’m very optimistic,’ says Rocha. ‘If we give nature a hand, we can speed up the process of regeneration.’</p>
+            `,
+            questions: `
+                <div class="q-card">
+                    <div class="flex items-center mb-3">
+                        <span class="bg-sky-100 text-sky-800 text-xs font-bold px-3 py-1 rounded-full mr-2 uppercase">Questions 7–13</span>
+                        <h4 class="font-bold text-gray-800 text-sm sm:text-base">Table Completion</h4>
+                    </div>
+                    <p class="text-sm text-gray-600 bg-sky-50/70 p-3 rounded-lg border border-sky-100 mb-4">
+                        Complete the table below. Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.
+                    </p>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs sm:text-sm border-collapse border border-gray-200">
+                            <thead>
+                                <tr class="bg-sky-100 text-sky-900 border-b border-gray-300">
+                                    <th colspan="2" class="p-3 text-center font-bold text-base">The study carried out by Rocha’s team</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 text-gray-800">
+                                <tr>
+                                    <td class="p-3 border-r border-gray-200 font-bold bg-gray-50 w-1/4">Aim</td>
+                                    <td class="p-3">To investigate the feeding habits of bats in farmland near the Ranomafana National Park.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-r border-gray-200 font-bold bg-gray-50">Method</td>
+                                    <td class="p-3 leading-relaxed">
+                                        Ultrasonic recording to identify favourite feeding spots.<br>
+                                        DNA analysis of bat <strong>7.</strong> <input type="text" class="text-input inline-input" placeholder="...">.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-r border-gray-200 font-bold bg-gray-50">Findings</td>
+                                    <td class="p-3 leading-relaxed space-y-2">
+                                        <p>• The bats were most active in rice fields located on hills.</p>
+                                        <p>• Ate pests of rice, <strong>8.</strong> <input type="text" class="text-input inline-input" placeholder="...">, sugarcane, nuts and fruit.</p>
+                                        <p>• Prevent the spread of disease by eating <strong>9.</strong> <input type="text" class="text-input inline-input" placeholder="..."> and blackflies.</p>
+                                        <p>• Local attitudes to bats are mixed:</p>
+                                        <ul class="list-disc pl-5 space-y-1 text-gray-700">
+                                            <li>they provide food rich in <strong>10.</strong> <input type="text" class="text-input inline-input" placeholder="..."></li>
+                                            <li>the buildings where they roost become <strong>11.</strong> <input type="text" class="text-input inline-input" placeholder="..."></li>
+                                            <li>they play an important role in local <strong>12.</strong> <input type="text" class="text-input inline-input" placeholder="..."></li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-r border-gray-200 font-bold bg-gray-50">Recommendation</td>
+                                    <td class="p-3">Farmers should provide special <strong>13.</strong> <input type="text" class="text-input inline-input" placeholder="..."> to support the bat population.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `
+        },
+        // Tab 7: Practice 6 - Stonehenge
+        {
+            id: 'prac6',
+            label: 'Prac 6: Stonehenge',
+            title: 'Stonehenge History Note Completion',
+            passage: `
+                <h3>Stonehenge</h3>
+                <p>Archaeologists believe England’s most iconic prehistoric ruin was built in several stages with the earliest constructed 5,000 or more years ago. First, Neolithic Britons used primitive tools, which may have been fashioned out of deer antlers, to dig a massive circular ditch and bank, or henge. Deep pits dating back to that era and located within the circle may have once held a ring of timber posts, according to some scholars.</p>
+                <p>According to one long-standing theory among archaeologists, Stonehenge’s builders fashioned sledges and rollers out of tree trunks to lug the bluestones from the Preseli Hills. They then transferred the boulders onto rafts and floated them first along the Welsh coast and then up the River Avon toward Salisbury Plain; alternatively, they may have towed each stone with a fleet of vessels. More recent archaeological hypotheses have them transporting the bluestones with supersized wicker baskets on a combination of ball bearings and long grooved planks, hauled by oxen.</p>
+                <p>But who were the builders of Stonehenge? In the 17th century, archaeologist John Aubrey made the claim that Stonehenge was the work of druids, who had important religious, judicial and political roles in Celtic society. This theory was widely popularized by the antiquarian William Stukeley, who had unearthed primitive graves at the site. Even today, people who identify as modern druids continue to gather at Stonehenge for the summer <span class="vocab-word" data-word="solstice">solstice</span>. However, in the mid-20th century, radiocarbon dating demonstrated that Stonehenge stood more than 1,000 years before the Celts inhabited the region.</p>
+                <p>If the facts surrounding the architects and construction of Stonehenge remain shadowy at best, the purpose of the striking monument is even more of a mystery. While there is consensus among the majority of modern scholars that Stonehenge once served the function of burial ground, they have yet to determine what other purposes it had.</p>
+                <p>In the 1960s, the astronomer Gerald Hawkins suggested that the cluster of <span class="vocab-word" data-word="megalithic">megalithic</span> stones operated as a form of calendar, with different points corresponding to astrological phenomena such as solstices, equinoxes and eclipses occurring at different times of the year. While his theory has received a considerable amount of attention over the decades, critics maintain that Stonehenge’s builders probably lacked the knowledge necessary to predict such events or that England’s dense cloud cover would have obscured their view of the skies.</p>
+            `,
+            questions: `
+                <div class="q-card">
+                    <div class="flex items-center mb-3">
+                        <span class="bg-sky-100 text-sky-800 text-xs font-bold px-3 py-1 rounded-full mr-2 uppercase">Questions 1–8</span>
+                        <h4 class="font-bold text-gray-800 text-sm sm:text-base">Notes Completion</h4>
+                    </div>
+                    <p class="text-sm text-gray-600 bg-sky-50/70 p-3 rounded-lg border border-sky-100 mb-4">
+                        Complete the notes below. Choose <strong>NO MORE THAN TWO WORDS</strong> from the passage for each answer.
+                    </p>
+
+                    <div class="space-y-4 bg-gray-50 p-4 rounded-xl border border-gray-200 text-gray-800">
+                        <h5 class="font-bold text-sky-800 border-b pb-1">Stonehenge Notes</h5>
+                        
+                        <div>
+                            <p class="font-semibold text-sky-700">Construction</p>
+                            <div class="pl-3 mt-1 space-y-2">
+                                <p class="font-medium text-gray-900">Stage 1:</p>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>the ditch and henge were dug, possibly using tools made from <strong>1.</strong> <input type="text" class="text-input inline-input" placeholder="..."></li>
+                                    <li><strong>2.</strong> <input type="text" class="text-input inline-input" placeholder="..."> may have been arranged in deep pits inside the circle</li>
+                                </ul>
+
+                                <p class="font-medium text-gray-900 pt-1">Stage 2:</p>
+                                <ul class="list-disc pl-5 space-y-2">
+                                    <li>bluestones from the Preseli Hills were placed in standing position</li>
+                                    <li>theories about the transportation of the bluestones:
+                                        <div class="pl-4 border-l-2 border-sky-200 mt-1 space-y-1">
+                                            <p><em>archaeological:</em></p>
+                                            <p>• builders used <strong>3.</strong> <input type="text" class="text-input inline-input" placeholder="..."> to make sledges and rollers</p>
+                                            <p>• <strong>4.</strong> <input type="text" class="text-input inline-input" placeholder="..."> pulled them on giant baskets</p>
+                                            <p><em>geological:</em></p>
+                                            <p>• they were brought from Wales by <strong>5.</strong> <input type="text" class="text-input inline-input" placeholder="..."></p>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <p class="font-medium text-gray-900 pt-1">Stage 3:</p>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>sandstone slabs were arranged into an outer crescent or ring</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p class="font-semibold text-sky-700">Builders</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>a theory arose in the 17th century that its builders were Celtic <strong>6.</strong> <input type="text" class="text-input inline-input" placeholder="..."></li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p class="font-semibold text-sky-700">Purpose</p>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>many experts agree it has been used as a <strong>7.</strong> <input type="text" class="text-input inline-input" placeholder="..."> site</li>
+                                <li>in the 1960s, it was suggested that it worked as a kind of <strong>8.</strong> <input type="text" class="text-input inline-input" placeholder="..."></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `
+        }
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const app = {
+            currentTab: 0,
+            currentFontSize: 17,
+
+            // DOM Elements
+            leftPane: document.getElementById('left-pane'),
+            rightPane: document.getElementById('right-pane'),
+            passageContainer: document.getElementById('passage-container'),
+            questionsContainer: document.getElementById('questions-container'),
+            tabNav: document.getElementById('tab-navigation'),
+            splitter: document.getElementById('splitter'),
+            highlightTooltip: document.getElementById('highlight-tooltip'),
+            clearHighlightsBtn: document.getElementById('clear-highlights-btn'),
+            vocabModal: document.getElementById('vocab-modal'),
+            vocabModalContent: document.getElementById('vocab-modal-content'),
+            closeVocabModalBtn: document.getElementById('close-vocab-modal'),
+            vocabWordEl: document.getElementById('vocab-word'),
+            vocabMeaningEl: document.getElementById('vocab-meaning'),
+            vocabPronunciationText: document.getElementById('vocab-pronunciation-text'),
+            playAudioBtn: document.getElementById('play-audio-btn'),
+
+            init() {
+                this.renderTabsNav();
+                this.loadTabData(this.currentTab);
+                this.setupEventListeners();
+                this.initSplitter();
+                this.initHighlighter();
+            },
+
+            renderTabsNav() {
+                this.tabNav.innerHTML = tabsData.map((tab, idx) => `
+                    <button class="tab-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 focus:outline-none ${idx === this.currentTab ? 'active' : ''}" data-idx="${idx}">
+                        ${tab.label}
+                    </button>
+                `).join('');
+
+                this.tabNav.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const targetIdx = parseInt(e.currentTarget.dataset.idx);
+                        if (targetIdx !== this.currentTab) {
+                            this.currentTab = targetIdx;
+                            this.updateActiveTabUI();
+                            this.loadTabData(this.currentTab);
+                        }
+                    });
+                });
+            },
+
+            updateActiveTabUI() {
+                this.tabNav.querySelectorAll('.tab-btn').forEach((btn, idx) => {
+                    if (idx === this.currentTab) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+            },
+
+            loadTabData(index) {
+                const data = tabsData[index];
+                this.passageContainer.innerHTML = data.passage;
+                this.questionsContainer.innerHTML = data.questions;
+                this.leftPane.scrollTop = 0;
+                this.rightPane.scrollTop = 0;
+            },
+
+            setupEventListeners() {
+                // Font Resizing
+                document.getElementById('increase-font-btn').addEventListener('click', () => this.changeFontSize(1));
+                document.getElementById('decrease-font-btn').addEventListener('click', () => this.changeFontSize(-1));
+
+                // Clear Highlights
+                if (this.clearHighlightsBtn) {
+                    this.clearHighlightsBtn.addEventListener('click', () => {
+                        const marks = this.leftPane.querySelectorAll('mark');
+                        marks.forEach(mark => {
+                            const text = document.createTextNode(mark.textContent);
+                            mark.replaceWith(text);
+                        });
+                    });
+                }
+
+                // Vocab Modal Closing
+                this.closeVocabModalBtn.addEventListener('click', () => this.closeModal());
+                this.vocabModal.addEventListener('click', (e) => {
+                    if (e.target === this.vocabModal) this.closeModal();
+                });
+
+                // Click handler for vocabulary words in text
+                this.leftPane.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('vocab-word')) {
+                        const wordKey = e.target.dataset.word;
+                        this.openVocabModal(wordKey);
+                    }
+                    if (e.target.tagName === 'MARK') {
+                        const textNode = document.createTextNode(e.target.textContent);
+                        e.target.replaceWith(textNode);
+                    }
+                });
+
+                // Audio Pronunciation TTS
+                this.playAudioBtn.addEventListener('click', () => {
+                    const word = this.vocabWordEl.textContent;
+                    if (!word) return;
+                    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+                    
+                    this.playAudioBtn.classList.remove('text-sky-600', 'bg-sky-50');
+                    this.playAudioBtn.classList.add('bg-emerald-500', 'text-white');
+                    
+                    if ('speechSynthesis' in window) {
+                        const utterance = new SpeechSynthesisUtterance(word);
+                        utterance.lang = 'en-GB'; 
+                        utterance.rate = 0.9; 
+                        utterance.onend = () => this.resetAudioBtn();
+                        utterance.onerror = () => this.resetAudioBtn();
+                        window.speechSynthesis.speak(utterance);
+                    } else {
+                        setTimeout(() => this.resetAudioBtn(), 500);
+                    }
+                });
+            },
+
+            resetAudioBtn() {
+                this.playAudioBtn.classList.add('text-sky-600', 'bg-sky-50');
+                this.playAudioBtn.classList.remove('bg-emerald-500', 'text-white');
+            },
+
+            changeFontSize(delta) {
+                this.currentFontSize += delta;
+                if (this.currentFontSize < 14) this.currentFontSize = 14;
+                if (this.currentFontSize > 26) this.currentFontSize = 26;
+                document.documentElement.style.setProperty('--app-font-size', `${this.currentFontSize}px`);
+            },
+
+            openVocabModal(wordKey) {
+                const data = vocabularyDict[wordKey] || { meaning: 'Definition available in context.', phonetic: '' };
+                this.vocabWordEl.textContent = wordKey;
+                this.vocabMeaningEl.textContent = data.meaning;
+                this.vocabPronunciationText.textContent = data.phonetic || '';
+                this.vocabModal.classList.remove('hidden');
+                setTimeout(() => {
+                    this.vocabModalContent.classList.remove('scale-95', 'opacity-0');
+                    this.vocabModalContent.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            },
+
+            closeModal() {
+                if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+                this.vocabModalContent.classList.remove('scale-100', 'opacity-100');
+                this.vocabModalContent.classList.add('scale-95', 'opacity-0');
+                this.resetAudioBtn();
+                setTimeout(() => this.vocabModal.classList.add('hidden'), 200);
+            },
+
+            initHighlighter() {
+                document.body.addEventListener('mouseup', (e) => {
+                    const selection = window.getSelection();
+                    const selectedText = selection.toString().trim();
+
+                    if (selectedText.length > 0) {
+                        const range = selection.getRangeAt(0);
+                        if (!this.leftPane.contains(range.commonAncestorContainer) && !this.rightPane.contains(range.commonAncestorContainer)) {
+                            this.highlightTooltip.style.display = 'none';
+                            return;
+                        }
+
+                        this.highlightTooltip.style.left = `${e.pageX - 30}px`;
+                        this.highlightTooltip.style.top = `${e.pageY - 40}px`;
+                        this.highlightTooltip.style.display = 'block';
+
+                        this.highlightTooltip.onclick = () => {
+                            const container = range.commonAncestorContainer;
+                            if (container.nodeType === 3 && range.startContainer.parentElement !== range.endContainer.parentElement) {
+                                this.highlightTooltip.style.display = 'none';
+                                return;
+                            }
+                            
+                            const mark = document.createElement('mark');
+                            try {
+                                range.surroundContents(mark);
+                            } catch (ex) {} 
+                            finally {
+                                selection.removeAllRanges();
+                                this.highlightTooltip.style.display = 'none';
+                            }
+                        };
+                    } else {
+                        this.highlightTooltip.style.display = 'none';
+                    }
+                });
+
+                document.body.addEventListener('mousedown', (e) => {
+                    if (e.target !== this.highlightTooltip && window.getSelection().toString().length === 0) {
+                        this.highlightTooltip.style.display = 'none';
+                    }
+                });
+            },
+
+            initSplitter() {
+                let isDragging = false;
+                const contentPanes = document.getElementById('content-panes');
+
+                this.splitter.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                    isDragging = true;
+                    document.body.style.cursor = 'col-resize';
+                });
+
+                document.addEventListener('mousemove', (e) => {
+                    if (!isDragging) return;
+                    e.preventDefault();
+                    if (window.innerWidth <= 768) return; 
+                    
+                    const containerRect = contentPanes.getBoundingClientRect();
+                    const newLeftWidth = e.clientX - containerRect.left;
+                    if (newLeftWidth > 200 && newLeftWidth < containerRect.width - 200) {
+                        const newLeftPercent = (newLeftWidth / containerRect.width) * 100;
+                        contentPanes.style.gridTemplateColumns = `${newLeftPercent}% 5px 1fr`;
+                    }
+                });
+
+                document.addEventListener('mouseup', () => {
+                    if (isDragging) {
+                        isDragging = false;
+                        document.body.style.cursor = 'default';
+                    }
+                });
+            }
+        };
+
+        app.init();
+    });
+</script>
+
+</body>
+</html>
