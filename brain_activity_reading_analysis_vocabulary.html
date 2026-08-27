@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Brain Activity Can Be Used to Measure How Well You Understand a Concept — Reading Analysis, Translation & Vocabulary</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --app-font-size: 16px;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-size: var(--app-font-size);
+            overflow-x: hidden;
+        }
+        .reading-text {
+            font-family: 'Merriweather', serif;
+            line-height: 2.15;
+            color: #334155;
+        }
+        .reading-text p {
+            margin-bottom: 1.5rem;
+            text-indent: 1.25rem;
+        }
+        .reading-text p:first-of-type {
+            text-indent: 0;
+        }
+
+        .paragraph-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 0.85rem;
+            margin-right: 0.4rem;
+            color: #4338ca;
+            background-color: #e0e7ff;
+            border: 1px solid #c7d2fe;
+            text-indent: 0;
+            vertical-align: middle;
+        }
+
+        /* Highlight Targets & Interactive States */
+        .ans-target {
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            position: relative;
+            display: inline;
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+            text-indent: 0;
+        }
+
+        /* Question target color themes */
+        .ans-target-q1 { background-color: #fef08a; border-bottom: 2px solid #eab308; color: #854d0e; }
+        .ans-target-q2 { background-color: #bae6fd; border-bottom: 2px solid #0284c7; color: #075985; }
+        .ans-target-q3 { background-color: #bbf7d0; border-bottom: 2px solid #16a34a; color: #166534; }
+        .ans-target-q4 { background-color: #fbcfe8; border-bottom: 2px solid #db2777; color: #9d174d; }
+        .ans-target-q5 { background-color: #ddd6fe; border-bottom: 2px solid #7c3aed; color: #5b21b6; }
+
+        .q-badge {
+            display: inline-block;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72em;
+            font-weight: 800;
+            padding: 1px 6px;
+            border-radius: 4px;
+            margin-right: 4px;
+            vertical-align: baseline;
+            line-height: 1.2;
+            color: #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            text-indent: 0;
+            user-select: none;
+        }
+
+        .ans-target:hover, .ans-target.active-target {
+            outline: 3px solid #4f46e5;
+            box-shadow: 0 0 15px rgba(79, 70, 229, 0.4);
+            filter: brightness(0.96);
+            z-index: 20;
+        }
+
+        /* Floating Evidence Popover */
+        .explanation-popover {
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            opacity: 0;
+            visibility: hidden;
+            width: 320px;
+            background-color: #0f172a;
+            color: #f8fafc;
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 0.82rem;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.3);
+            z-index: 50;
+            transition: all 0.25s ease;
+            pointer-events: none;
+            line-height: 1.45;
+            font-weight: normal;
+        }
+        .explanation-popover::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: #0f172a transparent transparent transparent;
+        }
+        .ans-target:hover .explanation-popover, .ans-target.active-target .explanation-popover {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Flashcard Animation */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* SVG Connections */
+        #svg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 30;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .tab-btn.active {
+            background-color: #4338ca;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(67, 56, 202, 0.3);
+        }
+
+        @keyframes arrowFlow {
+            from { stroke-dashoffset: 26; }
+            to { stroke-dashoffset: 0; }
+        }
+        .animated-arrow-line {
+            animation: arrowFlow 1s linear infinite;
+        }
+
+        .lang-btn.active {
+            background-color: #0f172a;
+            color: white;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col bg-slate-100">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-white border-b border-slate-200 px-4 sm:px-6 py-3 flex flex-col md:flex-row justify-between items-center shadow-xs shrink-0 gap-3 z-40">
+        <div class="flex items-center space-x-3">
+            <div class="bg-indigo-700 text-white p-2.5 rounded-xl shadow-sm">
+                <i class="fa-solid fa-brain text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold text-slate-800">Your brain activity can be used to measure how well you understand a concept</h1>
+                <p class="text-xs text-slate-500 font-medium">IELTS Academic Reading Master Companion — Cognitive Neuroscience & Machine Learning</p>
+            </div>
+        </div>
+
+        <!-- Controls: Language Switcher, Font Resize & Arrows Toggle -->
+        <div class="flex items-center space-x-3 flex-wrap gap-y-2">
+            <!-- Language Switcher -->
+            <div class="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200" id="lang-switcher">
+                <button class="lang-btn active px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="en">EN</button>
+                <button class="lang-btn px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="vi">VIE</button>
+                <button class="lang-btn px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="dual">Parallel (EN/VIE)</button>
+            </div>
+
+            <!-- Font Resizer -->
+            <div class="flex items-center space-x-1 bg-slate-100 p-1 rounded-lg border border-slate-200">
+                <button id="btn-dec-font" class="w-7 h-7 flex items-center justify-center rounded bg-white shadow-xs hover:bg-slate-50 font-bold text-xs text-slate-700" title="Decrease Font">A-</button>
+                <button id="btn-inc-font" class="w-7 h-7 flex items-center justify-center rounded bg-white shadow-xs hover:bg-slate-50 font-bold text-xs text-slate-700" title="Increase Font">A+</button>
+            </div>
+
+            <!-- Toggle Arrow Canvas -->
+            <button id="btn-toggle-arrows" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-indigo-700 text-white border border-indigo-700 font-medium text-xs hover:bg-indigo-800 transition-colors shadow-xs">
+                <i class="fa-solid fa-route"></i>
+                <span class="hidden sm:inline">Arrows</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-white border-b border-slate-200 px-6 py-2 overflow-x-auto shrink-0 shadow-xs">
+        <div class="flex space-x-2 min-w-max" id="nav-tabs">
+            <button class="tab-btn active px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="analysis">
+                <i class="fa-solid fa-book-open mr-1.5"></i> 1. Passage & Question Analysis (Q1–Q5)
+            </button>
+            <button class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="vocabulary">
+                <i class="fa-solid fa-spell-check mr-1.5"></i> 2. IELTS Vocabulary Suite (Band 7.0–9.0)
+            </button>
+            <button class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="flashcards">
+                <i class="fa-solid fa-brain mr-1.5"></i> 3. Vocab Flashcards & Practice Quiz
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="flex-1 overflow-hidden relative" id="main-wrapper">
+        <svg id="svg-canvas"></svg>
+
+        <!-- TAB 1: Passage & Question Analysis -->
+        <div id="tab-analysis-content" class="h-full grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden">
+            <!-- Left Pane: Passage View -->
+            <section id="left-pane" class="lg:col-span-6 bg-white overflow-y-auto p-6 lg:p-10 border-r border-slate-200 relative">
+                <div class="max-w-3xl mx-auto">
+                    <div class="flex items-center justify-between mb-6 pb-3 border-b border-slate-100">
+                        <span class="text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-3 py-1 rounded-md border border-indigo-200">
+                            <i class="fa-solid fa-microchip mr-1.5"></i> Reading Passage — Brain Activity & Learning
+                        </span>
+                        <span class="text-xs text-slate-400 font-medium"><i class="fa-solid fa-mouse-pointer mr-1"></i> Hover/Click highlighted evidence</span>
+                    </div>
+
+                    <div id="passage-container" class="reading-text text-base leading-relaxed text-slate-700 space-y-4">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Pane: Questions & Detailed Explanations -->
+            <section id="right-pane" class="lg:col-span-6 bg-slate-50 overflow-y-auto p-6 lg:p-10">
+                <div class="max-w-2xl mx-auto space-y-6" id="explanations-list">
+                    <!-- Rendered dynamically -->
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB 2: Vocabulary Suite -->
+        <div id="tab-vocabulary-content" class="h-full bg-slate-50 overflow-y-auto p-6 lg:p-10 hidden">
+            <div class="max-w-6xl mx-auto space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-book-bookmark text-indigo-700"></i> Essential IELTS Reading Vocabulary
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">High-yield terms covering cognitive neuroscience, machine learning, physics, and empirical research.</p>
+                    </div>
+
+                    <div class="flex items-center space-x-3 w-full md:w-auto">
+                        <div class="relative flex-1 md:w-64">
+                            <i class="fa-solid fa-search absolute left-3 top-3 text-slate-400 text-xs"></i>
+                            <input type="text" id="vocab-search" placeholder="Search word or translation..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-600">
+                        </div>
+                        <select id="vocab-filter" class="bg-slate-50 border border-slate-200 text-xs font-semibold rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-600">
+                            <option value="all">All Categories</option>
+                            <option value="noun">Nouns</option>
+                            <option value="verb">Verbs</option>
+                            <option value="adjective">Adjectives</option>
+                            <option value="neuroscience">Neuroscience & Engineering</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="vocab-cards-grid">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: Vocab Flashcards & Practice Quiz -->
+        <div id="tab-flashcards-content" class="h-full bg-slate-50 overflow-y-auto p-6 lg:p-10 hidden">
+            <div class="max-w-3xl mx-auto space-y-8">
+                <div class="flex justify-center space-x-3">
+                    <button id="btn-mode-flashcard" class="px-5 py-2.5 rounded-xl text-xs font-extrabold bg-indigo-700 text-white shadow-sm transition-all">
+                        <i class="fa-solid fa-clone mr-2"></i> Interactive Flashcards
+                    </button>
+                    <button id="btn-mode-quiz" class="px-5 py-2.5 rounded-xl text-xs font-extrabold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all">
+                        <i class="fa-solid fa-circle-question mr-2"></i> Quick Quiz Mode
+                    </button>
+                </div>
+
+                <!-- Flashcard Display Box -->
+                <div id="flashcard-view" class="flex flex-col items-center space-y-6">
+                    <p class="text-xs text-slate-500 font-semibold">Click the card to flip between Word and Vietnamese Definition</p>
+                    
+                    <div class="w-full max-w-md h-72 perspective-1000 cursor-pointer" id="flashcard-wrapper">
+                        <div id="flashcard-inner" class="relative w-full h-full duration-500 transform-style-3d transition-transform">
+                            <!-- Front -->
+                            <div class="absolute w-full h-full bg-white rounded-3xl border border-slate-200 shadow-md p-8 flex flex-col justify-between items-center text-center backface-hidden">
+                                <span id="fc-category" class="text-[10px] uppercase font-extrabold tracking-widest text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200">Category</span>
+                                <div>
+                                    <h3 id="fc-word" class="text-3xl font-black text-slate-900 mb-2">Word</h3>
+                                    <p id="fc-phonetic" class="text-sm font-mono text-slate-500">/phonetic/</p>
+                                </div>
+                                <span class="text-xs font-bold text-indigo-700 flex items-center gap-1"><i class="fa-solid fa-rotate mr-1"></i> Flip for meaning</span>
+                            </div>
+                            <!-- Back -->
+                            <div class="absolute w-full h-full bg-slate-900 text-white rounded-3xl shadow-md p-8 flex flex-col justify-between items-center text-center backface-hidden rotate-y-180">
+                                <span class="text-[10px] uppercase font-extrabold tracking-widest text-indigo-400 bg-slate-800 px-3 py-1 rounded-full">Vietnamese Meaning</span>
+                                <div>
+                                    <h4 id="fc-meaning" class="text-2xl font-bold text-indigo-400 mb-3">Nghĩa tiếng Việt</h4>
+                                    <p id="fc-context" class="text-xs text-slate-300 italic leading-relaxed">"Context sentence..."</p>
+                                </div>
+                                <span class="text-xs font-bold text-slate-400 flex items-center gap-1"><i class="fa-solid fa-rotate mr-1"></i> Flip back</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <button id="btn-fc-prev" class="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 flex items-center justify-center font-bold text-base shadow-xs transition-all">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <span id="fc-counter" class="text-xs font-bold text-slate-600 px-4 py-2 bg-white rounded-xl border border-slate-200">1 / 14</span>
+                        <button id="btn-fc-next" class="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 flex items-center justify-center font-bold text-base shadow-xs transition-all">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Display Box -->
+                <div id="quiz-view" class="hidden space-y-6">
+                    <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6" id="quiz-box">
+                        <!-- Quiz populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const passageData = [
+            {
+                pNum: 'A',
+                en: `As students learn a new concept, measuring how well they grasp it has often depended on traditional paper and pencil tests. Dartmouth researchers have developed a machine learning algorithm, which can be used to measure how well a student understands a concept based on his or her brain activity patterns. The findings are published in Nature Communications.`,
+                vi: `Khi sinh viên học một khái niệm mới, việc đo lường mức độ thấu hiểu của họ thường phụ thuộc vào các bài kiểm tra bằng giấy và bút truyền thống. Các nhà nghiên cứu tại Đại học Dartmouth đã phát triển một thuật toán học máy, có thể dùng để đo mức độ hiểu một khái niệm của sinh viên dựa trên các mô hình hoạt động não bộ. Phát hiện này được công bố trên tạp chí Nature Communications.`
+            },
+            {
+                pNum: 'B',
+                en: `The study is one of the first to look at how knowledge learned in school is represented in the brain. To test knowledge of concepts in STEM, Dartmouth researchers examined how novices and intermediate learners’ knowledge and brain activity compared when testing mechanical engineering and physics concepts, and then developed a new method to assess their conceptual understanding.`,
+                vi: `Nghiên cứu này là một trong những nghiên cứu đầu tiên xem xét tri thức học ở trường được tái hiện trong não bộ như thế nào. Để kiểm tra kiến thức về các khái niệm trong STEM, các nhà nghiên cứu đã so sánh kiến thức và hoạt động não bộ của người mới bắt đầu (novices) và người học trung cấp (intermediate learners) khi kiểm tra các khái niệm vật lý và kỹ thuật cơ khí, từ đó phát triển phương pháp mới để đánh giá mức độ thấu hiểu khái niệm.`
+            },
+            {
+                pNum: 'C',
+                en: `“Learning about STEM topics is exciting but it can also be quite challenging. Yet, through the course of learning, students develop a rich understanding of many complex concepts. Presumably, this acquired knowledge must be reflected in new patterns of brain activity. However, we currently don’t have a detailed understanding of how the brain supports this kind of complex and abstract knowledge, so that’s what we set out to study” said senior author David Kraemer, an assistant professor of education at Dartmouth College.`,
+                vi: `“Học các chủ đề STEM rất thú vị nhưng cũng đầy thách thức. Trong quá trình học, sinh viên phát triển sự hiểu biết sâu sắc về nhiều khái niệm phức tạp. Tri thức thu nạp được này ắt hẳn phải được phản ánh qua các mô hình hoạt động não mới. Tuy nhiên, hiện tại chúng ta chưa hiểu chi tiết về cách não bộ nâng đỡ loại tri thức trừu tượng và phức tạp này, nên đó là lý do chúng tôi bắt tay vào nghiên cứu” - tác giả chính David Kraemer, trợ lý giáo sư giáo dục tại Đại học Dartmouth cho biết.`
+            },
+            {
+                pNum: 'D',
+                en: `Twenty-eight Dartmouth students participated in the study, broken into <span class="ans-target ans-target-q1" data-q="q1"><span class="q-badge bg-yellow-600">Q1</span>two equal groups<span class="explanation-popover"><strong class="text-indigo-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q1 Target Evidence</strong>"Twenty-eight Dartmouth students participated in the study, broken into two equal groups..." (two groups with the same number of members).</span></span>: engineering students and novices. Engineering students had taken at least one mechanical engineering course and an advanced physics course, whereas novices had not taken any <span class="ans-target ans-target-q2" data-q="q2"><span class="q-badge bg-sky-600">Q2</span>college<span class="explanation-popover"><strong class="text-indigo-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q2 Target Evidence</strong>"...whereas novices had not taken any college-level engineering or physics classes." (in college).</span></span>-level engineering or physics classes. The study was comprised of three tests, which focused on how structures were built and assessed participants’ understanding of Newton’s third law - for every action there is an equal and opposite reaction. Newton’s third law is often used to describe the interactions of objects in motion, but it also applies to objects that are static, or nonmoving: all of the forces in a static structure need to be in equilibrium, a principle fundamental to understanding whether a structure will collapse under its own weight or whether it can support more weight.`,
+                vi: `28 sinh viên Đại học Dartmouth đã tham gia vào nghiên cứu này, được chia thành <span class="ans-target ans-target-q1" data-q="q1"><span class="q-badge bg-yellow-600">Q1</span>hai (two)<span class="explanation-popover"><strong class="text-indigo-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q1</strong>28 sinh viên được chia thành hai (two) nhóm có số thành viên bằng nhau (equal groups).</span></span> nhóm bằng nhau: sinh viên ngành kỹ thuật và những người mới bắt đầu (novices). Các sinh viên kỹ thuật đã học ít nhất một khóa kỹ thuật cơ khí và một khóa vật lý nâng cao, trong khi những người mới bắt đầu chưa từng học bất kỳ lớp kỹ thuật hay vật lý nào ở cấp bậc <span class="ans-target ans-target-q2" data-q="q2"><span class="q-badge bg-sky-600">Q2</span>đại học (college)<span class="explanation-popover"><strong class="text-indigo-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q2</strong>Chưa học bất kỳ khóa kỹ thuật hay vật lý nào ở bậc đại học (college-level).</span></span>. Nghiên cứu bao gồm ba bài kiểm tra, tập trung vào cách các công trình cấu trúc được xây dựng và đánh giá sự hiểu biết của người tham gia về định luật III Newton – đối với mọi lực tác dụng luôn có một phản lực cùng độ lớn và ngược chiều. Định luật III Newton thường được dùng để mô tả sự tương tác của các vật thể chuyển động, nhưng nó cũng áp dụng cho các vật thể tĩnh (không chuyển động): tất cả các lực trong một cấu trúc tĩnh cần phải ở trạng thái cân bằng, một nguyên lý nền tảng để hiểu liệu một cấu trúc sẽ sụp đổ dưới trọng lượng của chính nó hay liệu nó có thể chịu thêm được tải trọng.`
+            },
+            {
+                pNum: 'E',
+                en: `At the start of the study, participants were provided with a brief overview of the different types of forces in mechanical engineering. In an fMRI scanner, they were presented with images of real-world <span class="ans-target ans-target-q3" data-q="q3"><span class="q-badge bg-emerald-600">Q3</span>structures<span class="explanation-popover"><strong class="text-indigo-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q3 Target Evidence</strong>"In an fMRI scanner, they were presented with images of real-world structures (bridges, lampposts, buildings, and more)..."</span></span> (bridges, lampposts, buildings, and more) and were asked to think about how the forces in a given structure balanced out to keep the structure in equilibrium. Then, participants were prompted with a subsequent image of the same structure, where arrows representing forces were overlaid onto the structure. Participants were asked to identify if the <span class="ans-target ans-target-q4" data-q="q4"><span class="q-badge bg-pink-600">Q4</span>Newtonian<span class="explanation-popover"><strong class="text-indigo-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q4 Target Evidence</strong>"Participants were asked to identify if the Newtonian forces had been labeled correctly in this diagram."</span></span> forces had been labeled correctly in this diagram. Engineering students (intermediate learners) answered 75 percent of the diagrams correctly and <span class="ans-target ans-target-q5" data-q="q5"><span class="q-badge bg-purple-600">Q5</span>outperformed<span class="explanation-popover"><strong class="text-indigo-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q5 Target Evidence</strong>"Engineering students (intermediate learners) answered 75 percent of the diagrams correctly and outperformed the novices..."</span></span> the novices, who answered 53.6 percent correctly.`,
+                vi: `Khi bắt đầu nghiên cứu, người tham gia được cung cấp tổng quan ngắn gọn về các loại lực trong kỹ thuật cơ khí. Trong máy quét fMRI, họ được cho xem hình ảnh của các <span class="ans-target ans-target-q3" data-q="q3"><span class="q-badge bg-emerald-600">Q3</span>cấu trúc / công trình (structures)<span class="explanation-popover"><strong class="text-indigo-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q3</strong>Hình ảnh cầu, cột đèn, tòa nhà và các cấu trúc (structures) ngoài đời thực.</span></span> ngoài đời thực (cầu, cột đèn, tòa nhà...) và được yêu cầu suy nghĩ về cách các lực trong một cấu trúc cụ thể tự cân bằng để duy trì trạng thái cân bằng. Sau đó, họ được xem hình ảnh tiếp theo của chính cấu trúc đó với các mũi tên thể hiện lực được phủ lên cấu trúc. Người tham gia được yêu cầu xác định xem các lực <span class="ans-target ans-target-q4" data-q="q4"><span class="q-badge bg-pink-600">Q4</span>Newton (Newtonian)<span class="explanation-popover"><strong class="text-indigo-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q4</strong>Mũi tên thể hiện các lực theo định luật Newton (Newtonian forces).</span></span> đã được dán nhãn chính xác trong sơ đồ này hay chưa. Sinh viên kỹ thuật (người học trung cấp) trả lời đúng 75% các sơ đồ và đã <span class="ans-target ans-target-q5" data-q="q5"><span class="q-badge bg-purple-600">Q5</span>thể hiện vượt trội hơn (outperformed)<span class="explanation-popover"><strong class="text-indigo-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q5</strong>Sinh viên trung cấp/kỹ thuật đã vượt trội hơn (outperformed) người mới bắt đầu.</span></span> so với những người mới bắt đầu (đạt 53,6% độ chính xác).`
+            },
+            {
+                pNum: 'F',
+                en: `Before the fMRI session, participants were also asked to complete two standardized, multiple-choice tests that measured other mechanical engineering and physics knowledge. For both tests, the engineering students had significantly higher scores than the novices with 50.2 percent versus 16.9 percent, and 79.3 percent versus 35.9 percent.`,
+                vi: `Trước buổi chụp fMRI, những người tham gia cũng được yêu cầu hoàn thành hai bài kiểm tra trắc nghiệm chuẩn hóa nhằm đo lường các kiến thức vật lý và kỹ thuật cơ khí khác. Đối với cả hai bài kiểm tra, các sinh viên kỹ thuật đều đạt điểm số cao hơn đáng kể so với những người mới bắt đầu, với kết quả lần lượt là 50,2% so với 16,9%, và 79,3% so với 35,9%.`
+            },
+            {
+                pNum: 'G',
+                en: `In cognitive neuroscience, studies on how information is stored in the brain often rely on averaging data across participants within a group, and then comparing their results to those from another group (such as experts versus novices). For this study, the Dartmouth researchers wanted to devise a data-driven method, which could generate an individual “neural score” based on the brain activity alone, without having to specify which group the participant was a part of. The team created a new method called an informational network analysis, a machine learning algorithm which “produced neural scores that significantly predicted individual differences in performance” testing knowledge of specific STEM concepts. To validate the neural score method, the researchers compared each student’s neural score with his/her performance on the three tests. The results demonstrated that the higher the neural score, the higher the student scored on the concept of knowledge tests.`,
+                vi: `Trong khoa học thần kinh nhận thức, các nghiên cứu về cách thông tin được lưu trữ trong não bộ thường dựa trên việc lấy giá trị trung bình dữ liệu của những người tham gia trong một nhóm, rồi sau đó so sánh kết quả của họ với kết quả từ một nhóm khác (chẳng hạn như nhóm chuyên gia so với nhóm người mới). Đối với nghiên cứu này, các nhà nghiên cứu tại Dartmouth muốn tìm ra một phương pháp dựa trên dữ liệu có thể tạo ra một “điểm số thần kinh” (neural score) riêng cho từng cá nhân chỉ dựa trên hoạt động của não bộ, mà không cần phải chỉ định người tham gia thuộc nhóm nào. Nhóm nghiên cứu đã tạo ra một phương pháp mới gọi là phân tích mạng lưới thông tin, một thuật toán học máy đã “tạo ra các điểm số thần kinh dự đoán chính xác đáng kể sự khác biệt về thành tích của từng cá nhân” khi kiểm tra kiến thức về các khái niệm STEM cụ thể. Để xác thực phương pháp điểm số thần kinh này, các nhà nghiên cứu đã so sánh điểm số thần kinh của từng sinh viên với kết quả bài thi của họ trong ba bài kiểm tra. Kết quả đã chứng minh rằng điểm số thần kinh càng cao thì sinh viên đó đạt điểm càng cao trong các bài kiểm tra kiến thức khái niệm.`
+            },
+            {
+                pNum: 'H',
+                en: `“In the study, we found that when engineering students looked at images of real-world structures, the students would automatically apply their engineering knowledge, and would see the differences between structures such as whether it was a cantilever, truss or vertical load” explained Kraemer. “Based on the similarities in brain activity patterns, our machine learning algorithm method was able to distinguish the differences between these mechanical categories and generate a neural score that reflected this underlying knowledge. The idea here is that an engineer and novice will see something different when they look at a photograph of a structure, and we’re picking up on that difference” he added.`,
+                vi: `“Trong nghiên cứu, chúng tôi nhận thấy rằng khi sinh viên kỹ thuật nhìn vào hình ảnh của các cấu trúc ngoài đời thực, họ sẽ tự động áp dụng kiến thức kỹ thuật của mình và nhìn thấy sự khác biệt giữa các cấu trúc, chẳng hạn như cấu trúc đó là dầm công-xôn (cantilever), giàn không gian (truss) hay chịu tải trọng thẳng đứng (vertical load),” Kraemer giải thích. “Dựa trên sự tương đồng trong các mô hình hoạt động của não bộ, phương pháp thuật toán học máy của chúng tôi có thể phân biệt sự khác biệt giữa các hạng mục cơ học này và tạo ra một điểm số thần kinh phản ánh tri thức nền tảng này. Ý tưởng ở đây là một kỹ sư và một người mới sẽ nhìn thấy những điều khác nhau khi họ xem một bức ảnh về một cấu trúc, và chúng tôi đang nắm bắt chính sự khác biệt đó,” ông cho biết thêm.`
+            },
+            {
+                pNum: 'I',
+                en: `The study found that while both engineering students and novices use the visual cortex similarly when applying concept knowledge about engineering, they use the rest of the brain very differently to process the same visual image. Consistent with prior research, the results demonstrated that the engineering students’ conceptual knowledge was associated with patterns of activity in several brain regions, including the dorsal frontoparietal network that helps enable spatial cognition, and regions of ventral occipitotemporal cortex that are implicated in visual object recognition and category identification.`,
+                vi: `Nghiên cứu phát hiện ra rằng trong khi cả sinh viên kỹ thuật và người mới đều sử dụng vỏ não thị giác theo cách tương tự nhau khi áp dụng kiến thức khái niệm về kỹ thuật, họ lại sử dụng phần còn lại của não bộ rất khác nhau để xử lý cùng một hình ảnh trực quan. Nhất quán với các nghiên cứu trước đây, kết quả đã chứng minh rằng kiến thức khái niệm của sinh viên kỹ thuật có mối liên hệ với các mô hình hoạt động ở một số vùng não, bao gồm mạng lưới trán-đỉnh lưng (dorsal frontoparietal network) giúp tăng cường nhận thức không gian, và các vùng thuộc vỏ não chẩm-thái dương bụng (ventral occipitotemporal cortex) có liên quan đến việc nhận diện đối tượng trực quan và phân loại hạng mục.`
+            },
+            {
+                pNum: 'J',
+                en: `The informational network analysis could also have broader applications, as it could be used to evaluate the effectiveness of different teaching approaches. The research team is currently testing the comparison between hands-on labs versus virtual labs to determine if either approach leads to better learning and retention of knowledge over time.`,
+                vi: `Phương pháp phân tích mạng lưới thông tin này cũng có thể có những ứng dụng rộng rãi hơn, vì nó có thể được sử dụng để đánh giá hiệu quả của các phương pháp giảng dạy khác nhau. Nhóm nghiên cứu hiện đang tiến hành thử nghiệm so sánh giữa phòng thí nghiệm thực hành thực tế và phòng thí nghiệm ảo để xác định xem phương pháp nào mang lại hiệu quả học tập và khả năng ghi nhớ kiến thức tốt hơn theo thời gian.`
+            }
+        ];
+
+        const questionsData = [
+            {
+                id: 'q1',
+                num: '1',
+                type: 'Notes Completion (One Word Only)',
+                ansKey: 'two',
+                badgeColor: 'bg-yellow-600',
+                prompt: 'Participants: 28 students divided into 1 _________________ groups with the same number of members',
+                explEn: 'Paragraph D states: "Twenty-eight Dartmouth students participated in the study, broken into two equal groups: engineering students and novices." "equal groups" paraphrases "groups with the same number of members".',
+                explVi: 'Đoạn D nêu rõ: "Twenty-eight Dartmouth students participated in the study, broken into two equal groups..." (28 sinh viên tham gia được chia thành hai nhóm bằng nhau). Cụm "equal groups" được paraphrase thành "groups with the same number of members". Từ đơn cần điền là "two".',
+                synonyms: [
+                    { q: 'divided into', p: 'broken into' },
+                    { q: 'groups with the same number of members', p: 'equal groups' }
+                ]
+            },
+            {
+                id: 'q2',
+                num: '2',
+                type: 'Notes Completion (One Word Only)',
+                ansKey: 'college',
+                badgeColor: 'bg-sky-600',
+                prompt: 'Novices: had not done any engineering and physics courses in 2 _________________',
+                explEn: 'Paragraph D states: "...whereas novices had not taken any college-level engineering or physics classes." "in college" answers where they had not taken the classes.',
+                explVi: 'Đoạn D cho biết: "...whereas novices had not taken any college-level engineering or physics classes." (trong khi những người mới chưa từng học các lớp kỹ thuật hoặc vật lý ở bậc đại học). "courses in college" tương đương "college-level classes". Từ cần điền là "college".',
+                synonyms: [
+                    { q: 'had not done any ... courses in', p: 'had not taken any ... classes' },
+                    { q: 'engineering and physics courses in college', p: 'college-level engineering or physics classes' }
+                ]
+            },
+            {
+                id: 'q3',
+                num: '3',
+                type: 'Notes Completion (One Word Only)',
+                ansKey: 'structures',
+                badgeColor: 'bg-emerald-600',
+                prompt: 'Tests: the students looked at photographs of buildings, bridges and other similar 3 _________________ in an fMRI scanner.',
+                explEn: 'Paragraph E states: "In an fMRI scanner, they were presented with images of real-world structures (bridges, lampposts, buildings, and more)..."',
+                explVi: 'Đoạn E khẳng định: "In an fMRI scanner, they were presented with images of real-world structures (bridges, lampposts, buildings, and more)..." (Trong máy quét fMRI, họ được xem hình ảnh các cấu trúc ngoài đời thực như cầu, cột đèn, tòa nhà...). Từ điền là "structures".',
+                synonyms: [
+                    { q: 'looked at photographs of', p: 'presented with images of' },
+                    { q: 'buildings, bridges and other similar structures', p: 'real-world structures (bridges, lampposts, buildings, and more)' }
+                ]
+            },
+            {
+                id: 'q4',
+                num: '4',
+                type: 'Notes Completion (One Word Only)',
+                ansKey: 'Newtonian',
+                badgeColor: 'bg-pink-600',
+                prompt: 'After that, the participants looked at the subsequent images with arrow showing 4 _________________ forces. Then they were asked whether the labels were right.',
+                explEn: 'Paragraph E states: "Then, participants were prompted with a subsequent image of the same structure, where arrows representing forces were overlaid onto the structure. Participants were asked to identify if the Newtonian forces had been labeled correctly in this diagram."',
+                explVi: 'Đoạn E chỉ ra: Người tham gia được xem hình ảnh tiếp theo có mũi tên chỉ lực và được yêu cầu xác định xem các lực theo định luật Newton ("Newtonian forces") có được gắn nhãn đúng không ("labeled correctly" = "labels were right"). Từ cần điền là "Newtonian".',
+                synonyms: [
+                    { q: 'arrow showing Newtonian forces', p: 'arrows representing forces ... Newtonian forces' },
+                    { q: 'whether the labels were right', p: 'if the Newtonian forces had been labeled correctly' }
+                ]
+            },
+            {
+                id: 'q5',
+                num: '5',
+                type: 'Notes Completion (One Word Only)',
+                ansKey: 'outperformed',
+                badgeColor: 'bg-purple-600',
+                prompt: 'Result: the intermediate students 5 _________________ the novices.',
+                explEn: 'Paragraph E states: "Engineering students (intermediate learners) answered 75 percent of the diagrams correctly and outperformed the novices, who answered 53.6 percent correctly."',
+                explVi: 'Đoạn E kết luận: "Engineering students (intermediate learners) answered 75 percent of the diagrams correctly and outperformed the novices..." (Sinh viên kỹ thuật - những người học trung cấp - đã làm đúng 75% và thể hiện vượt trội hơn hẳn so với người mới). Từ điền là "outperformed".',
+                synonyms: [
+                    { q: 'intermediate students', p: 'Engineering students (intermediate learners)' },
+                    { q: 'outperformed the novices', p: 'outperformed the novices' }
+                ]
+            }
+        ];
+
+        const vocabList = [
+            {
+                word: 'algorithm',
+                phonetic: '/ˈæl.ɡə.rɪ.ðəm/',
+                vi: 'Thuật toán / Quy trình tính toán',
+                enDef: 'A process or set of rules to be followed in calculations or other problem-solving operations, especially by a computer.',
+                type: 'noun',
+                category: 'neuroscience',
+                context: 'Dartmouth researchers have developed a machine learning algorithm based on brain activity.',
+                collocation: 'machine learning algorithm / complex algorithm'
+            },
+            {
+                word: 'cognitive',
+                phonetic: '/ˈkɒɡ.nə.tɪv/',
+                vi: 'Thuộc về nhận thức',
+                enDef: 'Relating to the mental process of acquiring knowledge and understanding through thought, experience, and the senses.',
+                type: 'adjective',
+                category: 'neuroscience',
+                context: 'In cognitive neuroscience, studies on how information is stored often rely on averaging data.',
+                collocation: 'cognitive neuroscience / cognitive development / cognitive ability'
+            },
+            {
+                word: 'novice',
+                phonetic: '/ˈnɒv.ɪs/',
+                vi: 'Người mới bắt đầu / Chưa có kinh nghiệm',
+                enDef: 'A person who is new to and lacks experience in a job or situation.',
+                type: 'noun',
+                category: 'noun',
+                context: 'Examined how novices and intermediate learners’ knowledge and brain activity compared.',
+                collocation: 'complete novice / novice learner'
+            },
+            {
+                word: 'intermediate',
+                phonetic: '/ˌɪn.təˈmiː.di.ət/',
+                vi: 'Trung cấp / Trình độ trung bình khá',
+                enDef: 'Coming between two points in time, place, degree, or level of skill.',
+                type: 'adjective',
+                category: 'adjective',
+                context: 'Engineering students (intermediate learners) answered 75 percent of the diagrams correctly.',
+                collocation: 'intermediate level / intermediate learner'
+            },
+            {
+                word: 'equilibrium',
+                phonetic: '/ˌiː.kwɪˈlɪb.ri.əm/',
+                vi: 'Trạng thái cân bằng',
+                enDef: 'A state in which opposing forces or influences are balanced.',
+                type: 'noun',
+                category: 'neuroscience',
+                context: 'All of the forces in a static structure need to be in equilibrium to prevent collapse.',
+                collocation: 'in equilibrium / maintain equilibrium'
+            },
+            {
+                word: 'static',
+                phonetic: '/ˈstæt.ɪk/',
+                vi: 'Tĩnh / Bất động (không di chuyển)',
+                enDef: 'Lacking in movement, action, or change, especially in a way viewed as desirable or stable.',
+                type: 'adjective',
+                category: 'neuroscience',
+                context: 'It also applies to objects that are static, or nonmoving.',
+                collocation: 'static structure / static forces'
+            },
+            {
+                word: 'outperform',
+                phonetic: '/ˌaʊt.pəˈfɔːm/',
+                vi: 'Thể hiện vượt trội / Vượt trội hơn',
+                enDef: 'Perform better than another person, group, or entity.',
+                type: 'verb',
+                category: 'verb',
+                context: 'Engineering students answered 75 percent correctly and outperformed the novices.',
+                collocation: 'outperform competitors / significantly outperform'
+            },
+            {
+                word: 'data-driven',
+                phonetic: '/ˈdeɪ.təˌdrɪv.ən/',
+                vi: 'Dựa trên dữ liệu thực tế',
+                enDef: 'Determined by or dependent on the collection and analysis of data.',
+                type: 'adjective',
+                category: 'adjective',
+                context: 'Researchers wanted to devise a data-driven method to generate neural scores.',
+                collocation: 'data-driven approach / data-driven decision'
+            },
+            {
+                word: 'cantilever',
+                phonetic: '/ˈkæn.tɪ.liː.vər/',
+                vi: 'Dầm công xôn (dầm nhô tự do đỡ một đầu)',
+                enDef: 'A long projecting beam or girder fixed at only one end, used in bridge and building construction.',
+                type: 'noun',
+                category: 'neuroscience',
+                context: 'Would see the differences between structures such as whether it was a cantilever or truss.',
+                collocation: 'cantilever bridge / cantilever beam'
+            },
+            {
+                word: 'truss',
+                phonetic: '/trʌs/',
+                vi: 'Giàn kết cấu chịu lực (hình tam giác)',
+                enDef: 'A framework, typically consisting of rafters, posts, and struts, supporting a roof, bridge, or other structure.',
+                type: 'noun',
+                category: 'neuroscience',
+                context: 'Differences between structures such as whether it was a cantilever, truss or vertical load.',
+                collocation: 'truss bridge / steel truss'
+            },
+            {
+                word: 'spatial',
+                phonetic: '/ˈspeɪ.ʃəl/',
+                vi: 'Thuộc về không gian',
+                enDef: 'Relating to space and the position, size, and shape of things in it.',
+                type: 'adjective',
+                category: 'neuroscience',
+                context: 'Associated with the dorsal frontoparietal network that helps enable spatial cognition.',
+                collocation: 'spatial cognition / spatial awareness / spatial memory'
+            },
+            {
+                word: 'retention',
+                phonetic: '/rɪˈten.ʃən/',
+                vi: 'Sự duy trì / Khả năng ghi nhớ thông tin',
+                enDef: 'The continued possession, use, or control of something; the ability to remember facts.',
+                type: 'noun',
+                category: 'noun',
+                context: 'To determine if either approach leads to better learning and retention of knowledge over time.',
+                collocation: 'knowledge retention / memory retention'
+            },
+            {
+                word: 'implicate',
+                phonetic: '/ˈɪm.plɪ.keɪt/',
+                vi: 'Liên quan mật thiết / Có vai trò trong',
+                enDef: 'Show to be involved in a process, function, or situation.',
+                type: 'verb',
+                category: 'verb',
+                context: 'Regions of ventral occipitotemporal cortex that are implicated in visual object recognition.',
+                collocation: 'implicated in cognition / implicated in recognition'
+            },
+            {
+                word: 'validate',
+                phonetic: '/ˈvæl.ɪ.deɪt/',
+                vi: 'Xác thực / Chứng minh tính đúng đắn',
+                enDef: 'Check or prove the validity or accuracy of something.',
+                type: 'verb',
+                category: 'verb',
+                context: 'To validate the neural score method, researchers compared student scores with test results.',
+                collocation: 'validate findings / validate the model'
+            }
+        ];
+    </script>
+
+    <script>
+        const app = {
+            currentLang: 'en',
+            fontSize: 16,
+            showArrows: true,
+            activeTab: 'analysis',
+            fcIndex: 0,
+            fcFlipped: false,
+            arrowAnimFrame: null,
+
+            init() {
+                this.bindEvents();
+                this.renderPassage();
+                this.renderExplanations();
+                this.bindTargetEvents();
+                this.renderVocabGrid();
+                this.setupFlashcard();
+                this.setupQuiz();
+            },
+
+            bindEvents() {
+                // Language Switcher Buttons
+                document.querySelectorAll('#lang-switcher .lang-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('#lang-switcher .lang-btn').forEach(b => b.classList.remove('active'));
+                        e.currentTarget.classList.add('active');
+                        this.currentLang = e.currentTarget.dataset.lang;
+                        this.renderPassage();
+                        this.renderExplanations();
+                        this.bindTargetEvents();
+                        setTimeout(() => this.drawConnections(), 60);
+                    });
+                });
+
+                // Font Resizing
+                document.getElementById('btn-inc-font').addEventListener('click', () => {
+                    if (this.fontSize < 24) {
+                        this.fontSize += 1;
+                        document.documentElement.style.setProperty('--app-font-size', `${this.fontSize}px`);
+                        this.drawConnections();
+                    }
+                });
+                document.getElementById('btn-dec-font').addEventListener('click', () => {
+                    if (this.fontSize > 13) {
+                        this.fontSize -= 1;
+                        document.documentElement.style.setProperty('--app-font-size', `${this.fontSize}px`);
+                        this.drawConnections();
+                    }
+                });
+
+                // Toggle Arrows
+                document.getElementById('btn-toggle-arrows').addEventListener('click', (e) => {
+                    this.showArrows = !this.showArrows;
+                    e.currentTarget.classList.toggle('bg-indigo-700');
+                    e.currentTarget.classList.toggle('bg-slate-300');
+                    e.currentTarget.classList.toggle('text-slate-700');
+                    if (!this.showArrows) {
+                        this.clearCanvas();
+                    } else {
+                        this.drawConnections();
+                    }
+                });
+
+                // Scroll Listeners
+                const leftPane = document.getElementById('left-pane');
+                const rightPane = document.getElementById('right-pane');
+                if (leftPane) leftPane.addEventListener('scroll', () => this.drawConnections());
+                if (rightPane) rightPane.addEventListener('scroll', () => this.drawConnections());
+
+                // Navigation Tabs
+                document.querySelectorAll('#nav-tabs .tab-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('#nav-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+                        e.currentTarget.classList.add('active');
+                        const tab = e.currentTarget.dataset.tab;
+                        this.activeTab = tab;
+
+                        document.getElementById('tab-analysis-content').classList.toggle('hidden', tab !== 'analysis');
+                        document.getElementById('tab-vocabulary-content').classList.toggle('hidden', tab !== 'vocabulary');
+                        document.getElementById('tab-flashcards-content').classList.toggle('hidden', tab !== 'flashcards');
+
+                        if (tab !== 'analysis') this.clearCanvas();
+                        else setTimeout(() => this.drawConnections(), 100);
+                    });
+                });
+
+                // Search & Filter Vocab
+                document.getElementById('vocab-search').addEventListener('input', () => this.filterVocab());
+                document.getElementById('vocab-filter').addEventListener('change', () => this.filterVocab());
+
+                // Flashcard Controls
+                document.getElementById('flashcard-wrapper').addEventListener('click', () => {
+                    this.fcFlipped = !this.fcFlipped;
+                    document.getElementById('flashcard-inner').classList.toggle('rotate-y-180', this.fcFlipped);
+                });
+                document.getElementById('btn-fc-prev').addEventListener('click', () => {
+                    if (this.fcIndex > 0) {
+                        this.fcIndex--;
+                        this.updateFlashcard();
+                    }
+                });
+                document.getElementById('btn-fc-next').addEventListener('click', () => {
+                    if (this.fcIndex < vocabList.length - 1) {
+                        this.fcIndex++;
+                        this.updateFlashcard();
+                    }
+                });
+
+                // Mode Switcher in Tab 3
+                document.getElementById('btn-mode-flashcard').addEventListener('click', (e) => {
+                    e.target.classList.replace('bg-white', 'bg-indigo-700');
+                    e.target.classList.replace('text-slate-700', 'text-white');
+                    document.getElementById('btn-mode-quiz').classList.replace('bg-indigo-700', 'bg-white');
+                    document.getElementById('btn-mode-quiz').classList.replace('text-white', 'text-slate-700');
+                    document.getElementById('flashcard-view').classList.remove('hidden');
+                    document.getElementById('quiz-view').classList.add('hidden');
+                });
+                document.getElementById('btn-mode-quiz').addEventListener('click', (e) => {
+                    e.target.classList.replace('bg-white', 'bg-indigo-700');
+                    e.target.classList.replace('text-slate-700', 'text-white');
+                    document.getElementById('btn-mode-flashcard').classList.replace('bg-indigo-700', 'bg-white');
+                    document.getElementById('btn-mode-flashcard').classList.replace('text-white', 'text-slate-700');
+                    document.getElementById('quiz-view').classList.remove('hidden');
+                    document.getElementById('flashcard-view').classList.add('hidden');
+                });
+
+                window.addEventListener('resize', () => this.drawConnections());
+            },
+
+            renderPassage() {
+                const container = document.getElementById('passage-container');
+                let html = `
+                    <h2 class="text-2xl font-black text-slate-900 mb-2 text-center leading-tight tracking-tight">YOUR BRAIN ACTIVITY CAN BE USED TO MEASURE HOW WELL YOU UNDERSTAND A CONCEPT</h2>
+                    <p class="text-xs text-center text-slate-500 italic mb-6">Investigating machine learning algorithms, fMRI neural scoring, and conceptual understanding in STEM.</p>
+                `;
+
+                passageData.forEach(p => {
+                    if (this.currentLang === 'en') {
+                        html += `<p><span class="paragraph-num">${p.pNum}</span>${p.en}</p>`;
+                    } else if (this.currentLang === 'vi') {
+                        html += `<p><span class="paragraph-num">${p.pNum}</span>${p.vi}</p>`;
+                    } else if (this.currentLang === 'dual') {
+                        html += `
+                            <div class="mb-6 p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                                <div class="text-slate-800 text-sm leading-relaxed border-b border-slate-200 pb-3">
+                                    <strong class="text-xs font-bold text-indigo-700 uppercase tracking-wider block mb-1">ENGLISH [Paragraph ${p.pNum}]</strong>
+                                    ${p.en}
+                                </div>
+                                <div class="text-slate-600 text-sm leading-relaxed pt-1">
+                                    <strong class="text-xs font-bold text-purple-700 uppercase tracking-wider block mb-1">TIẾNG VIỆT</strong>
+                                    ${p.vi}
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+
+                container.innerHTML = html;
+            },
+
+            renderExplanations() {
+                const container = document.getElementById('explanations-list');
+                let html = `
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+                        <div class="flex items-center space-x-2 text-indigo-700 font-bold text-xs uppercase tracking-wide mb-1">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span>Comprehensive Rationale & Evidence Guide</span>
+                        </div>
+                        <h2 class="text-xl font-extrabold text-slate-900">Dartmouth Test — Phân Tích Đáp Án Chi Tiết</h2>
+                        <p class="text-xs text-slate-500 mt-1">Click "Locate Text" or click any highlighted badge in the notes box below to scroll to and highlight the supporting sentence in the passage.</p>
+                    </div>
+
+                    <!-- Notes Completion Structure Block -->
+                    <div class="bg-indigo-50/70 p-6 rounded-2xl border border-indigo-200/80 shadow-xs space-y-4">
+                        <div class="flex items-center justify-between border-b border-indigo-200/60 pb-3">
+                            <span class="font-extrabold text-xs text-indigo-900 uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-pen-to-square text-indigo-700"></i> Questions 1–5 Notes Completion
+                            </span>
+                            <span class="text-[11px] font-bold text-indigo-800 bg-indigo-100/90 px-2.5 py-1 rounded-md border border-indigo-200">
+                                Choose ONE WORD ONLY from the passage
+                            </span>
+                        </div>
+
+                        <h3 class="text-center font-extrabold text-slate-900 text-base sm:text-lg tracking-tight">Dartmouth Test</h3>
+
+                        <div class="bg-white p-5 sm:p-6 rounded-xl border border-indigo-200 text-xs sm:text-sm text-slate-800 space-y-4 leading-relaxed">
+                            <p>
+                                <strong>Participants:</strong> 28 students divided into 
+                                <span class="jump-btn bg-yellow-200 border border-yellow-400 font-bold px-2 py-0.5 rounded cursor-pointer text-yellow-900 hover:bg-yellow-300 transition-all inline-flex items-center gap-1" data-q="q1">
+                                    <strong>1</strong> <span class="underline decoration-dashed">two</span>
+                                </span>
+                                groups with the same number of members
+                            </p>
+
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li><strong>Engineering students:</strong> had knowledge about mechanical engineering and physics.</li>
+                                <li>
+                                    <strong>Novices:</strong> had not done any engineering and physics courses in 
+                                    <span class="jump-btn bg-sky-200 border border-sky-400 font-bold px-2 py-0.5 rounded cursor-pointer text-sky-900 hover:bg-sky-300 transition-all inline-flex items-center gap-1" data-q="q2">
+                                        <strong>2</strong> <span class="underline decoration-dashed">college</span>
+                                    </span>
+                                </li>
+                            </ul>
+
+                            <p>
+                                <strong>Tests:</strong> the students looked at photographs of buildings, bridges and other similar 
+                                <span class="jump-btn bg-emerald-200 border border-emerald-400 font-bold px-2 py-0.5 rounded cursor-pointer text-emerald-900 hover:bg-emerald-300 transition-all inline-flex items-center gap-1" data-q="q3">
+                                    <strong>3</strong> <span class="underline decoration-dashed">structures</span>
+                                </span>
+                                in an fMRI scanner. After that, the participants looked at the subsequent images with arrow showing 
+                                <span class="jump-btn bg-pink-200 border border-pink-400 font-bold px-2 py-0.5 rounded cursor-pointer text-pink-900 hover:bg-pink-300 transition-all inline-flex items-center gap-1" data-q="q4">
+                                    <strong>4</strong> <span class="underline decoration-dashed">Newtonian</span>
+                                </span>
+                                forces. Then they were asked whether the labels were right.
+                            </p>
+
+                            <p>
+                                <strong>Result:</strong> the intermediate students 
+                                <span class="jump-btn bg-purple-200 border border-purple-400 font-bold px-2 py-0.5 rounded cursor-pointer text-purple-900 hover:bg-purple-300 transition-all inline-flex items-center gap-1" data-q="q5">
+                                    <strong>5</strong> <span class="underline decoration-dashed">outperformed</span>
+                                </span>
+                                the novices.
+                            </p>
+                        </div>
+                    </div>
+                `;
+
+                questionsData.forEach(q => {
+                    html += `
+                        <div class="q-card bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4 transition-all hover:border-indigo-400" id="q-card-${q.id}">
+                            <div class="flex items-start justify-between">
+                                <span class="bg-slate-100 text-slate-800 font-extrabold text-xs px-3 py-1 rounded-md border border-slate-200">
+                                    Question ${q.num} <span class="text-[10px] font-semibold text-slate-500">(${q.type})</span>
+                                </span>
+                                <div class="flex items-center space-x-2">
+                                    <button class="jump-btn bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs px-2.5 py-1 rounded-md border border-indigo-200 transition-colors flex items-center gap-1 cursor-pointer" data-q="${q.id}">
+                                        <i class="fa-solid fa-location-dot"></i> Locate Text
+                                    </button>
+                                    <span class="${q.badgeColor} text-white font-black text-xs px-3 py-1 rounded-full uppercase tracking-wider shadow-xs">
+                                        Answer: ${q.ansKey}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p class="text-sm font-bold text-slate-800 leading-relaxed">${q.prompt}</p>
+                            </div>
+
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-700 space-y-2">
+                                <div class="flex items-center text-indigo-700 font-bold text-xs uppercase tracking-wider">
+                                    <i class="fa-solid fa-circle-check mr-1.5"></i>
+                                    <span>Detailed Rationale / Giải Thích:</span>
+                                </div>
+                                <p class="leading-relaxed font-medium text-slate-800">${this.currentLang === 'vi' ? q.explVi : q.explEn}</p>
+                            </div>
+
+                            ${q.synonyms ? `
+                                <div class="pt-2 border-t border-slate-100">
+                                    <h5 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center">
+                                        <i class="fa-solid fa-arrows-rotate mr-1.5 text-indigo-600"></i> Paraphrase Keywords Table
+                                    </h5>
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full text-xs text-left border-collapse">
+                                            <thead>
+                                                <tr class="bg-indigo-50/70 text-indigo-900 font-semibold border-b border-indigo-100">
+                                                    <th class="p-2">Question Keyword</th>
+                                                    <th class="p-2">Passage Equivalent</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-slate-100 text-slate-600">
+                                                ${q.synonyms.map(s => `
+                                                    <tr>
+                                                        <td class="p-2 font-medium text-slate-700">${s.q}</td>
+                                                        <td class="p-2 font-semibold text-indigo-700">${s.p}</td>
+                                                    </tr>
+                                                `).join('')}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+            },
+
+            bindTargetEvents() {
+                const targets = document.querySelectorAll('.ans-target');
+                const qCards = document.querySelectorAll('.q-card');
+                const jumpBtns = document.querySelectorAll('.jump-btn');
+
+                const activatePair = (targetEl, cardEl, scrollLeft = false, scrollRight = false) => {
+                    document.querySelectorAll('.ans-target').forEach(t => t.classList.remove('active-target'));
+                    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('ring-2', 'ring-indigo-600', 'bg-indigo-50/40', 'border-indigo-400'));
+
+                    if (targetEl) {
+                        targetEl.classList.add('active-target');
+                        if (scrollLeft) {
+                            targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }
+
+                    if (cardEl) {
+                        cardEl.classList.add('ring-2', 'ring-indigo-600', 'bg-indigo-50/40', 'border-indigo-400');
+                        if (scrollRight) {
+                            cardEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }
+                    }
+
+                    this.startSmoothTracking();
+                };
+
+                const deactivateAll = () => {
+                    document.querySelectorAll('.ans-target').forEach(t => t.classList.remove('active-target'));
+                    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('ring-2', 'ring-indigo-600', 'bg-indigo-50/40', 'border-indigo-400'));
+                    this.clearCanvas();
+                };
+
+                targets.forEach(target => {
+                    const qId = target.dataset.q;
+                    const qCard = document.getElementById(`q-card-${qId}`);
+
+                    target.addEventListener('mouseenter', () => activatePair(target, qCard, false, false));
+                    target.addEventListener('mouseleave', deactivateAll);
+                    target.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        activatePair(target, qCard, false, true);
+                    });
+                });
+
+                qCards.forEach(qCard => {
+                    const qId = qCard.id.replace('q-card-', '');
+                    const target = document.querySelector(`.ans-target[data-q="${qId}"]`);
+
+                    qCard.addEventListener('mouseenter', () => activatePair(target, qCard, false, false));
+                    qCard.addEventListener('mouseleave', deactivateAll);
+                    qCard.addEventListener('click', (e) => {
+                        if (e.target.closest('.jump-btn')) return;
+                        activatePair(target, qCard, true, false);
+                    });
+                });
+
+                jumpBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        const qId = btn.dataset.q;
+                        const target = document.querySelector(`.ans-target[data-q="${qId}"]`);
+                        const qCard = document.getElementById(`q-card-${qId}`);
+                        activatePair(target, qCard, true, false);
+                    });
+                });
+            },
+
+            startSmoothTracking() {
+                if (this.arrowAnimFrame) cancelAnimationFrame(this.arrowAnimFrame);
+                const startTime = performance.now();
+                const duration = 800;
+
+                const step = (now) => {
+                    this.drawConnections();
+                    if (now - startTime < duration) {
+                        this.arrowAnimFrame = requestAnimationFrame(step);
+                    }
+                };
+                this.arrowAnimFrame = requestAnimationFrame(step);
+            },
+
+            drawConnections() {
+                const activeTarget = document.querySelector('.ans-target.active-target');
+                if (activeTarget && this.showArrows) {
+                    const qId = activeTarget.dataset.q;
+                    const qCard = document.getElementById(`q-card-${qId}`);
+                    if (qCard) {
+                        this.drawArrow(activeTarget, qCard);
+                        return;
+                    }
+                }
+                this.clearCanvas();
+            },
+
+            drawArrow(fromEl, toEl) {
+                if (!fromEl || !toEl || window.innerWidth < 1024 || !this.showArrows) {
+                    this.clearCanvas();
+                    return;
+                }
+                
+                const svg = document.getElementById('svg-canvas');
+                const wrapper = document.getElementById('main-wrapper');
+                const leftPane = document.getElementById('left-pane');
+                const rightPane = document.getElementById('right-pane');
+
+                if (!svg || !wrapper || !leftPane || !rightPane) return;
+
+                const wrapperRect = wrapper.getBoundingClientRect();
+                const leftPaneRect = leftPane.getBoundingClientRect();
+                const rightPaneRect = rightPane.getBoundingClientRect();
+
+                const clientRects = fromEl.getClientRects();
+                let fromRect = fromEl.getBoundingClientRect();
+                if (clientRects.length > 0) {
+                    fromRect = clientRects[clientRects.length - 1];
+                }
+                const toRect = toEl.getBoundingClientRect();
+
+                const isFromVisible = (fromRect.bottom >= leftPaneRect.top && fromRect.top <= leftPaneRect.bottom);
+                const isToVisible = (toRect.bottom >= rightPaneRect.top && toRect.top <= rightPaneRect.bottom);
+
+                if (!isFromVisible || !isToVisible) {
+                    this.clearCanvas();
+                    return;
+                }
+
+                const x1 = Math.min(fromRect.right - wrapperRect.left, leftPaneRect.right - wrapperRect.left - 8);
+                const y1 = fromRect.top + (fromRect.height / 2) - wrapperRect.top;
+                
+                const x2 = toRect.left - wrapperRect.left;
+                const y2 = toRect.top + Math.min(36, toRect.height / 2) - wrapperRect.top;
+
+                const dx = Math.max(30, (x2 - x1) * 0.45);
+                const pathData = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
+
+                svg.innerHTML = `
+                    <defs>
+                        <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#4338ca" />
+                            <stop offset="100%" stop-color="#6366f1" />
+                        </linearGradient>
+                        <filter id="arrowGlowFilter" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#4338ca" flood-opacity="0.4"/>
+                        </filter>
+                        <marker id="arrowhead" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                            <polygon points="0 0, 9 3.5, 0 7" fill="#6366f1" />
+                        </marker>
+                    </defs>
+                    <path d="${pathData}" fill="none" stroke="url(#arrowGrad)" stroke-width="3" stroke-dasharray="7,4" class="animated-arrow-line" marker-end="url(#arrowhead)" filter="url(#arrowGlowFilter)"/>
+                    <circle cx="${x1}" cy="${y1}" r="4" fill="#4338ca" />
+                    <circle cx="${x2}" cy="${y2}" r="4" fill="#6366f1" />
+                `;
+            },
+
+            clearCanvas() {
+                const svg = document.getElementById('svg-canvas');
+                if (svg) svg.innerHTML = '';
+            },
+
+            renderVocabGrid() {
+                this.filterVocab();
+            },
+
+            filterVocab() {
+                const search = document.getElementById('vocab-search').value.toLowerCase();
+                const filter = document.getElementById('vocab-filter').value;
+                const grid = document.getElementById('vocab-cards-grid');
+
+                const filtered = vocabList.filter(item => {
+                    const matchSearch = item.word.toLowerCase().includes(search) || item.vi.toLowerCase().includes(search);
+                    const matchFilter = filter === 'all' || item.category === filter || item.type === filter;
+                    return matchSearch && matchFilter;
+                });
+
+                let html = '';
+                filtered.forEach(item => {
+                    html += `
+                        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col justify-between hover:border-indigo-400 transition-all space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-[10px] font-black uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-md border border-indigo-200">${item.type}</span>
+                                    <button onclick="app.speakWord('${item.word}')" class="text-slate-400 hover:text-indigo-700 transition-colors" title="Listen pronunciation">
+                                        <i class="fa-solid fa-volume-high text-sm"></i>
+                                    </button>
+                                </div>
+                                <h3 class="text-xl font-extrabold text-slate-900 capitalize">${item.word}</h3>
+                                <p class="text-xs font-mono text-slate-500 mb-2">${item.phonetic}</p>
+                                <p class="text-sm font-bold text-indigo-700 bg-indigo-50/50 p-2 rounded-lg border border-indigo-100 mb-3">${item.vi}</p>
+                                <p class="text-xs text-slate-600 leading-relaxed mb-3">${item.enDef}</p>
+                            </div>
+
+                            <div class="pt-3 border-t border-slate-100 space-y-2 text-xs">
+                                <div>
+                                    <span class="font-bold text-slate-700 block text-[10px] uppercase tracking-wider text-slate-400">Context in Passage:</span>
+                                    <p class="text-slate-600 italic">"${item.context}"</p>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-slate-700 block text-[10px] uppercase tracking-wider text-indigo-700">Common Collocation:</span>
+                                    <p class="font-semibold text-indigo-950">${item.collocation}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                grid.innerHTML = html || `<p class="text-sm text-slate-500 col-span-full text-center py-8">No vocabulary words match your search filters.</p>`;
+            },
+
+            speakWord(word) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const u = new SpeechSynthesisUtterance(word);
+                    u.lang = 'en-GB';
+                    u.rate = 0.9;
+                    window.speechSynthesis.speak(u);
+                }
+            },
+
+            setupFlashcard() {
+                this.updateFlashcard();
+            },
+
+            updateFlashcard() {
+                const item = vocabList[this.fcIndex];
+                this.fcFlipped = false;
+                document.getElementById('flashcard-inner').classList.remove('rotate-y-180');
+
+                document.getElementById('fc-category').textContent = `${item.type.toUpperCase()} • ${item.category.toUpperCase()}`;
+                document.getElementById('fc-word').textContent = item.word;
+                document.getElementById('fc-phonetic').textContent = item.phonetic;
+                document.getElementById('fc-meaning').textContent = item.vi;
+                document.getElementById('fc-context').textContent = `"${item.context}"`;
+                document.getElementById('fc-counter').textContent = `${this.fcIndex + 1} / ${vocabList.length}`;
+            },
+
+            setupQuiz() {
+                const quizBox = document.getElementById('quiz-box');
+                const sampleQuestions = [
+                    {
+                        q: "Which term refers to 'a state in which opposing forces or influences are balanced' in physics and mechanics?",
+                        options: ["Algorithm", "Equilibrium", "Cantilever", "Retention"],
+                        ans: 1,
+                        expl: "Equilibrium (danh từ) = Trạng thái cân bằng của các lực."
+                    },
+                    {
+                        q: "What does 'outperform' mean in comparative testing and research?",
+                        options: ["To fail completely", "To perform better than another person or group", "To participate equally", "To drop out of a study"],
+                        ans: 1,
+                        expl: "Outperform (động từ) = Thể hiện tốt hơn, vượt trội hơn đối tượng khác."
+                    },
+                    {
+                        q: "Which word describes a projecting beam or girder fixed at only one end, common in engineering?",
+                        options: ["Cantilever", "Truss", "Novice", "Static"],
+                        ans: 0,
+                        expl: "Cantilever (danh từ) = Dầm công xôn (chỉ cố định ở một đầu)."
+                    }
+                ];
+
+                let html = `<h3 class="text-xl font-extrabold text-slate-900 border-b pb-3 border-slate-100 flex items-center gap-2"><i class="fa-solid fa-vial text-indigo-700"></i> IELTS Vocab Challenge — Brain Activity & Learning</h3>`;
+                sampleQuestions.forEach((q, idx) => {
+                    html += `
+                        <div class="space-y-3 pt-2" id="quiz-q-${idx}">
+                            <p class="text-sm font-bold text-slate-800">${idx + 1}. ${q.q}</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                ${q.options.map((opt, oIdx) => `
+                                    <button onclick="app.checkQuiz(${idx}, ${oIdx}, ${q.ans})" class="quiz-opt-btn text-left p-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-all">
+                                        ${String.fromCharCode(65 + oIdx)}. ${opt}
+                                    </button>
+                                `).join('')}
+                            </div>
+                            <div class="quiz-feedback hidden text-xs p-3 rounded-xl"></div>
+                        </div>
+                    `;
+                });
+
+                quizBox.innerHTML = html;
+            },
+
+            checkQuiz(qIdx, selected, correct) {
+                const qDiv = document.getElementById(`quiz-q-${qIdx}`);
+                const btns = qDiv.querySelectorAll('.quiz-opt-btn');
+                const feedback = qDiv.querySelector('.quiz-feedback');
+
+                btns.forEach((btn, idx) => {
+                    btn.disabled = true;
+                    if (idx === correct) {
+                        btn.className = "quiz-opt-btn text-left p-3 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-900 font-bold text-xs";
+                    } else if (idx === selected) {
+                        btn.className = "quiz-opt-btn text-left p-3 rounded-xl border-2 border-red-400 bg-red-50 text-red-900 font-bold text-xs";
+                    }
+                });
+
+                feedback.classList.remove('hidden');
+                if (selected === correct) {
+                    feedback.className = "quiz-feedback text-xs p-3 rounded-xl bg-emerald-100 text-emerald-900 font-bold border border-emerald-200";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Correct! Excellent job.`;
+                } else {
+                    feedback.className = "quiz-feedback text-xs p-3 rounded-xl bg-red-100 text-red-900 font-bold border border-red-200";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-xmark mr-1"></i> Incorrect. Option ${String.fromCharCode(65 + correct)} is the right answer.`;
+                }
+            }
+        };
+
+        window.onload = () => app.init();
+    </script>
+</body>
+</html>

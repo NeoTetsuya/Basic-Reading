@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The kākāpō — IELTS Reading Analysis, Translation & Vocabulary</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --app-font-size: 16px;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-size: var(--app-font-size);
+            overflow-x: hidden;
+        }
+        .reading-text {
+            font-family: 'Merriweather', serif;
+            line-height: 2.1;
+            color: #334155;
+        }
+        .reading-text p {
+            margin-bottom: 1.5rem;
+            text-indent: 1.25rem;
+        }
+        .reading-text p:first-of-type {
+            text-indent: 0;
+        }
+
+        .paragraph-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 0.8rem;
+            margin-right: 0.4rem;
+            color: #0284c7;
+            background-color: #e0f2fe;
+            border: 1px solid #bae6fd;
+            text-indent: 0;
+            vertical-align: middle;
+        }
+
+        /* Highlight Targets & Interactive States */
+        .ans-target {
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            position: relative;
+            display: inline;
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+            text-indent: 0;
+        }
+
+        /* Question target color themes */
+        .ans-target-q1 { background-color: #fef08a; border-bottom: 2px solid #eab308; color: #854d0e; }
+        .ans-target-q2 { background-color: #bae6fd; border-bottom: 2px solid #0284c7; color: #075985; }
+        .ans-target-q3 { background-color: #bbf7d0; border-bottom: 2px solid #16a34a; color: #166534; }
+        .ans-target-q4 { background-color: #fbcfe8; border-bottom: 2px solid #db2777; color: #9d174d; }
+        .ans-target-q5 { background-color: #ddd6fe; border-bottom: 2px solid #7c3aed; color: #5b21b6; }
+        .ans-target-q6 { background-color: #fed7aa; border-bottom: 2px solid #ea580c; color: #9a3412; }
+        .ans-target-q7 { background-color: #ccfbf1; border-bottom: 2px solid #0d9488; color: #115e59; }
+        .ans-target-q8 { background-color: #fef3c7; border-bottom: 2px solid #d97706; color: #92400e; }
+        .ans-target-q9 { background-color: #e0e7ff; border-bottom: 2px solid #4f46e5; color: #3730a3; }
+        .ans-target-q10 { background-color: #fae8ff; border-bottom: 2px solid #c026d3; color: #86198f; }
+        .ans-target-q11 { background-color: #dcfce7; border-bottom: 2px solid #22c55e; color: #14532d; }
+        .ans-target-q12 { background-color: #ffe4e6; border-bottom: 2px solid #f43f5e; color: #881337; }
+        .ans-target-q13 { background-color: #e0f2fe; border-bottom: 2px solid #0369a1; color: #0c4a6e; }
+
+        .q-badge {
+            display: inline-block;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72em;
+            font-weight: 800;
+            padding: 1px 6px;
+            border-radius: 4px;
+            margin-right: 4px;
+            vertical-align: baseline;
+            line-height: 1.2;
+            color: #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            text-indent: 0;
+            user-select: none;
+        }
+
+        .ans-target:hover, .ans-target.active-target {
+            outline: 3px solid #0284c7;
+            box-shadow: 0 0 15px rgba(2, 132, 199, 0.4);
+            filter: brightness(0.96);
+            z-index: 20;
+        }
+
+        /* Floating Explanation Popover */
+        .explanation-popover {
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            opacity: 0;
+            visibility: hidden;
+            width: 300px;
+            background-color: #0f172a;
+            color: #f8fafc;
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 0.82rem;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.3);
+            z-index: 50;
+            transition: all 0.25s ease;
+            pointer-events: none;
+            line-height: 1.45;
+            font-weight: normal;
+        }
+        .explanation-popover::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: #0f172a transparent transparent transparent;
+        }
+        .ans-target:hover .explanation-popover, .ans-target.active-target .explanation-popover {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Flashcard Animation */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* SVG Connections */
+        #svg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 30;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .tab-btn.active {
+            background-color: #0284c7;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.3);
+        }
+
+        @keyframes arrowFlow {
+            from { stroke-dashoffset: 26; }
+            to { stroke-dashoffset: 0; }
+        }
+        .animated-arrow-line {
+            animation: arrowFlow 1s linear infinite;
+        }
+
+        .lang-btn.active {
+            background-color: #0f172a;
+            color: white;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col bg-slate-100">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-white border-b border-slate-200 px-4 sm:px-6 py-3 flex flex-col md:flex-row justify-between items-center shadow-xs shrink-0 gap-3 z-40">
+        <div class="flex items-center space-x-3">
+            <div class="bg-emerald-600 text-white p-2.5 rounded-xl shadow-sm">
+                <i class="fa-solid fa-feather-pointed text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold text-slate-800">The kākāpō — Analysis, Translation & Vocabulary</h1>
+                <p class="text-xs text-slate-500 font-medium">IELTS Academic Reading Master Companion — Cambridge Style</p>
+            </div>
+        </div>
+
+        <!-- Controls: Language Switcher, Font Resize & Arrows Toggle -->
+        <div class="flex items-center space-x-3 flex-wrap gap-y-2">
+            <!-- Language Switcher -->
+            <div class="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200" id="lang-switcher">
+                <button class="lang-btn active px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="en">EN</button>
+                <button class="lang-btn px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="vi">VIE</button>
+                <button class="lang-btn px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="dual">Parallel (EN/VIE)</button>
+            </div>
+
+            <!-- Font Resizer -->
+            <div class="flex items-center space-x-1 bg-slate-100 p-1 rounded-lg border border-slate-200">
+                <button id="btn-dec-font" class="w-7 h-7 flex items-center justify-center rounded bg-white shadow-xs hover:bg-slate-50 font-bold text-xs text-slate-700" title="Decrease Font">A-</button>
+                <button id="btn-inc-font" class="w-7 h-7 flex items-center justify-center rounded bg-white shadow-xs hover:bg-slate-50 font-bold text-xs text-slate-700" title="Increase Font">A+</button>
+            </div>
+
+            <!-- Toggle Arrow Canvas -->
+            <button id="btn-toggle-arrows" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-sky-600 text-white border border-sky-600 font-medium text-xs hover:bg-sky-700 transition-colors shadow-xs">
+                <i class="fa-solid fa-route"></i>
+                <span class="hidden sm:inline">Arrows</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-white border-b border-slate-200 px-6 py-2 overflow-x-auto shrink-0 shadow-xs">
+        <div class="flex space-x-2 min-w-max" id="nav-tabs">
+            <button class="tab-btn active px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="analysis">
+                <i class="fa-solid fa-book-open mr-1.5"></i> 1. Passage & Question Analysis (Q1–Q13)
+            </button>
+            <button class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="vocabulary">
+                <i class="fa-solid fa-spell-check mr-1.5"></i> 2. IELTS Vocabulary Suite (Band 7.0–9.0)
+            </button>
+            <button class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="flashcards">
+                <i class="fa-solid fa-brain mr-1.5"></i> 3. Vocab Flashcards & Practice Quiz
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="flex-1 overflow-hidden relative" id="main-wrapper">
+        <svg id="svg-canvas"></svg>
+
+        <!-- TAB 1: Passage & Question Analysis -->
+        <div id="tab-analysis-content" class="h-full grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden">
+            <!-- Left Pane: Passage View -->
+            <section id="left-pane" class="lg:col-span-6 bg-white overflow-y-auto p-6 lg:p-10 border-r border-slate-200 relative">
+                <div class="max-w-3xl mx-auto">
+                    <div class="flex items-center justify-between mb-6 pb-3 border-b border-slate-100">
+                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-md border border-emerald-200">
+                            <i class="fa-solid fa-feather mr-1.5"></i> Reading Passage — The kākāpō
+                        </span>
+                        <span class="text-xs text-slate-400 font-medium"><i class="fa-solid fa-mouse-pointer mr-1"></i> Hover/Click highlighted evidence</span>
+                    </div>
+
+                    <div id="passage-container" class="reading-text text-base leading-relaxed text-slate-700 space-y-4">
+                        <!-- Rendered dynamically depending on active language mode -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Pane: Questions & Detailed Explanations -->
+            <section id="right-pane" class="lg:col-span-6 bg-slate-50 overflow-y-auto p-6 lg:p-10">
+                <div class="max-w-2xl mx-auto space-y-6" id="explanations-list">
+                    <!-- Rendered dynamically -->
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB 2: Vocabulary Suite -->
+        <div id="tab-vocabulary-content" class="h-full bg-slate-50 overflow-y-auto p-6 lg:p-10 hidden">
+            <div class="max-w-6xl mx-auto space-y-6">
+                <!-- Vocab Header & Search / Filters -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-book-bookmark text-emerald-600"></i> Essential IELTS Reading Vocabulary
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">High-frequency academic terms, collocation patterns, and context sentences from "The kākāpō" text.</p>
+                    </div>
+
+                    <div class="flex items-center space-x-3 w-full md:w-auto">
+                        <div class="relative flex-1 md:w-64">
+                            <i class="fa-solid fa-search absolute left-3 top-3 text-slate-400 text-xs"></i>
+                            <input type="text" id="vocab-search" placeholder="Search word or translation..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                        </div>
+                        <select id="vocab-filter" class="bg-slate-50 border border-slate-200 text-xs font-semibold rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <option value="all">All Categories</option>
+                            <option value="noun">Nouns</option>
+                            <option value="verb">Verbs</option>
+                            <option value="adjective">Adjectives</option>
+                            <option value="environment">Ecology & Conservation</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Vocabulary Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="vocab-cards-grid">
+                    <!-- Vocab cards injected by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: Vocab Flashcards & Practice Quiz -->
+        <div id="tab-flashcards-content" class="h-full bg-slate-50 overflow-y-auto p-6 lg:p-10 hidden">
+            <div class="max-w-3xl mx-auto space-y-8">
+                <!-- Section Switcher -->
+                <div class="flex justify-center space-x-3">
+                    <button id="btn-mode-flashcard" class="px-5 py-2.5 rounded-xl text-xs font-extrabold bg-emerald-600 text-white shadow-sm transition-all">
+                        <i class="fa-solid fa-clone mr-2"></i> Interactive Flashcards
+                    </button>
+                    <button id="btn-mode-quiz" class="px-5 py-2.5 rounded-xl text-xs font-extrabold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all">
+                        <i class="fa-solid fa-circle-question mr-2"></i> Quick Quiz Mode
+                    </button>
+                </div>
+
+                <!-- Flashcard Display Box -->
+                <div id="flashcard-view" class="flex flex-col items-center space-y-6">
+                    <p class="text-xs text-slate-500 font-semibold">Click the card to flip between Word and Vietnamese Definition</p>
+                    
+                    <div class="w-full max-w-md h-72 perspective-1000 cursor-pointer" id="flashcard-wrapper">
+                        <div id="flashcard-inner" class="relative w-full h-full duration-500 transform-style-3d transition-transform">
+                            <!-- Front -->
+                            <div class="absolute w-full h-full bg-white rounded-3xl border border-slate-200 shadow-md p-8 flex flex-col justify-between items-center text-center backface-hidden">
+                                <span id="fc-category" class="text-[10px] uppercase font-extrabold tracking-widest text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">Category</span>
+                                <div>
+                                    <h3 id="fc-word" class="text-3xl font-black text-slate-900 mb-2">Word</h3>
+                                    <p id="fc-phonetic" class="text-sm font-mono text-slate-500">/phonetic/</p>
+                                </div>
+                                <span class="text-xs font-bold text-sky-600 flex items-center gap-1"><i class="fa-solid fa-rotate mr-1"></i> Flip for meaning</span>
+                            </div>
+                            <!-- Back -->
+                            <div class="absolute w-full h-full bg-slate-900 text-white rounded-3xl shadow-md p-8 flex flex-col justify-between items-center text-center backface-hidden rotate-y-180">
+                                <span class="text-[10px] uppercase font-extrabold tracking-widest text-emerald-400 bg-slate-800 px-3 py-1 rounded-full">Vietnamese Meaning</span>
+                                <div>
+                                    <h4 id="fc-meaning" class="text-2xl font-bold text-emerald-400 mb-3">Nghĩa tiếng Việt</h4>
+                                    <p id="fc-context" class="text-xs text-slate-300 italic leading-relaxed">"Context sentence..."</p>
+                                </div>
+                                <span class="text-xs font-bold text-slate-400 flex items-center gap-1"><i class="fa-solid fa-rotate mr-1"></i> Flip back</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flashcard Navigation Buttons -->
+                    <div class="flex items-center space-x-4">
+                        <button id="btn-fc-prev" class="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 flex items-center justify-center font-bold text-base shadow-xs transition-all">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <span id="fc-counter" class="text-xs font-bold text-slate-600 px-4 py-2 bg-white rounded-xl border border-slate-200">1 / 15</span>
+                        <button id="btn-fc-next" class="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 flex items-center justify-center font-bold text-base shadow-xs transition-all">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Display Box -->
+                <div id="quiz-view" class="hidden space-y-6">
+                    <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6" id="quiz-box">
+                        <!-- Quiz populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script>
+        const passageData = [
+            {
+                pNum: 1,
+                en: `The kākāpō, also known as the owl parrot, is a large, forest-dwelling bird, with a pale owl-like face. Up to 64 cm in length, it has predominantly yellow-green feathers, forward-facing eyes, a large grey beak, large blue feet, and relatively short wings and tail. <span class="ans-target ans-target-q1" data-q="q1"><span class="q-badge bg-yellow-600">Q1</span>It is the world’s only flightless parrot<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q1 Target Evidence</strong>The passage states it is the ONLY flightless parrot, contradicting the statement that other parrots share this inability.</span></span>, and is also possibly one of the world’s longest-living birds, with a reported lifespan of up to 100 years.`,
+                vi: `Chim kākāpō, còn được gọi là vẹt cú, là một loài chim lớn sống trong rừng với khuôn mặt nhạt màu giống chim cú. Có chiều dài lên tới 64 cm, nó sở hữu bộ lông chủ yếu màu vàng-xanh lục, đôi mắt hướng về phía trước, chiếc mỏ lớn màu xám, bàn chân lớn màu xanh lam cùng đôi cánh và chiếc đuôi tương đối ngắn. <span class="ans-target ans-target-q1" data-q="q1"><span class="q-badge bg-yellow-600">Q1</span>Nó là loài vẹt không biết bay duy nhất trên thế giới<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q1</strong>Bài đọc khẳng định Kākāpō là loài vẹt duy nhất không biết bay, mâu thuẫn với nhận định cho rằng các loài vẹt khác cũng không biết bay -> SAI (FALSE).</span></span>, và cũng có thể là một trong những loài chim sống lâu nhất thế giới với tuổi thọ được ghi nhận lên tới 100 năm.`
+            },
+            {
+                pNum: 2,
+                en: `Kākāpō are solitary birds and tend to occupy the same home range for many years. They forage on the ground and climb high into trees. They often leap from trees and flap their wings, but at best manage a controlled descent to the ground. They are entirely vegetarian, with their diet including the leaves, roots and bark of trees as well as <span class="ans-target ans-target-q7" data-q="q7"><span class="q-badge bg-teal-600">Q7</span>bulbs<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q7 Target Evidence</strong>Diet includes leaves, roots, bark, fern fronds, and <i>bulbs</i>.</span></span>, and fern fronds.`,
+                vi: `Kākāpō là loài chim sống đơn độc và có xu hướng chiếm giữ cùng một phạm vi lãnh thổ sinh sống trong suốt nhiều năm. Chúng kiếm ăn trên mặt đất và trèo lên rất cao trên cây. Chúng thường nhảy từ trên cành cây xuống và đập cánh, nhưng giỏi lắm cũng chỉ kiểm soát được cú đáp có định hướng xuống mặt đất. Chúng hoàn toàn ăn thực vật (ăn chay), với chế độ ăn bao gồm lá, rễ và vỏ cây cũng như <span class="ans-target ans-target-q7" data-q="q7"><span class="q-badge bg-teal-600">Q7</span>các loại củ (bulbs)<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q7</strong>Chế độ ăn gồm lá, rễ, vỏ cây, lá dương xỉ và các loại củ (bulbs).</span></span> và các lá dương xỉ non.`
+            },
+            {
+                pNum: 3,
+                en: `<span class="ans-target ans-target-q2" data-q="q2"><span class="q-badge bg-sky-600">Q2</span>Kākāpō breed in summer and autumn, but only in years when food is plentiful<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q2 Target Evidence</strong>They breed ONLY when food is plentiful, not every year -> FALSE.</span></span>. <span class="ans-target ans-target-q3" data-q="q3"><span class="q-badge bg-emerald-600">Q3</span>Males play no part in incubation or chick-rearing – females alone incubate eggs and feed the chicks<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q3 Target Evidence</strong>Males play no part in feeding or rearing chicks -> FALSE.</span></span>. The 1-4 eggs are laid in <span class="ans-target ans-target-q8" data-q="q8"><span class="q-badge bg-amber-600">Q8</span>soil<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q8 Target Evidence</strong>Eggs are laid in soil which is repeatedly turned over.</span></span>, which is repeatedly turned over before and during incubation. The female kākāpō has to spend long periods away from the nest searching for food, which leaves the unattended eggs and chicks particularly vulnerable to predators.`,
+                vi: `<span class="ans-target ans-target-q2" data-q="q2"><span class="q-badge bg-sky-600">Q2</span>Kākāpō sinh sản vào mùa hè và mùa thu, nhưng chỉ trong những năm mà nguồn thức ăn dồi dào<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q2</strong>Chúng CHỈ sinh sản khi thức ăn dồi dào, không phải năm nào cũng sinh sản -> SAI (FALSE).</span></span>. <span class="ans-target ans-target-q3" data-q="q3"><span class="q-badge bg-emerald-600">Q3</span>Chim đực không đóng bất kỳ vai trò nào trong việc ấp trứng hay nuôi con – một mình chim cái ấp trứng và mớm mồi cho con non<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q3</strong>Chim đực hoàn toàn không tham gia vào việc ấp trứng hoặc nuôi con non -> SAI (FALSE).</span></span>. Từ 1 đến 4 quả trứng được đẻ trong <span class="ans-target ans-target-q8" data-q="q8"><span class="q-badge bg-amber-600">Q8</span>đất (soil)<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q8</strong>Trứng được đẻ trong đất (soil) vốn được xới lật liên tục.</span></span>, nơi được xới đảo liên tục trước và trong suốt quá trình ấp. Chim kākāpō cái phải dành những khoảng thời gian dài rời xa tổ để đi tìm kiếm thức ăn, điều này khiến cho trứng và con non không được trông coi trở nên đặc biệt dễ bị các loài săn mồi tấn công.`
+            },
+            {
+                pNum: 4,
+                en: `Before humans arrived, kākāpō were common throughout New Zealand’s forests. However, this all changed with the arrival of the first Polynesian settlers about 700 years ago. <span class="ans-target ans-target-q4" data-q="q4"><span class="q-badge bg-pink-600">Q4</span>For the early settlers, the flightless kākāpō was easy prey. They ate its meat and used its feathers to make soft cloaks. With them came the Polynesian dog and rat, which also preyed on kākāpō<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q4 Target Evidence</strong>Both settlers and rats preyed on kākāpō, but no comparison of threat severity is provided -> NOT GIVEN.</span></span>. They used its <span class="ans-target ans-target-q9" data-q="q9"><span class="q-badge bg-indigo-600">Q9</span>feathers<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q9 Target Evidence</strong>Feathers were used to make soft cloaks (clothes).</span></span> to make soft cloaks. By the time European colonisers arrived in the early 1800s, kākāpō had become confined to the central North Island and forested parts of the South Island. The fall in kākāpō numbers was accelerated by European colonisation. A great deal of habitat was lost through forest clearance, and introduced species such as <span class="ans-target ans-target-q10" data-q="q10"><span class="q-badge bg-fuchsia-600">Q10</span>deer<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q10 Target Evidence</strong>Deer were introduced and depleted forest food.</span></span> depleted the remaining forests of food. Other predators such as cats, stoats and two more species of rat were also introduced. The kākāpō were in serious trouble.`,
+                vi: `Trước khi con người xuất hiện, kākāpō từng rất phổ biến khắp các khu rừng tại New Zealand. Tuy nhiên, tất cả đã thay đổi khi những người định cư Polynesia đầu tiên đặt chân đến đây khoảng 700 năm trước. <span class="ans-target ans-target-q4" data-q="q4"><span class="q-badge bg-pink-600">Q4</span>Đối với những người định cư thời kỳ đầu, loài kākāpō không biết bay là một con mồi dễ dàng. Họ ăn thịt chúng và dùng lông vũ của chúng để may những chiếc áo choàng mềm mại. Cùng đi với họ là loài chó và chuột Polynesia, những loài này cũng săn bắt kākāpō<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q4</strong>Cả người định cư và chuột Polynesia đều săn kākāpō, nhưng bài đọc không so sánh mức độ nguy hại của mối đe dọa nào lớn hơn -> NOT GIVEN.</span></span>. Họ đã sử dụng <span class="ans-target ans-target-q9" data-q="q9"><span class="q-badge bg-indigo-600">Q9</span>lông vũ (feathers)<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q9</strong>Lông vũ (feathers) được dùng để may các loại áo choàng mềm mại.</span></span> của nó để làm áo choàng mềm. Đến thời điểm thực dân châu Âu đến vào đầu những năm 1800, kākāpō đã bị thu hẹp phạm vi sinh sống chỉ còn ở vùng trung tâm Đảo Bắc và các khu vực rừng rậm thuộc Đảo Nam. Sự suy giảm số lượng kākāpō càng bị đẩy nhanh hơn bởi quá trình thực dân hóa của người châu Âu. Một lượng lớn môi trường sống tự nhiên đã bị mất đi do nạn phá rừng, và các loài du nhập như <span class="ans-target ans-target-q10" data-q="q10"><span class="q-badge bg-fuchsia-600">Q10</span>hươu (deer)<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q10</strong>Loài hươu (deer) được du nhập đã làm cạn kiệt nguồn thức ăn trong rừng.</span></span> đã làm cạn kiệt nguồn thức ăn tại những khu rừng còn sót lại. Các loài săn mồi khác như mèo, chồn ecmin (stoat) và thêm hai loài chuột khác cũng được đưa vào. Loài kākāpō đã rơi vào tình thế vô cùng nguy ngập.`
+            },
+            {
+                pNum: 5,
+                en: `In 1894, the New Zealand government launched its first attempt to save the kākāpō. Conservationist Richard Henry led an effort to relocate several hundred of the birds to predator-free Resolution Island in Fiordland. Unfortunately, the island didn’t remain predator free – stoats arrived within six years, eventually destroying the kākāpō population. By the mid-1900s, the kākāpō was practically a lost species. Only a few clung to life in the most isolated parts of New Zealand.`,
+                vi: `Vào năm 1894, chính phủ New Zealand đã phát động nỗ lực đầu tiên nhằm cứu lấy loài kākāpō. Nhà bảo tồn Richard Henry đã dẫn đầu nỗ lực di dời vài trăm cá thể chim đến Đảo Resolution ở Fiordland – một hòn đảo không có loài săn mồi. Thật không may, hòn đảo này đã không duy trì được trạng thái an toàn đó – chồn ecmin đã xâm nhập vào hòn đảo chỉ trong vòng sáu năm và cuối cùng đã xóa sổ quần thể kākāpō tại đây. Đến giữa thế kỷ 20, kākāpō trên thực tế đã trở thành một loài gần như biến mất hoàn toàn. Chỉ còn một số rất ít cá thể bám trụ sự sống tại những vùng hẻo lánh và cô lập nhất của New Zealand.`
+            },
+            {
+                pNum: 6,
+                en: `From 1949 to 1973, the newly formed New Zealand Wildlife Service made over 60 expeditions to find kākāpō, focusing mainly on Fiordland. Six were caught, but there were no females amongst them and all but one died within a few months of captivity. In 1974, a new initiative was launched, and by 1977, 18 more kākāpō were found in Fiordland. However, there were still no females. In 1977, a large population of males was spotted in Rakiura – a large island free from stoats, ferrets and weasels. There were about 200 individuals, and in <span class="ans-target ans-target-q11" data-q="q11"><span class="q-badge bg-green-600">Q11</span>1980<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q11 Target Evidence</strong>In 1980, presence of female kākāpō on Rakiura was confirmed.</span></span> it was confirmed females were also present. These birds have been the foundation of all subsequent work in managing the species.`,
+                vi: `Từ năm 1949 đến năm 1973, Cơ quan Động vật Hoang dã New Zealand mới thành lập đã thực hiện hơn 60 chuyến thám hiểm để tìm kiếm kākāpō, chủ yếu tập trung vào vùng Fiordland. Sáu con đã được bắt giữ, nhưng không có con cái nào trong số đó và tất cả ngoại trừ một cá thể đều đã chết chỉ sau vài tháng nuôi nhốt. Năm 1974, một sáng kiến mới đã được triển khai, và đến năm 1977, thêm 18 con kākāpō nữa đã được tìm thấy ở Fiordland. Tuy nhiên, vẫn không có bất kỳ con cái nào. Vào năm 1977, một quần thể cá thể đực lớn đã được phát hiện ở Rakiura – một hòn đảo lớn không có sự xuất hiện của chồn ecmin, chồn ferret và chồn weasel. Có khoảng 200 cá thể tại đây, và vào năm <span class="ans-target ans-target-q11" data-q="q11"><span class="q-badge bg-green-600">Q11</span>1980<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q11</strong>Năm 1980 chính thức xác nhận sự có mặt của các cá thể cái trên đảo Rakiura.</span></span>, người ta đã chính thức xác nhận có sự hiện diện của các cá thể cái. Những con chim này đã trở thành nền tảng cho toàn bộ các công tác quản lý và bảo tồn loài sau này.`
+            },
+            {
+                pNum: 7,
+                en: `<span class="ans-target ans-target-q5" data-q="q5"><span class="q-badge bg-purple-600">Q5</span>Unfortunately, predation by feral cats on Rakiura Island led to a rapid decline in kākāpō numbers. As a result, during 1980-97, the surviving population was evacuated to three island sanctuaries<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q5 Target Evidence</strong>Evacuated to sanctuaries because of feral cats -> TRUE.</span></span>: Codfish Island, Maud Island and Little Barrier Island. However, breeding success was hard to achieve. Rats were found to be a major predator of kākāpō chicks and an insufficient number of chicks survived to offset adult mortality. By 1995, although at least 12 chicks had been produced on the islands, only three had survived. The kākāpō population had dropped to 51 birds. The critical situation prompted an urgent review of kākāpō management in New Zealand.`,
+                vi: `<span class="ans-target ans-target-q5" data-q="q5"><span class="q-badge bg-purple-600">Q5</span>Đáng tiếc thay, sự săn bắt của mèo hoang trên Đảo Rakiura đã dẫn đến sự sụt giảm nhanh chóng về số lượng kākāpō. Kết quả là trong giai đoạn từ năm 1980 đến 1997, toàn bộ quần thể sống sót đã được sơ tán khẩn cấp đến ba khu bảo tồn trên đảo<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q5</strong>Quần thể được sơ tán đến các khu bảo tồn trên đảo do mối đe dọa từ mèo hoang -> ĐÚNG (TRUE).</span></span>: Đảo Codfish, Đảo Maud và Đảo Little Barrier. Tuy nhiên, việc đạt được thành công trong sinh sản lại vô cùng khó khăn. Chuột được phát hiện là loài săn mồi chính đối với chim non kākāpō và không có đủ số lượng chim non sống sót để bù đắp cho tỷ lệ tử vong ở chim trưởng thành. Đến năm 1995, mặc dù có ít nhất 12 chim non được sinh ra trên các đảo, chỉ có duy nhất ba con sống sót. Quần thể kākāpō đã giảm xuống chỉ còn 51 cá thể. Tình thế nguy kịch này đã thúc đẩy một cuộc đánh giá khẩn cấp về công tác quản lý kākāpō tại New Zealand.`
+            },
+            {
+                pNum: 8,
+                en: `In 1996, a new Recovery Plan was launched, together with a specialist advisory group called the Kākāpō Scientific and Technical Advisory Committee and a higher amount of <span class="ans-target ans-target-q12" data-q="q12"><span class="q-badge bg-rose-600">Q12</span>funding<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q12 Target Evidence</strong>The Recovery Plan launched with higher amount of funding.</span></span>. Renewed steps were taken to control predators on the three islands. Cats were eradicated from Little Barrier Island in 1980, and possums were eradicated from Codfish Island by 1986. However, the population did not start to increase until rats were removed from all three islands, and the birds were more intensively managed. This involved moving the birds between islands, supplementary feeding of adults and <span class="ans-target ans-target-q6" data-q="q6"><span class="q-badge bg-orange-600">Q6</span>rescuing and hand-raising any failing chicks<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q6 Target Evidence</strong>Rescuing and hand-raising failing chicks = caring for struggling young birds -> TRUE.</span></span>.`,
+                vi: `Năm 1996, một Kế hoạch Phục hồi mới đã được công bố, cùng với một nhóm tư vấn chuyên gia mang tên Ủy ban Cố vấn Kỹ thuật và Khoa học Kākāpō và một mức <span class="ans-target ans-target-q12" data-q="q12"><span class="q-badge bg-rose-600">Q12</span>nguồn kinh phí (funding)<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q12</strong>Kế hoạch Phục hồi được triển khai với nguồn ngân sách/tài trợ (funding) dồi dào hơn.</span></span> cao hơn. Các biện pháp mới đã được thực hiện để kiểm soát các loài săn mồi trên cả ba hòn đảo. Mèo đã bị tiêu diệt hoàn toàn khỏi Đảo Little Barrier vào năm 1980, và loài thú có túi possum đã được loại trừ khỏi Đảo Codfish vào năm 1986. Tuy nhiên, quần thể này chỉ bắt đầu tăng trưởng sau khi chuột bị tiêu diệt sạch sẽ khỏi cả ba hòn đảo và đàn chim được quản lý một cách chuyên sâu hơn. Điều này bao gồm việc luân chuyển các cá thể chim giữa các hòn đảo, bổ sung thức ăn cho chim trưởng thành và <span class="ans-target ans-target-q6" data-q="q6"><span class="q-badge bg-orange-600">Q6</span>cứu hộ cũng như tự tay chăm sóc nuôi dưỡng bất kỳ cá thể chim non nào gặp khó khăn / ốm yếu<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q6</strong>Cứu hộ và tự tay chăm sóc chim non ốm yếu = chăm sóc cho chim non gặp khó khăn -> ĐÚNG (TRUE).</span></span>.`
+            },
+            {
+                pNum: 9,
+                en: `After the first five years of the Recovery Plan, the population was on target. By 2000, five new females had been produced, and the total population had grown to 62 birds. For the first time, there was cautious optimism for the future of kākāpō and by June 2020, a total of 210 birds was recorded.`,
+                vi: `Sau 5 năm đầu tiên triển khai Kế hoạch Phục hồi, quy mô quần thể đã đạt đúng mục tiêu đề ra. Đến năm 2000, năm cá thể chim cái mới đã được sinh ra, và tổng quần thể đã tăng lên tới 62 cá thể. Lần đầu tiên, có một sự lạc quan thận trọng về tương lai của loài kākāpō và tính đến tháng 6 năm 2020, tổng cộng 210 cá thể chim đã được ghi nhận.`
+            },
+            {
+                pNum: 10,
+                en: `Today, kākāpō management continues to be guided by the kākāpō Recovery Plan. Its key goals are: minimise the loss of genetic diversity in the kākāpō population, restore or maintain sufficient habitat to accommodate the expected increase in the kākāpō population, and ensure <span class="ans-target ans-target-q13" data-q="q13"><span class="q-badge bg-sky-800">Q13</span>stakeholders<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q13 Target Evidence</strong>Ensure stakeholders continue to be fully engaged (involvement).</span></span> continue to be fully engaged in the preservation of the species.`,
+                vi: `Ngày nay, công tác quản lý kākāpō tiếp tục được định hướng bởi Kế hoạch Phục hồi kākāpō. Các mục tiêu then chốt của kế hoạch là: giảm thiểu sự mất mát đa dạng di truyền trong quần thể kākāpō, phục hồi hoặc duy trì môi trường sống đầy đủ để đáp ứng sự gia tăng số lượng kākāpō dự kiến, và đảm bảo <span class="ans-target ans-target-q13" data-q="q13"><span class="q-badge bg-sky-800">Q13</span>các bên liên quan (stakeholders)<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q13</strong>Đảm bảo các bên liên quan (stakeholders) tiếp tục tham gia đầy đủ vào việc bảo tồn loài.</span></span> tiếp tục tham gia một cách trọn vẹn và tích cực vào nỗ lực bảo tồn loài chim quý hiếm này.`
+            }
+        ];
+
+        const questionsData = [
+            {
+                id: 'q1',
+                num: '1',
+                type: 'True/False/Not Given',
+                ansKey: 'FALSE',
+                badgeColor: 'bg-yellow-600',
+                prompt: 'There are other parrots that share the kakapo’s inability to fly.',
+                explEn: 'Paragraph 1 explicitly states that the kākāpō is "the world’s ONLY flightless parrot". Therefore, the statement that other parrots cannot fly directly contradicts the passage.',
+                explVi: 'Đoạn 1 khẳng định rõ ràng rằng kākāpō là "loài vẹt không biết bay duy nhất trên thế giới". Do đó, phát biểu rằng có các loài vẹt khác cũng không biết bay là trái ngược hoàn toàn với bài đọc.',
+                synonyms: [
+                    { q: 'share inability to fly', p: 'world’s ONLY flightless parrot' }
+                ]
+            },
+            {
+                id: 'q2',
+                num: '2',
+                type: 'True/False/Not Given',
+                ansKey: 'FALSE',
+                badgeColor: 'bg-sky-600',
+                prompt: 'Adult kakapo produce chicks every year.',
+                explEn: 'Paragraph 3 notes that kākāpō breed "only in years when food is plentiful", meaning they do NOT produce chicks every single year.',
+                explVi: 'Đoạn 3 cho biết kākāpō chỉ sinh sản "vào những năm thức ăn dồi dào", nghĩa là chúng KHÔNG sinh sản hàng năm.',
+                synonyms: [
+                    { q: 'produce chicks every year', p: 'breed only in years when food is plentiful' }
+                ]
+            },
+            {
+                id: 'q3',
+                num: '3',
+                type: 'True/False/Not Given',
+                ansKey: 'FALSE',
+                badgeColor: 'bg-emerald-600',
+                prompt: 'Adult male kakapo bring food back to nesting females.',
+                explEn: 'Paragraph 3 states "Males play no part in incubation or chick-rearing – females alone incubate eggs and feed the chicks." Thus, males do not bring food to females.',
+                explVi: 'Đoạn 3 ghi rõ "Con đực không tham gia vào việc ấp trứng hay nuôi con – một mình con cái ấp trứng và nuôi con." Do đó, con đực không mang thức ăn về cho con cái.',
+                synonyms: [
+                    { q: 'male bring food back', p: 'males play no part... females alone feed chicks' }
+                ]
+            },
+            {
+                id: 'q4',
+                num: '4',
+                type: 'True/False/Not Given',
+                ansKey: 'NOT GIVEN',
+                badgeColor: 'bg-pink-600',
+                prompt: 'The Polynesian rat was a greater threat to the kakapo than Polynesian settlers.',
+                explEn: 'Paragraph 4 mentions that both settlers and Polynesian rats preyed on kākāpō, but it never compares which of the two posed a "greater" threat.',
+                explVi: 'Đoạn 4 có đề cập cả người định cư và chuột Polynesian đều săn bắt kākāpō, nhưng bài đọc hoàn toàn không đưa ra sự so sánh xem bên nào là mối đe dọa "lớn hơn".',
+                synonyms: [
+                    { q: 'greater threat than settlers', p: 'No comparison in passage' }
+                ]
+            },
+            {
+                id: 'q5',
+                num: '5',
+                type: 'True/False/Not Given',
+                ansKey: 'TRUE',
+                badgeColor: 'bg-purple-600',
+                prompt: 'Kakapo were transferred from Rakiura Island to other locations because they were at risk from feral cats.',
+                explEn: 'Paragraph 7 explains: "predation by feral cats on Rakiura Island led to a rapid decline... As a result... the surviving population was evacuated to three island sanctuaries."',
+                explVi: 'Đoạn 7 giải thích: "sự săn mồi của mèo hoang trên đảo Rakiura đã dẫn đến sụt giảm nhanh chóng... Kết quả là quần thể sống sót đã được sơ tán đến 3 khu bảo tồn đảo."',
+                synonyms: [
+                    { q: 'transferred / evacuated', p: 'evacuated to three island sanctuaries' },
+                    { q: 'risk from feral cats', p: 'predation by feral cats' }
+                ]
+            },
+            {
+                id: 'q6',
+                num: '6',
+                type: 'True/False/Not Given',
+                ansKey: 'TRUE',
+                badgeColor: 'bg-orange-600',
+                prompt: 'One Recovery Plan initiative that helped increase the kakapo population size was caring for struggling young birds.',
+                explEn: 'Paragraph 8 mentions intensive management including "rescuing and hand-raising any failing chicks". "Failing chicks" paraphrases "struggling young birds".',
+                explVi: 'Đoạn 8 đề cập đến biện pháp "cứu hộ và tự tay nuôi dưỡng những con gà con yếu ớt/thất bại". "Failing chicks" chính là từ đồng nghĩa của "struggling young birds".',
+                synonyms: [
+                    { q: 'caring for / hand-raising', p: 'rescuing and hand-raising' },
+                    { q: 'struggling young birds', p: 'failing chicks' }
+                ]
+            },
+            {
+                id: 'q7',
+                num: '7',
+                type: 'Note Completion',
+                ansKey: 'bulbs',
+                badgeColor: 'bg-teal-600',
+                prompt: 'Diet consists of fern fronds, various parts of a tree and ____________.',
+                explEn: 'Paragraph 2 states: "...diet including the leaves, roots and bark of trees as well as bulbs, and fern fronds."',
+                explVi: 'Đoạn 2 ghi rõ: "...chế độ ăn bao gồm lá, rễ và vỏ cây cũng như củ (bulbs) và lá dương xỉ."',
+                synonyms: [
+                    { q: 'various parts of a tree', p: 'leaves, roots and bark of trees' }
+                ]
+            },
+            {
+                id: 'q8',
+                num: '8',
+                type: 'Note Completion',
+                ansKey: 'soil',
+                badgeColor: 'bg-amber-600',
+                prompt: 'Nests are created in ____________ where eggs are laid.',
+                explEn: 'Paragraph 3 states: "The 1-4 eggs are laid in soil..."',
+                explVi: 'Đoạn 3 khẳng định: "1-4 quả trứng được đẻ trong đất (soil)..."',
+                synonyms: [
+                    { q: 'where eggs are laid', p: 'eggs are laid in' }
+                ]
+            },
+            {
+                id: 'q9',
+                num: '9',
+                type: 'Note Completion',
+                ansKey: 'feathers',
+                badgeColor: 'bg-indigo-600',
+                prompt: 'The ____________ of the kākāpō were used to make clothes.',
+                explEn: 'Paragraph 4 states: "...used its feathers to make soft cloaks." Cloaks are a form of clothing.',
+                explVi: 'Đoạn 4 nêu: "...dùng lông vũ (feathers) của nó để làm áo choàng mềm." Áo choàng chính là một loại trang phục.',
+                synonyms: [
+                    { q: 'make clothes', p: 'make soft cloaks' }
+                ]
+            },
+            {
+                id: 'q10',
+                num: '10',
+                type: 'Note Completion',
+                ansKey: 'deer',
+                badgeColor: 'bg-fuchsia-600',
+                prompt: '____________ were an animal which they introduced that ate the kākāpō’s food sources.',
+                explEn: 'Paragraph 4 states: "...introduced species such as deer depleted the remaining forests of food."',
+                explVi: 'Đoạn 4 cho biết: "...các loài nhập cư như hươu (deer) làm cạn kiệt nguồn thức ăn trong rừng."',
+                synonyms: [
+                    { q: 'ate food sources', p: 'depleted forests of food' }
+                ]
+            },
+            {
+                id: 'q11',
+                num: '11',
+                type: 'Note Completion',
+                ansKey: '1980',
+                badgeColor: 'bg-green-600',
+                prompt: 'A definite sighting of female kākāpō on Rakiura Island was reported in the year ____________.',
+                explEn: 'Paragraph 6 states: "...and in 1980 it was confirmed females were also present."',
+                explVi: 'Đoạn 6 nêu rõ: "...và vào năm 1980 đã xác nhận sự có mặt của chim cái."',
+                synonyms: [
+                    { q: 'reported in the year', p: 'in 1980 it was confirmed' }
+                ]
+            },
+            {
+                id: 'q12',
+                num: '12',
+                type: 'Note Completion',
+                ansKey: 'funding',
+                badgeColor: 'bg-rose-600',
+                prompt: 'The Recovery Plan included an increase in ____________.',
+                explEn: 'Paragraph 8 states: "...launched, together with... a higher amount of funding." Higher amount = increase.',
+                explVi: 'Đoạn 8 cho biết: "...khởi động cùng với... nguồn kinh phí (funding) cao hơn." Nguồn kinh phí cao hơn = gia tăng kinh phí.',
+                synonyms: [
+                    { q: 'increase in', p: 'higher amount of' }
+                ]
+            },
+            {
+                id: 'q13',
+                num: '13',
+                type: 'Note Completion',
+                ansKey: 'stakeholders',
+                badgeColor: 'bg-sky-800',
+                prompt: 'A current goal of the Recovery Plan is to maintain the involvement of ____________ in kākāpō protection.',
+                explEn: 'Paragraph 10 states: "...ensure stakeholders continue to be fully engaged in the preservation of the species." Fully engaged = involvement.',
+                explVi: 'Đoạn 10 ghi rõ: "...đảm bảo các bên liên quan (stakeholders) tiếp tục tham gia đầy đủ vào việc bảo tồn loài."',
+                synonyms: [
+                    { q: 'maintain involvement', p: 'continue to be fully engaged' }
+                ]
+            }
+        ];
+
+        const vocabList = [
+            {
+                word: 'nocturnal',
+                phonetic: '/nɒkˈtɜːnəl/',
+                vi: 'Hoạt động về đêm',
+                enDef: 'Active, happening, or done at night rather than during the day.',
+                type: 'adjective',
+                category: 'environment',
+                context: 'The kākāpō is a nocturnal, flightless parrot.',
+                collocation: 'nocturnal creature / habit / species'
+            },
+            {
+                word: 'vulnerable',
+                phonetic: '/ˈvʌlnərəbl/',
+                vi: 'Dễ bị tổn thương / đe dọa',
+                enDef: 'Exposed to the possibility of being attacked or harmed, either physically or emotionally.',
+                type: 'adjective',
+                category: 'environment',
+                context: 'This leaves the unattended eggs and chicks particularly vulnerable to predators.',
+                collocation: 'vulnerable to predation / extinction'
+            },
+            {
+                word: 'solitary',
+                phonetic: '/ˈsɒlətri/',
+                vi: 'Sống đơn độc',
+                enDef: 'Done or existing alone; living without companions of the same species.',
+                type: 'adjective',
+                category: 'environment',
+                context: 'Kākāpō are solitary birds and tend to occupy the same home range.',
+                collocation: 'solitary lifestyle / animal'
+            },
+            {
+                word: 'incubation',
+                phonetic: '/ˌɪnkjʊˈbeɪʃn/',
+                vi: 'Sự ấp trứng',
+                enDef: 'The process of keeping eggs warm until they hatch.',
+                type: 'noun',
+                category: 'environment',
+                context: 'Males play no part in incubation or chick-rearing.',
+                collocation: 'incubation period / temperature'
+            },
+            {
+                word: 'deplete',
+                phonetic: '/dɪˈpliːt/',
+                vi: 'Làm cạn kiệt',
+                enDef: 'To reduce something by a large amount so that there is not enough left.',
+                type: 'verb',
+                category: 'environment',
+                context: 'Introduced species such as deer depleted the remaining forests of food.',
+                collocation: 'deplete resources / food supplies'
+            },
+            {
+                word: 'eradicate',
+                phonetic: '/ɪˈrædɪkeɪt/',
+                vi: 'Tiêu diệt hoàn toàn / Xóa sổ',
+                enDef: 'To destroy or completely remove something bad or unwanted.',
+                type: 'verb',
+                category: 'environment',
+                context: 'Cats were eradicated from Little Barrier Island by 1980.',
+                collocation: 'eradicate pests / predators / diseases'
+            },
+            {
+                word: 'captivity',
+                phonetic: '/kæpˈtɪvəti/',
+                vi: 'Tình trạng bị nuôi nhốt',
+                enDef: 'The state of being kept in a confined space, like a zoo or cage.',
+                type: 'noun',
+                category: 'environment',
+                context: 'All but one died within a few months of captivity.',
+                collocation: 'bred in captivity / kept in captivity'
+            },
+            {
+                word: 'stakeholders',
+                phonetic: '/ˈsteɪkhəʊldəz/',
+                vi: 'Các bên liên quan',
+                enDef: 'People or organizations involved in or affected by a particular project or effort.',
+                type: 'noun',
+                category: 'noun',
+                context: 'Ensure stakeholders continue to be fully engaged in preservation.',
+                collocation: 'key stakeholders / engage stakeholders'
+            },
+            {
+                word: 'predation',
+                phonetic: '/prɪˈdeɪʃn/',
+                vi: 'Sự săn mồi',
+                enDef: 'The preying of one animal on others.',
+                type: 'noun',
+                category: 'environment',
+                context: 'Predation by feral cats on Rakiura Island led to a rapid decline.',
+                collocation: 'predation pressure / risk of predation'
+            },
+            {
+                word: 'sanctuary',
+                phonetic: '/ˈsæŋktʃuəri/',
+                vi: 'Khu bảo tồn / Nơi trú ẩn',
+                enDef: 'A protected area where wild animals can live safely without danger.',
+                type: 'noun',
+                category: 'environment',
+                context: 'The surviving population was evacuated to three island sanctuaries.',
+                collocation: 'wildlife sanctuary / island sanctuary'
+            },
+            {
+                word: 'plentiful',
+                phonetic: '/ˈplentɪfl/',
+                vi: 'Dồi dào / Phong phú',
+                enDef: 'Existing in large quantities; abundant.',
+                type: 'adjective',
+                category: 'adjective',
+                context: 'Kākāpō breed only in years when food is plentiful.',
+                collocation: 'plentiful supply / food is plentiful'
+            },
+            {
+                word: 'evacuate',
+                phonetic: '/ɪˈvækjueɪt/',
+                vi: 'Sơ tán',
+                enDef: 'Move people or animals from a dangerous place to a safer place.',
+                type: 'verb',
+                category: 'verb',
+                context: 'The surviving population was evacuated to island sanctuaries.',
+                collocation: 'evacuate to safety / mass evacuation'
+            },
+            {
+                word: 'initiative',
+                phonetic: '/ɪˈnɪʃətɪv/',
+                vi: 'Sáng kiến / Dự án mới',
+                enDef: 'An important new plan or action to solve a problem.',
+                type: 'noun',
+                category: 'noun',
+                context: 'In 1974, a new initiative was launched to save the species.',
+                collocation: 'conservation initiative / launch an initiative'
+            },
+            {
+                word: 'diversity',
+                phonetic: '/daɪˈvɜːsəti/',
+                vi: 'Sự đa dạng',
+                enDef: 'A range of different things or variety, especially in genetics or species.',
+                type: 'noun',
+                category: 'noun',
+                context: 'Minimise the loss of genetic diversity in the kākāpō population.',
+                collocation: 'genetic diversity / biodiversity'
+            },
+            {
+                word: 'expedition',
+                phonetic: '/ˌekspəˈdɪʃn/',
+                vi: 'Cuộc thám hiểm / Cuộc khảo sát',
+                enDef: 'An organized journey for a particular purpose, especially exploration or search.',
+                type: 'noun',
+                category: 'noun',
+                context: 'The Wildlife Service made over 60 expeditions to find kākāpō.',
+                collocation: 'scientific expedition / search expedition'
+            }
+        ];
+
+        // --- APP STATE & MANAGEMENT ---
+        const app = {
+            currentLang: 'en',
+            fontSize: 16,
+            showArrows: true,
+            activeTab: 'analysis',
+            fcIndex: 0,
+            fcFlipped: false,
+            arrowAnimFrame: null,
+
+            init() {
+                this.bindEvents();
+                this.renderPassage();
+                this.renderExplanations();
+                this.bindTargetEvents(); // Ensure target events are bound AFTER both passage and explanations exist
+                this.renderVocabGrid();
+                this.setupFlashcard();
+                this.setupQuiz();
+            },
+
+            bindEvents() {
+                // Language Switcher Buttons
+                document.querySelectorAll('#lang-switcher .lang-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('#lang-switcher .lang-btn').forEach(b => b.classList.remove('active'));
+                        e.currentTarget.classList.add('active');
+                        this.currentLang = e.currentTarget.dataset.lang;
+                        this.renderPassage();
+                        this.renderExplanations();
+                        this.bindTargetEvents();
+                        setTimeout(() => this.drawConnections(), 60);
+                    });
+                });
+
+                // Font Resizing
+                document.getElementById('btn-inc-font').addEventListener('click', () => {
+                    if (this.fontSize < 24) {
+                        this.fontSize += 1;
+                        document.documentElement.style.setProperty('--app-font-size', `${this.fontSize}px`);
+                        this.drawConnections();
+                    }
+                });
+                document.getElementById('btn-dec-font').addEventListener('click', () => {
+                    if (this.fontSize > 13) {
+                        this.fontSize -= 1;
+                        document.documentElement.style.setProperty('--app-font-size', `${this.fontSize}px`);
+                        this.drawConnections();
+                    }
+                });
+
+                // Toggle Arrows
+                document.getElementById('btn-toggle-arrows').addEventListener('click', (e) => {
+                    this.showArrows = !this.showArrows;
+                    e.currentTarget.classList.toggle('bg-sky-600');
+                    e.currentTarget.classList.toggle('bg-slate-300');
+                    e.currentTarget.classList.toggle('text-slate-700');
+                    if (!this.showArrows) {
+                        this.clearCanvas();
+                    } else {
+                        this.drawConnections();
+                    }
+                });
+
+                // Live scroll listeners to update arrow tracking continuously
+                const leftPane = document.getElementById('left-pane');
+                const rightPane = document.getElementById('right-pane');
+                if (leftPane) leftPane.addEventListener('scroll', () => this.drawConnections());
+                if (rightPane) rightPane.addEventListener('scroll', () => this.drawConnections());
+
+                // Navigation Tabs
+                document.querySelectorAll('#nav-tabs .tab-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('#nav-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+                        e.currentTarget.classList.add('active');
+                        const tab = e.currentTarget.dataset.tab;
+                        this.activeTab = tab;
+
+                        document.getElementById('tab-analysis-content').classList.toggle('hidden', tab !== 'analysis');
+                        document.getElementById('tab-vocabulary-content').classList.toggle('hidden', tab !== 'vocabulary');
+                        document.getElementById('tab-flashcards-content').classList.toggle('hidden', tab !== 'flashcards');
+
+                        if (tab !== 'analysis') this.clearCanvas();
+                        else setTimeout(() => this.drawConnections(), 100);
+                    });
+                });
+
+                // Search & Filter Vocab
+                document.getElementById('vocab-search').addEventListener('input', () => this.filterVocab());
+                document.getElementById('vocab-filter').addEventListener('change', () => this.filterVocab());
+
+                // Flashcard Controls
+                document.getElementById('flashcard-wrapper').addEventListener('click', () => {
+                    this.fcFlipped = !this.fcFlipped;
+                    document.getElementById('flashcard-inner').classList.toggle('rotate-y-180', this.fcFlipped);
+                });
+                document.getElementById('btn-fc-prev').addEventListener('click', () => {
+                    if (this.fcIndex > 0) {
+                        this.fcIndex--;
+                        this.updateFlashcard();
+                    }
+                });
+                document.getElementById('btn-fc-next').addEventListener('click', () => {
+                    if (this.fcIndex < vocabList.length - 1) {
+                        this.fcIndex++;
+                        this.updateFlashcard();
+                    }
+                });
+
+                // Mode switcher in Flashcards tab
+                document.getElementById('btn-mode-flashcard').addEventListener('click', (e) => {
+                    e.target.classList.replace('bg-white', 'bg-emerald-600');
+                    e.target.classList.replace('text-slate-700', 'text-white');
+                    document.getElementById('btn-mode-quiz').classList.replace('bg-emerald-600', 'bg-white');
+                    document.getElementById('btn-mode-quiz').classList.replace('text-white', 'text-slate-700');
+                    document.getElementById('flashcard-view').classList.remove('hidden');
+                    document.getElementById('quiz-view').classList.add('hidden');
+                });
+                document.getElementById('btn-mode-quiz').addEventListener('click', (e) => {
+                    e.target.classList.replace('bg-white', 'bg-emerald-600');
+                    e.target.classList.replace('text-slate-700', 'text-white');
+                    document.getElementById('btn-mode-flashcard').classList.replace('bg-emerald-600', 'bg-white');
+                    document.getElementById('btn-mode-flashcard').classList.replace('text-white', 'text-slate-700');
+                    document.getElementById('quiz-view').classList.remove('hidden');
+                    document.getElementById('flashcard-view').classList.add('hidden');
+                });
+
+                window.addEventListener('resize', () => this.drawConnections());
+            },
+
+            renderPassage() {
+                const container = document.getElementById('passage-container');
+                let html = `
+                    <h2 class="text-2xl font-black text-slate-900 mb-2 text-center leading-tight tracking-tight">The kākāpō</h2>
+                    <p class="text-xs text-center text-slate-500 italic mb-6">A nocturnal, flightless parrot that is critically endangered and one of New Zealand’s unique treasures.</p>
+                `;
+
+                passageData.forEach(p => {
+                    if (this.currentLang === 'en') {
+                        html += `<p><span class="paragraph-num">${p.pNum}</span>${p.en}</p>`;
+                    } else if (this.currentLang === 'vi') {
+                        html += `<p><span class="paragraph-num">${p.pNum}</span>${p.vi}</p>`;
+                    } else if (this.currentLang === 'dual') {
+                        html += `
+                            <div class="mb-6 p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                                <div class="text-slate-800 text-sm leading-relaxed border-b border-slate-200 pb-3">
+                                    <strong class="text-xs font-bold text-sky-700 uppercase tracking-wider block mb-1">ENGLISH [Đoạn ${p.pNum}]</strong>
+                                    ${p.en}
+                                </div>
+                                <div class="text-slate-600 text-sm leading-relaxed pt-1">
+                                    <strong class="text-xs font-bold text-emerald-700 uppercase tracking-wider block mb-1">TIẾNG VIỆT</strong>
+                                    ${p.vi}
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+
+                container.innerHTML = html;
+            },
+
+            renderExplanations() {
+                const container = document.getElementById('explanations-list');
+                let html = `
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+                        <div class="flex items-center space-x-2 text-emerald-700 font-bold text-xs uppercase tracking-wide mb-1">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span>Comprehensive Rationale & Evidence Guide</span>
+                        </div>
+                        <h2 class="text-xl font-extrabold text-slate-900">The kākāpō — Phân Tích Đáp Án</h2>
+                        <p class="text-xs text-slate-500 mt-1">Click "Locate Text" or hover over any card below to scroll to and highlight the exact text sentence in the reading passage.</p>
+                    </div>
+                `;
+
+                questionsData.forEach(q => {
+                    html += `
+                        <div class="q-card bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4 transition-all hover:border-sky-300" id="q-card-${q.id}">
+                            <div class="flex items-start justify-between">
+                                <span class="bg-slate-100 text-slate-800 font-extrabold text-xs px-3 py-1 rounded-md border border-slate-200">
+                                    Question ${q.num} <span class="text-[10px] font-semibold text-slate-500">(${q.type})</span>
+                                </span>
+                                <div class="flex items-center space-x-2">
+                                    <button class="jump-btn bg-sky-50 hover:bg-sky-100 text-sky-700 font-bold text-xs px-2.5 py-1 rounded-md border border-sky-200 transition-colors flex items-center gap-1 cursor-pointer" data-q="${q.id}">
+                                        <i class="fa-solid fa-location-dot"></i> Locate Text
+                                    </button>
+                                    <span class="${q.badgeColor} text-white font-black text-xs px-3 py-1 rounded-full uppercase tracking-wider shadow-xs">
+                                        Answer: ${q.ansKey}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p class="text-sm font-bold text-slate-800 leading-relaxed">${q.prompt}</p>
+                            </div>
+
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-700 space-y-2">
+                                <div class="flex items-center text-emerald-700 font-bold text-xs uppercase tracking-wider">
+                                    <i class="fa-solid fa-circle-check mr-1.5"></i>
+                                    <span>Detailed Rationale / Giải Thích:</span>
+                                </div>
+                                <p class="leading-relaxed font-medium text-slate-800">${this.currentLang === 'vi' ? q.explVi : q.explEn}</p>
+                            </div>
+
+                            ${q.synonyms ? `
+                                <div class="pt-2 border-t border-slate-100">
+                                    <h5 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center">
+                                        <i class="fa-solid fa-arrows-rotate mr-1.5 text-sky-500"></i> Paraphrase Keywords Table
+                                    </h5>
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full text-xs text-left border-collapse">
+                                            <thead>
+                                                <tr class="bg-sky-50/70 text-sky-900 font-semibold border-b border-sky-100">
+                                                    <th class="p-2">Question Keyword</th>
+                                                    <th class="p-2">Passage Equivalent</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-slate-100 text-slate-600">
+                                                ${q.synonyms.map(s => `
+                                                    <tr>
+                                                        <td class="p-2 font-medium text-slate-700">${s.q}</td>
+                                                        <td class="p-2 font-semibold text-sky-700">${s.p}</td>
+                                                    </tr>
+                                                `).join('')}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+            },
+
+            bindTargetEvents() {
+                const targets = document.querySelectorAll('.ans-target');
+                const qCards = document.querySelectorAll('.q-card');
+                const jumpBtns = document.querySelectorAll('.jump-btn');
+
+                const activatePair = (targetEl, cardEl, scrollLeft = false, scrollRight = false) => {
+                    document.querySelectorAll('.ans-target').forEach(t => t.classList.remove('active-target'));
+                    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('ring-2', 'ring-sky-500', 'bg-sky-50/40', 'border-sky-400'));
+
+                    if (targetEl) {
+                        targetEl.classList.add('active-target');
+                        if (scrollLeft) {
+                            targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }
+
+                    if (cardEl) {
+                        cardEl.classList.add('ring-2', 'ring-sky-500', 'bg-sky-50/40', 'border-sky-400');
+                        if (scrollRight) {
+                            cardEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }
+                    }
+
+                    this.startSmoothTracking();
+                };
+
+                const deactivateAll = () => {
+                    document.querySelectorAll('.ans-target').forEach(t => t.classList.remove('active-target'));
+                    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('ring-2', 'ring-sky-500', 'bg-sky-50/40', 'border-sky-400'));
+                    this.clearCanvas();
+                };
+
+                // Targets in reading passage
+                targets.forEach(target => {
+                    const qId = target.dataset.q;
+                    const qCard = document.getElementById(`q-card-${qId}`);
+
+                    target.addEventListener('mouseenter', () => activatePair(target, qCard, false, false));
+                    target.addEventListener('mouseleave', deactivateAll);
+                    target.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        activatePair(target, qCard, false, true);
+                    });
+                });
+
+                // Question Cards
+                qCards.forEach(qCard => {
+                    const qId = qCard.id.replace('q-card-', '');
+                    const target = document.querySelector(`.ans-target[data-q="${qId}"]`);
+
+                    qCard.addEventListener('mouseenter', () => activatePair(target, qCard, false, false));
+                    qCard.addEventListener('mouseleave', deactivateAll);
+                    qCard.addEventListener('click', (e) => {
+                        if (e.target.closest('.jump-btn')) return;
+                        activatePair(target, qCard, true, false);
+                    });
+                });
+
+                // "Locate Text" Buttons
+                jumpBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        const qId = btn.dataset.q;
+                        const target = document.querySelector(`.ans-target[data-q="${qId}"]`);
+                        const qCard = document.getElementById(`q-card-${qId}`);
+                        activatePair(target, qCard, true, false);
+                    });
+                });
+            },
+
+            startSmoothTracking() {
+                if (this.arrowAnimFrame) cancelAnimationFrame(this.arrowAnimFrame);
+                const startTime = performance.now();
+                const duration = 800; // Continuous tracking during smooth scrolling animation
+
+                const step = (now) => {
+                    this.drawConnections();
+                    if (now - startTime < duration) {
+                        this.arrowAnimFrame = requestAnimationFrame(step);
+                    }
+                };
+                this.arrowAnimFrame = requestAnimationFrame(step);
+            },
+
+            drawConnections() {
+                const activeTarget = document.querySelector('.ans-target.active-target');
+                if (activeTarget && this.showArrows) {
+                    const qId = activeTarget.dataset.q;
+                    const qCard = document.getElementById(`q-card-${qId}`);
+                    if (qCard) {
+                        this.drawArrow(activeTarget, qCard);
+                        return;
+                    }
+                }
+                this.clearCanvas();
+            },
+
+            drawArrow(fromEl, toEl) {
+                if (!fromEl || !toEl || window.innerWidth < 1024 || !this.showArrows) {
+                    this.clearCanvas();
+                    return;
+                }
+                
+                const svg = document.getElementById('svg-canvas');
+                const wrapper = document.getElementById('main-wrapper');
+                const leftPane = document.getElementById('left-pane');
+                const rightPane = document.getElementById('right-pane');
+
+                if (!svg || !wrapper || !leftPane || !rightPane) return;
+
+                const wrapperRect = wrapper.getBoundingClientRect();
+                const leftPaneRect = leftPane.getBoundingClientRect();
+                const rightPaneRect = rightPane.getBoundingClientRect();
+
+                // Get client rects for multi-line text inline wrapper
+                const clientRects = fromEl.getClientRects();
+                let fromRect = fromEl.getBoundingClientRect();
+                if (clientRects.length > 0) {
+                    fromRect = clientRects[clientRects.length - 1];
+                }
+                const toRect = toEl.getBoundingClientRect();
+
+                // Check visibility inside pane scrollports
+                const isFromVisible = (fromRect.bottom >= leftPaneRect.top && fromRect.top <= leftPaneRect.bottom);
+                const isToVisible = (toRect.bottom >= rightPaneRect.top && toRect.top <= rightPaneRect.bottom);
+
+                if (!isFromVisible || !isToVisible) {
+                    this.clearCanvas();
+                    return;
+                }
+
+                // Coordinates relative to main wrapper container
+                const x1 = Math.min(fromRect.right - wrapperRect.left, leftPaneRect.right - wrapperRect.left - 8);
+                const y1 = fromRect.top + (fromRect.height / 2) - wrapperRect.top;
+                
+                const x2 = toRect.left - wrapperRect.left;
+                const y2 = toRect.top + Math.min(36, toRect.height / 2) - wrapperRect.top;
+
+                const dx = Math.max(30, (x2 - x1) * 0.45);
+                const pathData = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
+
+                svg.innerHTML = `
+                    <defs>
+                        <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#0284c7" />
+                            <stop offset="100%" stop-color="#0369a1" />
+                        </linearGradient>
+                        <filter id="arrowGlowFilter" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#0284c7" flood-opacity="0.4"/>
+                        </filter>
+                        <marker id="arrowhead" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                            <polygon points="0 0, 9 3.5, 0 7" fill="#0369a1" />
+                        </marker>
+                    </defs>
+                    <path d="${pathData}" fill="none" stroke="url(#arrowGrad)" stroke-width="3" stroke-dasharray="7,4" class="animated-arrow-line" marker-end="url(#arrowhead)" filter="url(#arrowGlowFilter)"/>
+                    <circle cx="${x1}" cy="${y1}" r="4" fill="#0284c7" />
+                    <circle cx="${x2}" cy="${y2}" r="4" fill="#0369a1" />
+                `;
+            },
+
+            clearCanvas() {
+                const svg = document.getElementById('svg-canvas');
+                if (svg) svg.innerHTML = '';
+            },
+
+            renderVocabGrid() {
+                this.filterVocab();
+            },
+
+            filterVocab() {
+                const search = document.getElementById('vocab-search').value.toLowerCase();
+                const filter = document.getElementById('vocab-filter').value;
+                const grid = document.getElementById('vocab-cards-grid');
+
+                const filtered = vocabList.filter(item => {
+                    const matchSearch = item.word.toLowerCase().includes(search) || item.vi.toLowerCase().includes(search);
+                    const matchFilter = filter === 'all' || item.category === filter || item.type === filter;
+                    return matchSearch && matchFilter;
+                });
+
+                let html = '';
+                filtered.forEach(item => {
+                    html += `
+                        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col justify-between hover:border-emerald-400 transition-all space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-[10px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">${item.type}</span>
+                                    <button onclick="app.speakWord('${item.word}')" class="text-slate-400 hover:text-emerald-600 transition-colors" title="Listen pronunciation">
+                                        <i class="fa-solid fa-volume-high text-sm"></i>
+                                    </button>
+                                </div>
+                                <h3 class="text-xl font-extrabold text-slate-900 capitalize">${item.word}</h3>
+                                <p class="text-xs font-mono text-slate-500 mb-2">${item.phonetic}</p>
+                                <p class="text-sm font-bold text-emerald-700 bg-emerald-50/50 p-2 rounded-lg border border-emerald-100 mb-3">${item.vi}</p>
+                                <p class="text-xs text-slate-600 leading-relaxed mb-3">${item.enDef}</p>
+                            </div>
+
+                            <div class="pt-3 border-t border-slate-100 space-y-2 text-xs">
+                                <div>
+                                    <span class="font-bold text-slate-700 block text-[10px] uppercase tracking-wider text-slate-400">Context in Passage:</span>
+                                    <p class="text-slate-600 italic">"${item.context}"</p>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-slate-700 block text-[10px] uppercase tracking-wider text-sky-600">Common Collocation:</span>
+                                    <p class="font-semibold text-sky-800">${item.collocation}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                grid.innerHTML = html || `<p class="text-sm text-slate-500 col-span-full text-center py-8">No vocabulary words match your search filters.</p>`;
+            },
+
+            speakWord(word) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const u = new SpeechSynthesisUtterance(word);
+                    u.lang = 'en-GB';
+                    u.rate = 0.9;
+                    window.speechSynthesis.speak(u);
+                }
+            },
+
+            setupFlashcard() {
+                this.updateFlashcard();
+            },
+
+            updateFlashcard() {
+                const item = vocabList[this.fcIndex];
+                this.fcFlipped = false;
+                document.getElementById('flashcard-inner').classList.remove('rotate-y-180');
+
+                document.getElementById('fc-category').textContent = `${item.type.toUpperCase()} • ${item.category.toUpperCase()}`;
+                document.getElementById('fc-word').textContent = item.word;
+                document.getElementById('fc-phonetic').textContent = item.phonetic;
+                document.getElementById('fc-meaning').textContent = item.vi;
+                document.getElementById('fc-context').textContent = `"${item.context}"`;
+                document.getElementById('fc-counter').textContent = `${this.fcIndex + 1} / ${vocabList.length}`;
+            },
+
+            setupQuiz() {
+                const quizBox = document.getElementById('quiz-box');
+                const sampleQuestions = [
+                    {
+                        q: "Which word means 'Active, happening, or done at night rather than during the day'?",
+                        options: ["Solitary", "Nocturnal", "Vulnerable", "Predation"],
+                        ans: 1,
+                        expl: "Nocturnal (tính từ) chỉ loài động vật hoạt động về đêm."
+                    },
+                    {
+                        q: "What is the synonym for 'completely eliminate or destroy' in the text?",
+                        options: ["Accelerate", "Deplete", "Eradicate", "Relocate"],
+                        ans: 2,
+                        expl: "Eradicate = Tiêu diệt hoàn toàn / xóa sổ."
+                    },
+                    {
+                        q: "What does 'deplete' mean in the context of forest food supplies?",
+                        options: ["To increase rapidly", "To protect safely", "To use up or exhaust", "To relocate to an island"],
+                        ans: 2,
+                        expl: "Deplete = Làm cạn kiệt nguồn cung cấp."
+                    }
+                ];
+
+                let html = `<h3 class="text-xl font-extrabold text-slate-900 border-b pb-3 border-slate-100 flex items-center gap-2"><i class="fa-solid fa-vial text-emerald-600"></i> IELTS Vocab Challenge</h3>`;
+                sampleQuestions.forEach((q, idx) => {
+                    html += `
+                        <div class="space-y-3 pt-2" id="quiz-q-${idx}">
+                            <p class="text-sm font-bold text-slate-800">${idx + 1}. ${q.q}</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                ${q.options.map((opt, oIdx) => `
+                                    <button onclick="app.checkQuiz(${idx}, ${oIdx}, ${q.ans})" class="quiz-opt-btn text-left p-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-all">
+                                        ${String.fromCharCode(65 + oIdx)}. ${opt}
+                                    </button>
+                                `).join('')}
+                            </div>
+                            <div class="quiz-feedback hidden text-xs p-3 rounded-xl"></div>
+                        </div>
+                    `;
+                });
+
+                quizBox.innerHTML = html;
+            },
+
+            checkQuiz(qIdx, selected, correct) {
+                const qDiv = document.getElementById(`quiz-q-${qIdx}`);
+                const btns = qDiv.querySelectorAll('.quiz-opt-btn');
+                const feedback = qDiv.querySelector('.quiz-feedback');
+
+                btns.forEach((btn, idx) => {
+                    btn.disabled = true;
+                    if (idx === correct) {
+                        btn.className = "quiz-opt-btn text-left p-3 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-900 font-bold text-xs";
+                    } else if (idx === selected) {
+                        btn.className = "quiz-opt-btn text-left p-3 rounded-xl border-2 border-red-400 bg-red-50 text-red-900 font-bold text-xs";
+                    }
+                });
+
+                feedback.classList.remove('hidden');
+                if (selected === correct) {
+                    feedback.className = "quiz-feedback text-xs p-3 rounded-xl bg-emerald-100 text-emerald-900 font-bold border border-emerald-200";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Correct! Excellent job.`;
+                } else {
+                    feedback.className = "quiz-feedback text-xs p-3 rounded-xl bg-red-100 text-red-900 font-bold border border-red-200";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-xmark mr-1"></i> Incorrect. Option ${String.fromCharCode(65 + correct)} is the right answer.`;
+                }
+            }
+        };
+
+        window.onload = () => app.init();
+    </script>
+</body>
+</html>

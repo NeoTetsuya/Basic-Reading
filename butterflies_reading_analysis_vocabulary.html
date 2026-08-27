@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Butterflies — IELTS Reading Analysis, Translation & Vocabulary</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --app-font-size: 16px;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-size: var(--app-font-size);
+            overflow-x: hidden;
+        }
+        .reading-text {
+            font-family: 'Merriweather', serif;
+            line-height: 2.15;
+            color: #334155;
+        }
+        .reading-text p {
+            margin-bottom: 1.5rem;
+            text-indent: 1.25rem;
+        }
+        .reading-text p:first-of-type {
+            text-indent: 0;
+        }
+
+        .paragraph-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 0.8rem;
+            margin-right: 0.4rem;
+            color: #15803d;
+            background-color: #dcfce7;
+            border: 1px solid #bbf7d0;
+            text-indent: 0;
+            vertical-align: middle;
+        }
+
+        /* Highlight Targets & Interactive States */
+        .ans-target {
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            position: relative;
+            display: inline;
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+            text-indent: 0;
+        }
+
+        /* Question target color themes */
+        .ans-target-q1 { background-color: #fef08a; border-bottom: 2px solid #eab308; color: #854d0e; }
+        .ans-target-q2 { background-color: #bae6fd; border-bottom: 2px solid #0284c7; color: #075985; }
+        .ans-target-q3 { background-color: #bbf7d0; border-bottom: 2px solid #16a34a; color: #166534; }
+        .ans-target-q4 { background-color: #fbcfe8; border-bottom: 2px solid #db2777; color: #9d174d; }
+        .ans-target-q5 { background-color: #ddd6fe; border-bottom: 2px solid #7c3aed; color: #5b21b6; }
+        .ans-target-q6 { background-color: #fed7aa; border-bottom: 2px solid #ea580c; color: #9a3412; }
+        .ans-target-q7 { background-color: #ccfbf1; border-bottom: 2px solid #0d9488; color: #115e59; }
+        .ans-target-q8 { background-color: #fef3c7; border-bottom: 2px solid #d97706; color: #92400e; }
+        .ans-target-q9 { background-color: #e0e7ff; border-bottom: 2px solid #4f46e5; color: #3730a3; }
+        .ans-target-q10 { background-color: #fae8ff; border-bottom: 2px solid #c026d3; color: #86198f; }
+        .ans-target-q11 { background-color: #dcfce7; border-bottom: 2px solid #22c55e; color: #14532d; }
+        .ans-target-q12 { background-color: #ffe4e6; border-bottom: 2px solid #f43f5e; color: #881337; }
+        .ans-target-q13 { background-color: #e0f2fe; border-bottom: 2px solid #0369a1; color: #0c4a6e; }
+
+        .q-badge {
+            display: inline-block;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72em;
+            font-weight: 800;
+            padding: 1px 6px;
+            border-radius: 4px;
+            margin-right: 4px;
+            vertical-align: baseline;
+            line-height: 1.2;
+            color: #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            text-indent: 0;
+            user-select: none;
+        }
+
+        .ans-target:hover, .ans-target.active-target {
+            outline: 3px solid #16a34a;
+            box-shadow: 0 0 15px rgba(22, 163, 74, 0.4);
+            filter: brightness(0.96);
+            z-index: 20;
+        }
+
+        /* Floating Evidence Popover */
+        .explanation-popover {
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            opacity: 0;
+            visibility: hidden;
+            width: 300px;
+            background-color: #0f172a;
+            color: #f8fafc;
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 0.82rem;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.3);
+            z-index: 50;
+            transition: all 0.25s ease;
+            pointer-events: none;
+            line-height: 1.45;
+            font-weight: normal;
+        }
+        .explanation-popover::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: #0f172a transparent transparent transparent;
+        }
+        .ans-target:hover .explanation-popover, .ans-target.active-target .explanation-popover {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Flashcard Animation */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* SVG Connections */
+        #svg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 30;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .tab-btn.active {
+            background-color: #15803d;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(21, 128, 61, 0.3);
+        }
+
+        @keyframes arrowFlow {
+            from { stroke-dashoffset: 26; }
+            to { stroke-dashoffset: 0; }
+        }
+        .animated-arrow-line {
+            animation: arrowFlow 1s linear infinite;
+        }
+
+        .lang-btn.active {
+            background-color: #0f172a;
+            color: white;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col bg-slate-100">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-white border-b border-slate-200 px-4 sm:px-6 py-3 flex flex-col md:flex-row justify-between items-center shadow-xs shrink-0 gap-3 z-40">
+        <div class="flex items-center space-x-3">
+            <div class="bg-green-700 text-white p-2.5 rounded-xl shadow-sm">
+                <i class="fa-solid fa-bug text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold text-slate-800">Climate Change & Butterflies — Analysis, Translation & Vocab</h1>
+                <p class="text-xs text-slate-500 font-medium">IELTS Academic Reading Master Companion — Cambridge Style</p>
+            </div>
+        </div>
+
+        <!-- Controls: Language Switcher, Font Resize & Arrows Toggle -->
+        <div class="flex items-center space-x-3 flex-wrap gap-y-2">
+            <!-- Language Switcher -->
+            <div class="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200" id="lang-switcher">
+                <button class="lang-btn active px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="en">EN</button>
+                <button class="lang-btn px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="vi">VIE</button>
+                <button class="lang-btn px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="dual">Parallel (EN/VIE)</button>
+            </div>
+
+            <!-- Font Resizer -->
+            <div class="flex items-center space-x-1 bg-slate-100 p-1 rounded-lg border border-slate-200">
+                <button id="btn-dec-font" class="w-7 h-7 flex items-center justify-center rounded bg-white shadow-xs hover:bg-slate-50 font-bold text-xs text-slate-700" title="Decrease Font">A-</button>
+                <button id="btn-inc-font" class="w-7 h-7 flex items-center justify-center rounded bg-white shadow-xs hover:bg-slate-50 font-bold text-xs text-slate-700" title="Increase Font">A+</button>
+            </div>
+
+            <!-- Toggle Arrow Canvas -->
+            <button id="btn-toggle-arrows" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-green-700 text-white border border-green-700 font-medium text-xs hover:bg-green-800 transition-colors shadow-xs">
+                <i class="fa-solid fa-route"></i>
+                <span class="hidden sm:inline">Arrows</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-white border-b border-slate-200 px-6 py-2 overflow-x-auto shrink-0 shadow-xs">
+        <div class="flex space-x-2 min-w-max" id="nav-tabs">
+            <button class="tab-btn active px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="analysis">
+                <i class="fa-solid fa-book-open mr-1.5"></i> 1. Passage & Question Analysis (Q1–Q13)
+            </button>
+            <button class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="vocabulary">
+                <i class="fa-solid fa-spell-check mr-1.5"></i> 2. IELTS Vocabulary Suite (Band 7.0–9.0)
+            </button>
+            <button class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="flashcards">
+                <i class="fa-solid fa-brain mr-1.5"></i> 3. Vocab Flashcards & Practice Quiz
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="flex-1 overflow-hidden relative" id="main-wrapper">
+        <svg id="svg-canvas"></svg>
+
+        <!-- TAB 1: Passage & Question Analysis -->
+        <div id="tab-analysis-content" class="h-full grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden">
+            <!-- Left Pane: Passage View -->
+            <section id="left-pane" class="lg:col-span-6 bg-white overflow-y-auto p-6 lg:p-10 border-r border-slate-200 relative">
+                <div class="max-w-3xl mx-auto">
+                    <div class="flex items-center justify-between mb-6 pb-3 border-b border-slate-100">
+                        <span class="text-xs font-bold uppercase tracking-wider text-green-700 bg-green-50 px-3 py-1 rounded-md border border-green-200">
+                            <i class="fa-solid fa-seedling mr-1.5"></i> Reading Passage — Butterflies in Britain
+                        </span>
+                        <span class="text-xs text-slate-400 font-medium"><i class="fa-solid fa-mouse-pointer mr-1"></i> Hover/Click highlighted evidence</span>
+                    </div>
+
+                    <div id="passage-container" class="reading-text text-base leading-relaxed text-slate-700 space-y-4">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Pane: Questions & Detailed Explanations -->
+            <section id="right-pane" class="lg:col-span-6 bg-slate-50 overflow-y-auto p-6 lg:p-10">
+                <div class="max-w-2xl mx-auto space-y-6" id="explanations-list">
+                    <!-- Rendered dynamically -->
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB 2: Vocabulary Suite -->
+        <div id="tab-vocabulary-content" class="h-full bg-slate-50 overflow-y-auto p-6 lg:p-10 hidden">
+            <div class="max-w-6xl mx-auto space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-book-bookmark text-green-700"></i> Essential IELTS Reading Vocabulary — Butterflies
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">High-yield academic terms, phenology collocations, and contextual examples from the passage.</p>
+                    </div>
+
+                    <div class="flex items-center space-x-3 w-full md:w-auto">
+                        <div class="relative flex-1 md:w-64">
+                            <i class="fa-solid fa-search absolute left-3 top-3 text-slate-400 text-xs"></i>
+                            <input type="text" id="vocab-search" placeholder="Search word or translation..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-green-600">
+                        </div>
+                        <select id="vocab-filter" class="bg-slate-50 border border-slate-200 text-xs font-semibold rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600">
+                            <option value="all">All Categories</option>
+                            <option value="noun">Nouns</option>
+                            <option value="verb">Verbs</option>
+                            <option value="adjective">Adjectives</option>
+                            <option value="ecology">Ecology & Climate</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="vocab-cards-grid">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: Vocab Flashcards & Practice Quiz -->
+        <div id="tab-flashcards-content" class="h-full bg-slate-50 overflow-y-auto p-6 lg:p-10 hidden">
+            <div class="max-w-3xl mx-auto space-y-8">
+                <div class="flex justify-center space-x-3">
+                    <button id="btn-mode-flashcard" class="px-5 py-2.5 rounded-xl text-xs font-extrabold bg-green-700 text-white shadow-sm transition-all">
+                        <i class="fa-solid fa-clone mr-2"></i> Interactive Flashcards
+                    </button>
+                    <button id="btn-mode-quiz" class="px-5 py-2.5 rounded-xl text-xs font-extrabold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all">
+                        <i class="fa-solid fa-circle-question mr-2"></i> Quick Quiz Mode
+                    </button>
+                </div>
+
+                <!-- Flashcard Display Box -->
+                <div id="flashcard-view" class="flex flex-col items-center space-y-6">
+                    <p class="text-xs text-slate-500 font-semibold">Click the card to flip between Word and Vietnamese Definition</p>
+                    
+                    <div class="w-full max-w-md h-72 perspective-1000 cursor-pointer" id="flashcard-wrapper">
+                        <div id="flashcard-inner" class="relative w-full h-full duration-500 transform-style-3d transition-transform">
+                            <!-- Front -->
+                            <div class="absolute w-full h-full bg-white rounded-3xl border border-slate-200 shadow-md p-8 flex flex-col justify-between items-center text-center backface-hidden">
+                                <span id="fc-category" class="text-[10px] uppercase font-extrabold tracking-widest text-green-700 bg-green-50 px-3 py-1 rounded-full border border-green-200">Category</span>
+                                <div>
+                                    <h3 id="fc-word" class="text-3xl font-black text-slate-900 mb-2">Word</h3>
+                                    <p id="fc-phonetic" class="text-sm font-mono text-slate-500">/phonetic/</p>
+                                </div>
+                                <span class="text-xs font-bold text-green-700 flex items-center gap-1"><i class="fa-solid fa-rotate mr-1"></i> Flip for meaning</span>
+                            </div>
+                            <!-- Back -->
+                            <div class="absolute w-full h-full bg-slate-900 text-white rounded-3xl shadow-md p-8 flex flex-col justify-between items-center text-center backface-hidden rotate-y-180">
+                                <span class="text-[10px] uppercase font-extrabold tracking-widest text-green-400 bg-slate-800 px-3 py-1 rounded-full">Vietnamese Meaning</span>
+                                <div>
+                                    <h4 id="fc-meaning" class="text-2xl font-bold text-green-400 mb-3">Nghĩa tiếng Việt</h4>
+                                    <p id="fc-context" class="text-xs text-slate-300 italic leading-relaxed">"Context sentence..."</p>
+                                </div>
+                                <span class="text-xs font-bold text-slate-400 flex items-center gap-1"><i class="fa-solid fa-rotate mr-1"></i> Flip back</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <button id="btn-fc-prev" class="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 flex items-center justify-center font-bold text-base shadow-xs transition-all">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <span id="fc-counter" class="text-xs font-bold text-slate-600 px-4 py-2 bg-white rounded-xl border border-slate-200">1 / 14</span>
+                        <button id="btn-fc-next" class="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 flex items-center justify-center font-bold text-base shadow-xs transition-all">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Display Box -->
+                <div id="quiz-view" class="hidden space-y-6">
+                    <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6" id="quiz-box">
+                        <!-- Quiz populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const passageData = [
+            {
+                pNum: 1,
+                en: `According to conservationists, <span class="ans-target ans-target-q1" data-q="q1"><span class="q-badge bg-yellow-600">Q1</span>populations of around two thirds of butterfly species have declined in Britain over the past 40 years<span class="explanation-popover"><strong class="text-green-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q1 Target Evidence</strong>Passage says populations declined (decreased), so 40 yrs ago there were MORE butterflies, not fewer -> FALSE.</span></span>. If this trend continues, it might have unpredictable knock-on effects for other species in the ecosystem. Butterfly eggs develop into caterpillars and these insects, which are the second stage in a new butterfly's lifecycle, consume vast quantities of plant material, and in turn <span class="ans-target ans-target-q2" data-q="q2"><span class="q-badge bg-sky-600">Q2</span>act as prey for birds as well as bats and other small mammals<span class="explanation-popover"><strong class="text-green-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q2 Target Evidence</strong>Caterpillars are eaten by multiple predators (birds, bats, small mammals) -> TRUE.</span></span>. Only by arming themselves with an understanding of why butterfly numbers are down can conservationists hope to halt or reverse the decline.`,
+                vi: `Theo các nhà bảo tồn, <span class="ans-target ans-target-q1" data-q="q1"><span class="q-badge bg-yellow-600">Q1</span>quần thể của khoảng 2/3 các loài bướm đã suy giảm ở nước Anh trong vòng 40 năm qua<span class="explanation-popover"><strong class="text-green-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q1</strong>Bài đọc nêu số lượng đã suy giảm trong 40 năm qua, đồng nghĩa 40 năm trước số lượng bướm nhiều hơn hiện tại -> SAI (FALSE).</span></span>. Nếu xu hướng này tiếp tục diễn ra, nó có thể gây ra những hiệu ứng dây chuyền khó lường đối với các loài khác trong hệ sinh thái. Trứng bướm phát triển thành sâu bướm và những loài côn trùng này – giai đoạn thứ hai trong vòng đời của một con bướm – tiêu thụ một lượng lớn thực vật, và đến lượt chúng lại <span class="ans-target ans-target-q2" data-q="q2"><span class="q-badge bg-sky-600">Q2</span>làm con mồi cho chim chóc cũng như loài dơi và các động vật có vú nhỏ khác<span class="explanation-popover"><strong class="text-green-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q2</strong>Sâu bướm làm con mồi cho nhiều kẻ săn mồi khác nhau (chim, dơi, thú nhỏ) -> ĐÚNG (TRUE).</span></span>. Chỉ bằng cách tự trang bị cho mình sự hiểu biết về lý do tại sao số lượng loài bướm sụt giảm, các nhà bảo tồn mới có thể hy vọng ngăn chặn hoặc đảo ngược sự suy giảm này.`
+            },
+            {
+                pNum: 2,
+                en: `Butterflies prefer outdoor conditions to be 'just right', which means neither too hot nor too cold. Under the conditions of climate change, the temperature at any given time in summer is generally getting warmer, leaving butterflies with the challenge of how to deal with this. One of the main ways in which species are ensuring conditions suit them is by changing the time of year at which they are active and reproduce. <span class="ans-target ans-target-q3" data-q="q3"><span class="q-badge bg-emerald-600">Q3</span>Scientists refer to the timing of such lifecycle events as 'phenology', so when an animal or plant starts to do something earlier in the year than it usually does, it is said to be 'advancing its phenology'<span class="explanation-popover"><strong class="text-green-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q3 Target Evidence</strong>Phenology refers to TIMING (when events occur), NOT location/place -> FALSE.</span></span>.`,
+                vi: `Loài bướm ưa thích các điều kiện ngoài trời ở mức 'vừa phải', nghĩa là không quá nóng cũng không quá lạnh. Dưới tác động của biến đổi khí hậu, nhiệt độ vào bất kỳ thời điểm nào trong mùa hè nhìn chung đang trở nên ấm hơn, đặt loài bướm trước thách thức phải đối phó với điều này như thế nào. Một trong những cách chính mà các loài đang áp dụng để đảm bảo điều kiện phù hợp với mình là thay đổi thời điểm trong năm mà chúng hoạt động và sinh sản. <span class="ans-target ans-target-q3" data-q="q3"><span class="q-badge bg-emerald-600">Q3</span>Các nhà khoa học gọi thời điểm diễn ra các sự kiện vòng đời như vậy là 'phenology' (sinh thái học hiện tượng thời kỳ), vì vậy khi một loài động vật hay thực vật bắt đầu thực hiện một hoạt động nào đó sớm hơn trong năm so với thường lệ, nó được cho là đang 'đẩy sớm hiện tượng học của mình' (advancing its phenology)<span class="explanation-popover"><strong class="text-green-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q3</strong>Thuật ngữ 'phenology' đề cập đến thời điểm (timing: khi nào sự kiện diễn ra), KHÔNG phải địa điểm hay nơi chốn (location) -> SAI (FALSE).</span></span>.`
+            },
+            {
+                pNum: 3,
+                en: `<span class="ans-target ans-target-q4" data-q="q4"><span class="q-badge bg-pink-600">Q4</span>These advances have been observed already in a wide range of butterflies — indeed, most species are advancing their phenology to some extent. In Britain, as the average spring temperature has increased by roughly 0.5°C over the past 20 years, species have advanced by between three days and a week on average, to keep in line with cooler temperatures<span class="explanation-popover"><strong class="text-green-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q4 Target Evidence</strong>Text mentions advancing active period by 3 to 7 days, but NO mention of reduced lifespan -> NOT GIVEN.</span></span>. <span class="ans-target ans-target-q5" data-q="q5"><span class="q-badge bg-purple-600">Q5</span>Is this a sign that butterflies are well equipped to cope with climate change, and readily adjust to new temperatures? Or are these populations under stress, being dragged along unwillingly by unnaturally fast changes? The answer is still unknown, but a new study is seeking to answer these questions<span class="explanation-popover"><strong class="text-green-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q5 Target Evidence</strong>Passage explicitly states "The answer is still unknown" regarding clear reasons/mechanisms -> FALSE.</span></span>.`,
+                vi: `<span class="ans-target ans-target-q4" data-q="q4"><span class="q-badge bg-pink-600">Q4</span>Những sự tiến sớm này đã được quan sát thấy ở rất nhiều loài bướm — trên thực tế, hầu hết các loài đều đang đẩy sớm hiện tượng học của mình ở một mức độ nào đó. Tại Anh, khi nhiệt độ trung bình mùa xuân tăng khoảng 0,5°C trong vòng 20 năm qua, các loài bướm đã đẩy sớm thời gian hoạt động trung bình từ 3 ngày đến 1 tuần, nhằm thích ứng với nhiệt độ mát hơn<span class="explanation-popover"><strong class="text-green-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q4</strong>Bài đọc chỉ đề cập đến việc đẩy sớm thời gian hoạt động từ 3 đến 7 ngày, chứ KHÔNG hề nhắc đến việc giảm tuổi thọ (reduced lifespan) -> NOT GIVEN.</span></span>. <span class="ans-target ans-target-q5" data-q="q5"><span class="q-badge bg-purple-600">Q5</span>Liệu đây có phải là dấu hiệu cho thấy loài bướm được trang bị tốt để đối phó với biến đổi khí hậu và dễ dàng thích nghi với nhiệt độ mới? Hay những quần thể này đang chịu căng thẳng và bị cuốn theo một cách miễn cưỡng bởi những thay đổi nhanh bất thường? Câu trả lời hiện vẫn chưa được làm rõ, nhưng một nghiên cứu mới đang tìm cách giải đáp những câu hỏi này<span class="explanation-popover"><strong class="text-green-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q5</strong>Bài đọc khẳng định rõ ràng rằng 'The answer is still unknown' (câu trả lời vẫn chưa được biết) -> SAI (FALSE).</span></span>.`
+            },
+            {
+                pNum: 4,
+                en: `First, the researchers pulled together data from millions of records that <span class="ans-target ans-target-q6" data-q="q6"><span class="q-badge bg-orange-600">Q6</span>had been submitted by butterfly enthusiasts — people who spend their free time observing the activities of different species<span class="explanation-popover"><strong class="text-green-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q6 Target Evidence</strong>"butterfly enthusiasts" (people who spend free time observing) = amateur butterfly watchers -> TRUE.</span></span>. This provided information on 130 species of butterflies in Great Britain every year for a 20-year period. They then estimated the abundance and distribution of each species across this time, along with how far north in the country they had moved. The data also, crucially, allowed researchers to estimate subtle changes in what time of the year each species was changing into an adult butterfly.`,
+                vi: `Đầu tiên, các nhà nghiên cứu đã tập hợp dữ liệu từ hàng triệu hồ sơ <span class="ans-target ans-target-q6" data-q="q6"><span class="q-badge bg-orange-600">Q6</span>được gửi bởi những người đam mê bướm — những người dành thời gian rảnh rỗi của họ để quan sát hoạt động của các loài khác nhau<span class="explanation-popover"><strong class="text-green-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q6</strong>'Những người đam mê bướm' (những người dành thời gian rảnh quan sát) tương đương với những người quan sát không chuyên (amateur watchers) -> ĐÚNG (TRUE).</span></span>. Dữ liệu này cung cấp thông tin về 130 loài bướm ở Vương quốc Anh mỗi năm trong suốt khoảng thời gian 20 năm. Sau đó, họ ước tính số lượng cá thể dồi dào và sự phân bố của từng loài trong suốt thời gian này, cùng với quãng đường chúng đã dịch chuyển về phía bắc của đất nước. Quan trọng hơn cả, dữ liệu này còn cho phép các nhà nghiên cứu ước tính những thay đổi tinh tế về thời điểm trong năm mà mỗi loài chuyển hóa thành bướm trưởng thành.`
+            },
+            {
+                pNum: 5,
+                en: `Analyzing the trends in each variable, the researchers discovered that species with more flexible lifecycles were more likely to be able to benefit from an earlier emergence driven by climate change. Some species are able to go from caterpillar to butterfly twice or more per year, so that the individual butterflies you see flying in the spring are the grandchildren or great-grandchildren of the individuals seen a year previously.`,
+                vi: `Khi phân tích các xu hướng trong từng biến số, các nhà nghiên cứu phát hiện ra rằng những loài có vòng đời linh hoạt hơn có nhiều khả năng hưởng lợi từ việc xuất hiện sớm hơn do biến đổi khí hậu thúc đẩy. Một số loài có thể chuyển từ sâu bướm thành bướm trưởng thành hai lần hoặc nhiều hơn mỗi năm, do đó những cá thể bướm mà bạn nhìn thấy bay lượn vào mùa xuân thực chất là cháu hoặc chắt của những cá thể đã được nhìn thấy vào một năm trước đó.`
+            },
+            {
+                pNum: 6,
+                en: `Among these species, researchers observed that those which have been advancing their phenology the most over the 20-year study period also had the most positive trends in abundance, distribution and northwards extent. For these species, such as Britain's tiniest butterfly, the dainty Small Blue, whose <span class="ans-target ans-target-q7" data-q="q7"><span class="q-badge bg-teal-600">Q7</span>colonies<span class="explanation-popover"><strong class="text-green-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q7 Target Evidence</strong>Small Blue whose colonies are up to a hundred strong.</span></span> are up to a hundred strong, some develop into butterflies early in <span class="ans-target ans-target-q8" data-q="q8"><span class="q-badge bg-amber-600">Q8</span>spring<span class="explanation-popover"><strong class="text-green-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q8 Target Evidence</strong>First appears / develops early in spring.</span></span>, allowing their summer generations to complete another reproductive cycle by autumn so that more population growth occurs.`,
+                vi: `Trong số các loài này, các nhà nghiên cứu quan sát thấy rằng những loài đẩy sớm hiện tượng học của mình nhiều nhất trong suốt giai đoạn nghiên cứu 20 năm cũng có những xu hướng tích cực nhất về độ phong phú cá thể, mức độ phân bố và phạm vi mở rộng về phía bắc. Đối với những loài này, chẳng hạn như loài bướm nhỏ nhất nước Anh - loài bướm Small Blue xinh xắn, có các <span class="ans-target ans-target-q7" data-q="q7"><span class="q-badge bg-teal-600">Q7</span>quần thể / tập đoàn (colonies)<span class="explanation-popover"><strong class="text-green-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q7</strong>Loài bướm Small Blue có các quần thể/thuộc địa (colonies) đông tới cả trăm con.</span></span> lên tới cả trăm con, một số phát triển thành bướm từ rất sớm vào mùa <span class="ans-target ans-target-q8" data-q="q8"><span class="q-badge bg-amber-600">Q8</span>xuân (spring)<span class="explanation-popover"><strong class="text-green-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q8</strong>Xuất hiện và phát triển thành bướm từ đầu mùa xuân (spring).</span></span>, cho phép các thế hệ mùa hè của chúng hoàn thành thêm một chu kỳ sinh sản nữa trước mùa thu, nhờ đó làm tăng trưởng quy mô quần thể nhiều hơn.`
+            },
+            {
+                pNum: 7,
+                en: `Other species, however, are less flexible and restricted to a single reproductive cycle per year. For these species, there was no evidence of any benefit to emerging earlier. Indeed, worryingly, it was found that the species in this group that specialize in very specific <span class="ans-target ans-target-q10" data-q="q10"><span class="q-badge bg-fuchsia-600">Q10</span>habitat<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q10 Target Evidence</strong>Caterpillars occupy a limited range of habitat types.</span></span> types, often related to the caterpillar's preferred diet, actually tended to be most at harm from advancing phenology. The beautiful High Brown Fritillary, often described as Britain's most <span class="ans-target ans-target-q9" data-q="q9"><span class="q-badge bg-indigo-600">Q9</span>endangered<span class="explanation-popover"><strong class="text-green-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q9 Target Evidence</strong>Described as Britain's most endangered butterfly.</span></span> butterfly, is in this group. It is found only in coppiced woodland and limestone pavement habitats. It is also a single-generation butterfly that has advanced its phenology. This suggests that climate change, while undoubtedly not the sole cause, might have played a part in the downfall of this species.`,
+                vi: `Tuy nhiên, những loài khác lại kém linh hoạt hơn và bị giới hạn ở một chu kỳ sinh sản duy nhất mỗi năm. Đối với các loài này, không có bằng chứng nào cho thấy bất kỳ lợi ích nào từ việc xuất hiện sớm hơn. Thật vậy, điều đáng lo ngại là người ta nhận thấy những loài trong nhóm này chuyên biệt hóa ở những loại <span class="ans-target ans-target-q10" data-q="q10"><span class="q-badge bg-fuchsia-600">Q10</span>môi trường sống (habitat)<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q10 Target Evidence</strong>Sâu bướm chiếm phạm vi các loại môi trường sống (habitat types) hạn chế.</span></span> rất đặc thù, thường liên quan đến thức ăn ưa thích của sâu bướm, thực sự có xu hướng chịu tổn hại nhiều nhất từ việc đẩy sớm hiện tượng học. Loài bướm tuyệt đẹp High Brown Fritillary, thường được mô tả là loài bướm đang bị đe dọa tuyệt chủng nhiều nhất (<span class="ans-target ans-target-q9" data-q="q9"><span class="q-badge bg-indigo-600">Q9</span>endangered<span class="explanation-popover"><strong class="text-green-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q9</strong>Được mô tả là loài bướm nguy cấp nhất tại nước Anh (most endangered).</span></span>) ở nước Anh, thuộc nhóm này. Nó chỉ được tìm thấy ở những vùng rừng chồi và môi trường đá vôi. Nó cũng là một loài bướm đơn thế hệ đã đẩy sớm hiện tượng học của mình. Điều này cho thấy biến đổi khí hậu, dù chắc chắn không phải là nguyên nhân duy nhất, có thể đã góp một phần vào sự suy tàn của loài này.`
+            },
+            {
+                pNum: 8,
+                en: `All is not lost, however. Many of Britain's single-generation species show the capacity, in continental <span class="ans-target ans-target-q11" data-q="q11"><span class="q-badge bg-green-600">Q11</span>Europe<span class="explanation-popover"><strong class="text-green-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q11 Target Evidence</strong>In continental Europe, can add a second generation in warm years.</span></span>, to add a second generation in years that are sufficiently warm. Therefore, as the climate continues to warm, species like the Silver-studded Blue might be able to switch to multiple generations in the UK as well, and so begin to extract benefits from the additional warmth, potentially leading to population increases.`,
+                vi: `Tuy nhiên, không phải tất cả đều là bế tắc. Nhiều loài đơn thế hệ của nước Anh thể hiện khả năng sinh thêm thế hệ thứ hai tại lục địa <span class="ans-target ans-target-q11" data-q="q11"><span class="q-badge bg-green-600">Q11</span>Châu Âu (Europe / continental Europe)<span class="explanation-popover"><strong class="text-green-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q11</strong>Tại lục địa Châu Âu, có thể sinh thêm thế hệ thứ hai vào những năm đủ ấm áp.</span></span> vào những năm thời tiết đủ ấm áp. Do đó, khi khí hậu tiếp tục ấm lên, những loài như loài bướm Silver-studded Blue có thể chuyển sang sinh sản nhiều thế hệ tại Vương quốc Anh, và từ đó bắt đầu thu được lợi ích từ nhiệt độ ấm lên, có khả năng dẫn đến sự gia tăng số lượng quần thể.`
+            },
+            {
+                pNum: 9,
+                en: `More immediately, conservationists can arm themselves with all this knowledge to spot the warning signs of species that may be at risk. The White Admiral of <span class="ans-target ans-target-q12" data-q="q12"><span class="q-badge bg-rose-600">Q12</span>southern<span class="explanation-popover"><strong class="text-green-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q12 Target Evidence</strong>Found in southern England.</span></span> England, a much sought-after butterfly, experienced a significant increase in numbers from the 1920s but has shown a considerable decline in the past 20 years. This may be because the caterpillar exists solely on a <span class="ans-target ans-target-q13" data-q="q13"><span class="q-badge bg-sky-800">Q13</span>diet<span class="explanation-popover"><strong class="text-green-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q13 Target Evidence</strong>Caterpillar exists solely on a diet of honeysuckle.</span></span> of a plant called honeysuckle. But it is also likely to be due to climate change.`,
+                vi: `Trước mắt, các nhà bảo tồn có thể tự trang bị cho mình toàn bộ kiến thức này để phát hiện các dấu hiệu cảnh báo về những loài có thể đang gặp nguy hiểm. Loài bướm White Admiral ở miền <span class="ans-target ans-target-q12" data-q="q12"><span class="q-badge bg-rose-600">Q12</span>nam (southern / southern England)<span class="explanation-popover"><strong class="text-green-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q12</strong>Loài bướm tìm thấy ở miền nam nước Anh.</span></span> nước Anh, một loài bướm rất được săn đón, đã trải qua sự gia tăng đáng kể về số lượng từ những năm 1920 nhưng lại cho thấy sự suy giảm nghiêm trọng trong 20 năm qua. Điều này có thể là do sâu bướm chỉ sống dựa hoàn toàn vào <span class="ans-target ans-target-q13" data-q="q13"><span class="q-badge bg-sky-800">Q13</span>chế độ ăn (diet)<span class="explanation-popover"><strong class="text-green-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q13</strong>Sâu bướm tồn tại hoàn toàn nhờ chế độ ăn (diet) lá cây kim ngân.</span></span> một loài thực vật tên là cây kim ngân (honeysuckle). Nhưng rất có thể điều này cũng bắt nguồn từ biến đổi khí hậu.`
+            }
+        ];
+
+        const questionsData = [
+            {
+                id: 'q1',
+                num: '1',
+                type: 'True/False/Not Given',
+                ansKey: 'FALSE',
+                badgeColor: 'bg-yellow-600',
+                prompt: 'Forty years ago, there were fewer butterflies in Britain than at present.',
+                explEn: 'Paragraph 1 states that "populations of around two thirds of butterfly species have declined... over the past 40 years." This means butterfly numbers were HIGHER 40 years ago than now, contradicting "fewer".',
+                explVi: 'Đoạn 1 nêu rõ quần thể bướm đã "suy giảm trong 40 năm qua", chứng tỏ 40 năm trước số lượng bướm nhiều hơn hiện tại chứ không phải ít hơn -> FALSE.',
+                synonyms: [
+                    { q: 'fewer butterflies than present', p: 'populations of 2/3 species have declined over past 40 yrs' }
+                ]
+            },
+            {
+                id: 'q2',
+                num: '2',
+                type: 'True/False/Not Given',
+                ansKey: 'TRUE',
+                badgeColor: 'bg-sky-600',
+                prompt: 'Caterpillars are eaten by a number of different predators.',
+                explEn: 'Paragraph 1 confirms caterpillars "act as prey for birds as well as bats and other small mammals." Multiple predators eat them.',
+                explVi: 'Đoạn 1 xác nhận sâu bướm làm mồi cho chim, dơi và các loài thú nhỏ khác (nhiều kẻ săn mồi khác nhau) -> TRUE.',
+                synonyms: [
+                    { q: 'eaten by number of predators', p: 'act as prey for birds as well as bats and other small mammals' }
+                ]
+            },
+            {
+                id: 'q3',
+                num: '3',
+                type: 'True/False/Not Given',
+                ansKey: 'FALSE',
+                badgeColor: 'bg-emerald-600',
+                prompt: '\'Phenology\' is a term used to describe a creature’s ability to alter the location of a lifecycle event.',
+                explEn: 'Paragraph 2 defines phenology as "the timing of such lifecycle events" (WHEN events happen), NOT location/place.',
+                explVi: 'Đoạn 2 định nghĩa Phenology là thời điểm (timing) diễn ra các sự kiện vòng đời, KHÔNG phải địa điểm (location) -> FALSE.',
+                synonyms: [
+                    { q: 'alter location of lifecycle event', p: 'timing of such lifecycle events' }
+                ]
+            },
+            {
+                id: 'q4',
+                num: '4',
+                type: 'True/False/Not Given',
+                ansKey: 'NOT GIVEN',
+                badgeColor: 'bg-pink-600',
+                prompt: 'Some species of butterfly have a reduced lifespan due to spring temperature increases.',
+                explEn: 'Paragraph 3 notes that butterflies advance their phenology by 3 to 7 days due to warmer spring temps, but does NOT mention any change in lifespan duration.',
+                explVi: 'Đoạn 3 cho biết bướm đẩy sớm thời gian xuất hiện từ 3-7 ngày nhưng không hề nhắc đến việc giảm tuổi thọ (reduced lifespan) -> NOT GIVEN.',
+                synonyms: [
+                    { q: 'reduced lifespan', p: 'No information in text' }
+                ]
+            },
+            {
+                id: 'q5',
+                num: '5',
+                type: 'True/False/Not Given',
+                ansKey: 'FALSE',
+                badgeColor: 'bg-purple-600',
+                prompt: 'There is a clear reason for the adaptations that butterflies are making to climate change.',
+                explEn: 'Paragraph 3 directly contradicts this: "Is this a sign that butterflies are well equipped... Or are these populations under stress... The answer is still unknown."',
+                explVi: 'Đoạn 3 khẳng định "Câu trả lời vẫn chưa được biết" (The answer is still unknown), trái ngược với việc đã có lý do rõ ràng -> FALSE.',
+                synonyms: [
+                    { q: 'there is a clear reason', p: 'The answer is still unknown' }
+                ]
+            },
+            {
+                id: 'q6',
+                num: '6',
+                type: 'True/False/Not Given',
+                ansKey: 'TRUE',
+                badgeColor: 'bg-orange-600',
+                prompt: 'The data used in the study was taken from the work of amateur butterfly watchers.',
+                explEn: 'Paragraph 4 states data came from "butterfly enthusiasts — people who spend their free time observing". Enthusiasts spending free time = amateur watchers.',
+                explVi: 'Đoạn 4 ghi nhận dữ liệu lấy từ "những người đam mê bướm quan sát trong thời gian rảnh", chính là các nhà quan sát không chuyên (amateur watchers) -> TRUE.',
+                synonyms: [
+                    { q: 'amateur butterfly watchers', p: 'butterfly enthusiasts (spend free time observing)' }
+                ]
+            },
+            {
+                id: 'q7',
+                num: '7',
+                type: 'Notes Completion',
+                ansKey: 'colonies',
+                badgeColor: 'bg-teal-600',
+                prompt: 'The Small Blue lives in large ____________.',
+                explEn: 'Paragraph 6 states: "...the dainty Small Blue, whose colonies are up to a hundred strong..."',
+                explVi: 'Đoạn 6 ghi rõ: "...loài Small Blue có các thuộc địa/quần thể (colonies) đông tới hàng trăm con."',
+                synonyms: [
+                    { q: 'lives in large', p: 'colonies are up to a hundred strong' }
+                ]
+            },
+            {
+                id: 'q8',
+                num: '8',
+                type: 'Notes Completion',
+                ansKey: 'spring',
+                badgeColor: 'bg-amber-600',
+                prompt: 'First appears at the start of ____________.',
+                explEn: 'Paragraph 6 states: "...some develop into butterflies early in spring..."',
+                explVi: 'Đoạn 6 nêu: "...một số phát triển thành bướm vào đầu mùa xuân (spring)."',
+                synonyms: [
+                    { q: 'start of', p: 'early in' }
+                ]
+            },
+            {
+                id: 'q9',
+                num: '9',
+                type: 'Notes Completion',
+                ansKey: 'endangered',
+                badgeColor: 'bg-indigo-600',
+                prompt: 'The High Brown Fritillary is considered to be more ____________ than other species.',
+                explEn: 'Paragraph 7 states: "The beautiful High Brown Fritillary, often described as Britain\'s most endangered butterfly..."',
+                explVi: 'Đoạn 7 cho biết: "Loài High Brown Fritillary thường được mô tả là loài bướm nguy cấp (endangered) nhất nước Anh."',
+                synonyms: [
+                    { q: 'more ... than other species', p: 'Britain\'s most endangered butterfly' }
+                ]
+            },
+            {
+                id: 'q10',
+                num: '10',
+                type: 'Notes Completion',
+                ansKey: 'habitat / habitats',
+                badgeColor: 'bg-fuchsia-600',
+                prompt: 'Its caterpillars occupy a limited range of ____________.',
+                explEn: 'Paragraph 7 states: "...species in this group that specialize in very specific habitat types..."',
+                explVi: 'Đoạn 7 khẳng định các loài nhóm này chuyên hóa ở các loại môi trường sống (habitat) cụ thể.',
+                synonyms: [
+                    { q: 'occupy a limited range of', p: 'specialize in very specific ... types' }
+                ]
+            },
+            {
+                id: 'q11',
+                num: '11',
+                type: 'Notes Completion',
+                ansKey: 'Europe',
+                badgeColor: 'bg-green-600',
+                prompt: 'The Silver-studded Blue is already able to reproduce twice a year in warm areas of ____________.',
+                explEn: 'Paragraph 8 states: "...show the capacity, in continental Europe, to add a second generation in years that are sufficiently warm."',
+                explVi: 'Đoạn 8 nêu: Loài này ở lục địa Châu Âu (Europe) có khả năng sinh thế hệ thứ 2 vào những năm đủ ấm.',
+                synonyms: [
+                    { q: 'reproduce twice a year', p: 'add a second generation' },
+                    { q: 'warm areas of', p: 'in years that are sufficiently warm' }
+                ]
+            },
+            {
+                id: 'q12',
+                num: '12',
+                type: 'Notes Completion',
+                ansKey: 'southern',
+                badgeColor: 'bg-rose-600',
+                prompt: 'The White Admiral is found in ____________ areas of England.',
+                explEn: 'Paragraph 9 states: "The White Admiral of southern England..."',
+                explVi: 'Đoạn 9 nêu: Loài bướm White Admiral ở miền nam (southern) nước Anh.',
+                synonyms: [
+                    { q: 'found in ... areas', p: 'White Admiral of southern England' }
+                ]
+            },
+            {
+                id: 'q13',
+                num: '13',
+                type: 'Notes Completion',
+                ansKey: 'diet',
+                badgeColor: 'bg-sky-800',
+                prompt: 'Both climate change and the ____________ of the caterpillar are possible reasons for decline.',
+                explEn: 'Paragraph 9 states: "This may be because the caterpillar exists solely on a diet of a plant called honeysuckle. But it is also likely to be due to climate change."',
+                explVi: 'Đoạn 9 cho biết lý do sụt giảm có thể do chế độ ăn (diet) độc nhất loài cây kim ngân cũng như biến đổi khí hậu.',
+                synonyms: [
+                    { q: 'possible reasons for decline', p: 'may be because ... also likely to be due to' }
+                ]
+            }
+        ];
+
+        const vocabList = [
+            {
+                word: 'conservationist',
+                phonetic: '/ˌkɒn.səˈveɪ.ʃən.ɪst/',
+                vi: 'Nhà bảo tồn thiên nhiên',
+                enDef: 'A person who advocates or acts for the protection and preservation of the environment.',
+                type: 'noun',
+                category: 'ecology',
+                context: 'According to conservationists, populations of butterfly species have declined.',
+                collocation: 'wildlife conservationist / environmental conservationist'
+            },
+            {
+                word: 'ecosystem',
+                phonetic: '/ˈiː.kəʊˌsɪs.təm/',
+                vi: 'Hệ sinh thái',
+                enDef: 'A biological community of interacting organisms and their physical environment.',
+                type: 'noun',
+                category: 'ecology',
+                context: 'It might have unpredictable knock-on effects for other species in the ecosystem.',
+                collocation: 'fragile ecosystem / marine ecosystem'
+            },
+            {
+                word: 'lifecycle',
+                phonetic: '/ˈlaɪfˌsaɪ.kəl/',
+                vi: 'Vòng đời',
+                enDef: 'The series of changes in the life of an organism, including reproduction.',
+                type: 'noun',
+                category: 'ecology',
+                context: 'Caterpillars are the second stage in a new butterfly\'s lifecycle.',
+                collocation: 'complete lifecycle / reproductive lifecycle'
+            },
+            {
+                word: 'phenology',
+                phonetic: '/fɪˈnɒl.ə.dʒi/',
+                vi: 'Sinh học hiện tượng (sự kiện mùa)',
+                enDef: 'The study of cyclic and seasonal natural phenomena in relation to climate and plant/animal life.',
+                type: 'noun',
+                category: 'ecology',
+                context: 'Scientists refer to the timing of such lifecycle events as phenology.',
+                collocation: 'advancing phenology / phenology shifts'
+            },
+            {
+                word: 'enthusiast',
+                phonetic: '/ɪnˈθjuː.zi.æst/',
+                vi: 'Người đam mê (không chuyên)',
+                enDef: 'A person who is highly interested in a particular activity or subject.',
+                type: 'noun',
+                category: 'noun',
+                context: 'Data submitted by butterfly enthusiasts provided information on 130 species.',
+                collocation: 'nature enthusiast / amateur enthusiast'
+            },
+            {
+                word: 'abundance',
+                phonetic: '/əˈbʌn.dəns/',
+                vi: 'Sự dồi dào / Số lượng lớn',
+                enDef: 'A very large quantity or relative representation of a species in an ecosystem.',
+                type: 'noun',
+                category: 'ecology',
+                context: 'They estimated the abundance and distribution of each species across time.',
+                collocation: 'species abundance / abundance and distribution'
+            },
+            {
+                word: 'emergence',
+                phonetic: '/ɪˈmɜː.dʒəns/',
+                vi: 'Sự xuất hiện / Sự nảy mầm',
+                enDef: 'The process of coming into existence or emerging from pupa/caterpillar stage.',
+                type: 'noun',
+                category: 'ecology',
+                context: 'Species with flexible lifecycles benefit from an earlier emergence.',
+                collocation: 'earlier emergence / spring emergence'
+            },
+            {
+                word: 'colony',
+                phonetic: '/ˈkɒl.ə.ni/',
+                vi: 'Quần thể / Thuộc địa sinh vật',
+                enDef: 'A group of animals or plants of the same type living together.',
+                type: 'noun',
+                category: 'ecology',
+                context: 'The Small Blue, whose colonies are up to a hundred strong.',
+                collocation: 'butterfly colony / breeding colony'
+            },
+            {
+                word: 'specialize',
+                phonetic: '/ˈspeʃ.əl.aɪz/',
+                vi: 'Chuyên hóa',
+                enDef: 'Adapt to a particular environment or develop specialized habits.',
+                type: 'verb',
+                category: 'verb',
+                context: 'Species that specialize in very specific habitat types tend to be at harm.',
+                collocation: 'specialize in habitat / specialized diet'
+            },
+            {
+                word: 'habitat',
+                phonetic: '/ˈhæb.ɪ.tæt/',
+                vi: 'Môi trường sống',
+                enDef: 'The natural home or environment of an animal, plant, or other organism.',
+                type: 'noun',
+                category: 'ecology',
+                context: 'It is found only in coppiced woodland and limestone pavement habitats.',
+                collocation: 'habitat loss / natural habitat'
+            },
+            {
+                word: 'endangered',
+                phonetic: '/ɪnˈdeɪn.dʒəd/',
+                vi: 'Nguy cấp / Nguy cơ tuyệt chủng',
+                enDef: 'At risk of extinction.',
+                type: 'adjective',
+                category: 'adjective',
+                context: 'High Brown Fritillary is described as Britain\'s most endangered butterfly.',
+                collocation: 'endangered species / critically endangered'
+            },
+            {
+                word: 'coppiced',
+                phonetic: '/ˈkɒp.ɪst/',
+                vi: 'Rừng chồi (được tỉa cành định kỳ)',
+                enDef: 'Woodland where trees are periodically cut back to ground level to stimulate growth.',
+                type: 'adjective',
+                category: 'adjective',
+                context: 'Found only in coppiced woodland and limestone pavement habitats.',
+                collocation: 'coppiced woodland / coppiced forest'
+            },
+            {
+                word: 'diet',
+                phonetic: '/ˈdaɪ.ət/',
+                vi: 'Chế độ ăn',
+                enDef: 'The kinds of food that a person, animal, or community habitually eats.',
+                type: 'noun',
+                category: 'noun',
+                context: 'The caterpillar exists solely on a diet of a plant called honeysuckle.',
+                collocation: 'restricted diet / specialized diet'
+            },
+            {
+                word: 'honeysuckle',
+                phonetic: '/ˈhʌn.iˌsʌk.əl/',
+                vi: 'Cây kim ngân',
+                enDef: 'A climbing shrub with sweet-smelling tubular flowers.',
+                type: 'noun',
+                category: 'ecology',
+                context: 'The caterpillar exists solely on a diet of honeysuckle.',
+                collocation: 'wild honeysuckle / honeysuckle plant'
+            }
+        ];
+    </script>
+
+    <script>
+        const app = {
+            currentLang: 'en',
+            fontSize: 16,
+            showArrows: true,
+            activeTab: 'analysis',
+            fcIndex: 0,
+            fcFlipped: false,
+            arrowAnimFrame: null,
+
+            init() {
+                this.bindEvents();
+                this.renderPassage();
+                this.renderExplanations();
+                this.bindTargetEvents(); // Ensures target events bind strictly AFTER elements exist
+                this.renderVocabGrid();
+                this.setupFlashcard();
+                this.setupQuiz();
+            },
+
+            bindEvents() {
+                // Language Switcher Buttons
+                document.querySelectorAll('#lang-switcher .lang-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('#lang-switcher .lang-btn').forEach(b => b.classList.remove('active'));
+                        e.currentTarget.classList.add('active');
+                        this.currentLang = e.currentTarget.dataset.lang;
+                        this.renderPassage();
+                        this.renderExplanations();
+                        this.bindTargetEvents();
+                        setTimeout(() => this.drawConnections(), 60);
+                    });
+                });
+
+                // Font Resizing
+                document.getElementById('btn-inc-font').addEventListener('click', () => {
+                    if (this.fontSize < 24) {
+                        this.fontSize += 1;
+                        document.documentElement.style.setProperty('--app-font-size', `${this.fontSize}px`);
+                        this.drawConnections();
+                    }
+                });
+                document.getElementById('btn-dec-font').addEventListener('click', () => {
+                    if (this.fontSize > 13) {
+                        this.fontSize -= 1;
+                        document.documentElement.style.setProperty('--app-font-size', `${this.fontSize}px`);
+                        this.drawConnections();
+                    }
+                });
+
+                // Toggle Arrows
+                document.getElementById('btn-toggle-arrows').addEventListener('click', (e) => {
+                    this.showArrows = !this.showArrows;
+                    e.currentTarget.classList.toggle('bg-green-700');
+                    e.currentTarget.classList.toggle('bg-slate-300');
+                    e.currentTarget.classList.toggle('text-slate-700');
+                    if (!this.showArrows) {
+                        this.clearCanvas();
+                    } else {
+                        this.drawConnections();
+                    }
+                });
+
+                // Live scroll listeners for smooth arrow tracking
+                const leftPane = document.getElementById('left-pane');
+                const rightPane = document.getElementById('right-pane');
+                if (leftPane) leftPane.addEventListener('scroll', () => this.drawConnections());
+                if (rightPane) rightPane.addEventListener('scroll', () => this.drawConnections());
+
+                // Navigation Tabs
+                document.querySelectorAll('#nav-tabs .tab-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('#nav-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+                        e.currentTarget.classList.add('active');
+                        const tab = e.currentTarget.dataset.tab;
+                        this.activeTab = tab;
+
+                        document.getElementById('tab-analysis-content').classList.toggle('hidden', tab !== 'analysis');
+                        document.getElementById('tab-vocabulary-content').classList.toggle('hidden', tab !== 'vocabulary');
+                        document.getElementById('tab-flashcards-content').classList.toggle('hidden', tab !== 'flashcards');
+
+                        if (tab !== 'analysis') this.clearCanvas();
+                        else setTimeout(() => this.drawConnections(), 100);
+                    });
+                });
+
+                // Search & Filter Vocab
+                document.getElementById('vocab-search').addEventListener('input', () => this.filterVocab());
+                document.getElementById('vocab-filter').addEventListener('change', () => this.filterVocab());
+
+                // Flashcard Controls
+                document.getElementById('flashcard-wrapper').addEventListener('click', () => {
+                    this.fcFlipped = !this.fcFlipped;
+                    document.getElementById('flashcard-inner').classList.toggle('rotate-y-180', this.fcFlipped);
+                });
+                document.getElementById('btn-fc-prev').addEventListener('click', () => {
+                    if (this.fcIndex > 0) {
+                        this.fcIndex--;
+                        this.updateFlashcard();
+                    }
+                });
+                document.getElementById('btn-fc-next').addEventListener('click', () => {
+                    if (this.fcIndex < vocabList.length - 1) {
+                        this.fcIndex++;
+                        this.updateFlashcard();
+                    }
+                });
+
+                // Mode switcher in Flashcards tab
+                document.getElementById('btn-mode-flashcard').addEventListener('click', (e) => {
+                    e.target.classList.replace('bg-white', 'bg-green-700');
+                    e.target.classList.replace('text-slate-700', 'text-white');
+                    document.getElementById('btn-mode-quiz').classList.replace('bg-green-700', 'bg-white');
+                    document.getElementById('btn-mode-quiz').classList.replace('text-white', 'text-slate-700');
+                    document.getElementById('flashcard-view').classList.remove('hidden');
+                    document.getElementById('quiz-view').classList.add('hidden');
+                });
+                document.getElementById('btn-mode-quiz').addEventListener('click', (e) => {
+                    e.target.classList.replace('bg-white', 'bg-green-700');
+                    e.target.classList.replace('text-slate-700', 'text-white');
+                    document.getElementById('btn-mode-flashcard').classList.replace('bg-green-700', 'bg-white');
+                    document.getElementById('btn-mode-flashcard').classList.replace('text-white', 'text-slate-700');
+                    document.getElementById('quiz-view').classList.remove('hidden');
+                    document.getElementById('flashcard-view').classList.add('hidden');
+                });
+
+                window.addEventListener('resize', () => this.drawConnections());
+            },
+
+            renderPassage() {
+                const container = document.getElementById('passage-container');
+                let html = `
+                    <h2 class="text-2xl font-black text-slate-900 mb-2 text-center leading-tight tracking-tight">The Impact of Climate Change on Butterflies in Britain</h2>
+                    <p class="text-xs text-center text-slate-500 italic mb-6">Investigating phenology advances and lifecycle flexibility in British butterfly species.</p>
+                `;
+
+                passageData.forEach(p => {
+                    if (this.currentLang === 'en') {
+                        html += `<p><span class="paragraph-num">${p.pNum}</span>${p.en}</p>`;
+                    } else if (this.currentLang === 'vi') {
+                        html += `<p><span class="paragraph-num">${p.pNum}</span>${p.vi}</p>`;
+                    } else if (this.currentLang === 'dual') {
+                        html += `
+                            <div class="mb-6 p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                                <div class="text-slate-800 text-sm leading-relaxed border-b border-slate-200 pb-3">
+                                    <strong class="text-xs font-bold text-green-700 uppercase tracking-wider block mb-1">ENGLISH [Đoạn ${p.pNum}]</strong>
+                                    ${p.en}
+                                </div>
+                                <div class="text-slate-600 text-sm leading-relaxed pt-1">
+                                    <strong class="text-xs font-bold text-emerald-700 uppercase tracking-wider block mb-1">TIẾNG VIỆT</strong>
+                                    ${p.vi}
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+
+                container.innerHTML = html;
+            },
+
+            renderExplanations() {
+                const container = document.getElementById('explanations-list');
+                let html = `
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+                        <div class="flex items-center space-x-2 text-green-700 font-bold text-xs uppercase tracking-wide mb-1">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span>Comprehensive Rationale & Evidence Guide</span>
+                        </div>
+                        <h2 class="text-xl font-extrabold text-slate-900">Butterflies in Britain — Phân Tích Đáp Án</h2>
+                        <p class="text-xs text-slate-500 mt-1">Click "Locate Text" or hover over any card below to scroll to and highlight the exact text sentence in the reading passage.</p>
+                    </div>
+                `;
+
+                questionsData.forEach(q => {
+                    html += `
+                        <div class="q-card bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4 transition-all hover:border-green-400" id="q-card-${q.id}">
+                            <div class="flex items-start justify-between">
+                                <span class="bg-slate-100 text-slate-800 font-extrabold text-xs px-3 py-1 rounded-md border border-slate-200">
+                                    Question ${q.num} <span class="text-[10px] font-semibold text-slate-500">(${q.type})</span>
+                                </span>
+                                <div class="flex items-center space-x-2">
+                                    <button class="jump-btn bg-green-50 hover:bg-green-100 text-green-700 font-bold text-xs px-2.5 py-1 rounded-md border border-green-200 transition-colors flex items-center gap-1 cursor-pointer" data-q="${q.id}">
+                                        <i class="fa-solid fa-location-dot"></i> Locate Text
+                                    </button>
+                                    <span class="${q.badgeColor} text-white font-black text-xs px-3 py-1 rounded-full uppercase tracking-wider shadow-xs">
+                                        Answer: ${q.ansKey}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p class="text-sm font-bold text-slate-800 leading-relaxed">${q.prompt}</p>
+                            </div>
+
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-700 space-y-2">
+                                <div class="flex items-center text-green-700 font-bold text-xs uppercase tracking-wider">
+                                    <i class="fa-solid fa-circle-check mr-1.5"></i>
+                                    <span>Detailed Rationale / Giải Thích:</span>
+                                </div>
+                                <p class="leading-relaxed font-medium text-slate-800">${this.currentLang === 'vi' ? q.explVi : q.explEn}</p>
+                            </div>
+
+                            ${q.synonyms ? `
+                                <div class="pt-2 border-t border-slate-100">
+                                    <h5 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center">
+                                        <i class="fa-solid fa-arrows-rotate mr-1.5 text-green-600"></i> Paraphrase Keywords Table
+                                    </h5>
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full text-xs text-left border-collapse">
+                                            <thead>
+                                                <tr class="bg-green-50/70 text-green-900 font-semibold border-b border-green-100">
+                                                    <th class="p-2">Question Keyword</th>
+                                                    <th class="p-2">Passage Equivalent</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-slate-100 text-slate-600">
+                                                ${q.synonyms.map(s => `
+                                                    <tr>
+                                                        <td class="p-2 font-medium text-slate-700">${s.q}</td>
+                                                        <td class="p-2 font-semibold text-green-700">${s.p}</td>
+                                                    </tr>
+                                                `).join('')}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+            },
+
+            bindTargetEvents() {
+                const targets = document.querySelectorAll('.ans-target');
+                const qCards = document.querySelectorAll('.q-card');
+                const jumpBtns = document.querySelectorAll('.jump-btn');
+
+                const activatePair = (targetEl, cardEl, scrollLeft = false, scrollRight = false) => {
+                    document.querySelectorAll('.ans-target').forEach(t => t.classList.remove('active-target'));
+                    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('ring-2', 'ring-green-500', 'bg-green-50/40', 'border-green-400'));
+
+                    if (targetEl) {
+                        targetEl.classList.add('active-target');
+                        if (scrollLeft) {
+                            targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }
+
+                    if (cardEl) {
+                        cardEl.classList.add('ring-2', 'ring-green-500', 'bg-green-50/40', 'border-green-400');
+                        if (scrollRight) {
+                            cardEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }
+                    }
+
+                    this.startSmoothTracking();
+                };
+
+                const deactivateAll = () => {
+                    document.querySelectorAll('.ans-target').forEach(t => t.classList.remove('active-target'));
+                    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('ring-2', 'ring-green-500', 'bg-green-50/40', 'border-green-400'));
+                    this.clearCanvas();
+                };
+
+                targets.forEach(target => {
+                    const qId = target.dataset.q;
+                    const qCard = document.getElementById(`q-card-${qId}`);
+
+                    target.addEventListener('mouseenter', () => activatePair(target, qCard, false, false));
+                    target.addEventListener('mouseleave', deactivateAll);
+                    target.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        activatePair(target, qCard, false, true);
+                    });
+                });
+
+                qCards.forEach(qCard => {
+                    const qId = qCard.id.replace('q-card-', '');
+                    const target = document.querySelector(`.ans-target[data-q="${qId}"]`);
+
+                    qCard.addEventListener('mouseenter', () => activatePair(target, qCard, false, false));
+                    qCard.addEventListener('mouseleave', deactivateAll);
+                    qCard.addEventListener('click', (e) => {
+                        if (e.target.closest('.jump-btn')) return;
+                        activatePair(target, qCard, true, false);
+                    });
+                });
+
+                jumpBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        const qId = btn.dataset.q;
+                        const target = document.querySelector(`.ans-target[data-q="${qId}"]`);
+                        const qCard = document.getElementById(`q-card-${qId}`);
+                        activatePair(target, qCard, true, false);
+                    });
+                });
+            },
+
+            startSmoothTracking() {
+                if (this.arrowAnimFrame) cancelAnimationFrame(this.arrowAnimFrame);
+                const startTime = performance.now();
+                const duration = 800;
+
+                const step = (now) => {
+                    this.drawConnections();
+                    if (now - startTime < duration) {
+                        this.arrowAnimFrame = requestAnimationFrame(step);
+                    }
+                };
+                this.arrowAnimFrame = requestAnimationFrame(step);
+            },
+
+            drawConnections() {
+                const activeTarget = document.querySelector('.ans-target.active-target');
+                if (activeTarget && this.showArrows) {
+                    const qId = activeTarget.dataset.q;
+                    const qCard = document.getElementById(`q-card-${qId}`);
+                    if (qCard) {
+                        this.drawArrow(activeTarget, qCard);
+                        return;
+                    }
+                }
+                this.clearCanvas();
+            },
+
+            drawArrow(fromEl, toEl) {
+                if (!fromEl || !toEl || window.innerWidth < 1024 || !this.showArrows) {
+                    this.clearCanvas();
+                    return;
+                }
+                
+                const svg = document.getElementById('svg-canvas');
+                const wrapper = document.getElementById('main-wrapper');
+                const leftPane = document.getElementById('left-pane');
+                const rightPane = document.getElementById('right-pane');
+
+                if (!svg || !wrapper || !leftPane || !rightPane) return;
+
+                const wrapperRect = wrapper.getBoundingClientRect();
+                const leftPaneRect = leftPane.getBoundingClientRect();
+                const rightPaneRect = rightPane.getBoundingClientRect();
+
+                const clientRects = fromEl.getClientRects();
+                let fromRect = fromEl.getBoundingClientRect();
+                if (clientRects.length > 0) {
+                    fromRect = clientRects[clientRects.length - 1];
+                }
+                const toRect = toEl.getBoundingClientRect();
+
+                const isFromVisible = (fromRect.bottom >= leftPaneRect.top && fromRect.top <= leftPaneRect.bottom);
+                const isToVisible = (toRect.bottom >= rightPaneRect.top && toRect.top <= rightPaneRect.bottom);
+
+                if (!isFromVisible || !isToVisible) {
+                    this.clearCanvas();
+                    return;
+                }
+
+                const x1 = Math.min(fromRect.right - wrapperRect.left, leftPaneRect.right - wrapperRect.left - 8);
+                const y1 = fromRect.top + (fromRect.height / 2) - wrapperRect.top;
+                
+                const x2 = toRect.left - wrapperRect.left;
+                const y2 = toRect.top + Math.min(36, toRect.height / 2) - wrapperRect.top;
+
+                const dx = Math.max(30, (x2 - x1) * 0.45);
+                const pathData = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
+
+                svg.innerHTML = `
+                    <defs>
+                        <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#16a34a" />
+                            <stop offset="100%" stop-color="#15803d" />
+                        </linearGradient>
+                        <filter id="arrowGlowFilter" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#16a34a" flood-opacity="0.4"/>
+                        </filter>
+                        <marker id="arrowhead" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                            <polygon points="0 0, 9 3.5, 0 7" fill="#15803d" />
+                        </marker>
+                    </defs>
+                    <path d="${pathData}" fill="none" stroke="url(#arrowGrad)" stroke-width="3" stroke-dasharray="7,4" class="animated-arrow-line" marker-end="url(#arrowhead)" filter="url(#arrowGlowFilter)"/>
+                    <circle cx="${x1}" cy="${y1}" r="4" fill="#16a34a" />
+                    <circle cx="${x2}" cy="${y2}" r="4" fill="#15803d" />
+                `;
+            },
+
+            clearCanvas() {
+                const svg = document.getElementById('svg-canvas');
+                if (svg) svg.innerHTML = '';
+            },
+
+            renderVocabGrid() {
+                this.filterVocab();
+            },
+
+            filterVocab() {
+                const search = document.getElementById('vocab-search').value.toLowerCase();
+                const filter = document.getElementById('vocab-filter').value;
+                const grid = document.getElementById('vocab-cards-grid');
+
+                const filtered = vocabList.filter(item => {
+                    const matchSearch = item.word.toLowerCase().includes(search) || item.vi.toLowerCase().includes(search);
+                    const matchFilter = filter === 'all' || item.category === filter || item.type === filter;
+                    return matchSearch && matchFilter;
+                });
+
+                let html = '';
+                filtered.forEach(item => {
+                    html += `
+                        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col justify-between hover:border-green-400 transition-all space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-[10px] font-black uppercase tracking-wider text-green-700 bg-green-50 px-2.5 py-1 rounded-md border border-green-200">${item.type}</span>
+                                    <button onclick="app.speakWord('${item.word}')" class="text-slate-400 hover:text-green-700 transition-colors" title="Listen pronunciation">
+                                        <i class="fa-solid fa-volume-high text-sm"></i>
+                                    </button>
+                                </div>
+                                <h3 class="text-xl font-extrabold text-slate-900 capitalize">${item.word}</h3>
+                                <p class="text-xs font-mono text-slate-500 mb-2">${item.phonetic}</p>
+                                <p class="text-sm font-bold text-green-700 bg-green-50/50 p-2 rounded-lg border border-green-100 mb-3">${item.vi}</p>
+                                <p class="text-xs text-slate-600 leading-relaxed mb-3">${item.enDef}</p>
+                            </div>
+
+                            <div class="pt-3 border-t border-slate-100 space-y-2 text-xs">
+                                <div>
+                                    <span class="font-bold text-slate-700 block text-[10px] uppercase tracking-wider text-slate-400">Context in Passage:</span>
+                                    <p class="text-slate-600 italic">"${item.context}"</p>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-slate-700 block text-[10px] uppercase tracking-wider text-green-700">Common Collocation:</span>
+                                    <p class="font-semibold text-green-800">${item.collocation}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                grid.innerHTML = html || `<p class="text-sm text-slate-500 col-span-full text-center py-8">No vocabulary words match your search filters.</p>`;
+            },
+
+            speakWord(word) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const u = new SpeechSynthesisUtterance(word);
+                    u.lang = 'en-GB';
+                    u.rate = 0.9;
+                    window.speechSynthesis.speak(u);
+                }
+            },
+
+            setupFlashcard() {
+                this.updateFlashcard();
+            },
+
+            updateFlashcard() {
+                const item = vocabList[this.fcIndex];
+                this.fcFlipped = false;
+                document.getElementById('flashcard-inner').classList.remove('rotate-y-180');
+
+                document.getElementById('fc-category').textContent = `${item.type.toUpperCase()} • ${item.category.toUpperCase()}`;
+                document.getElementById('fc-word').textContent = item.word;
+                document.getElementById('fc-phonetic').textContent = item.phonetic;
+                document.getElementById('fc-meaning').textContent = item.vi;
+                document.getElementById('fc-context').textContent = `"${item.context}"`;
+                document.getElementById('fc-counter').textContent = `${this.fcIndex + 1} / ${vocabList.length}`;
+            },
+
+            setupQuiz() {
+                const quizBox = document.getElementById('quiz-box');
+                const sampleQuestions = [
+                    {
+                        q: "Which term refers to 'the study of cyclic and seasonal natural phenomena' in relation to climate?",
+                        options: ["Lifecycle", "Phenology", "Abundance", "Coppiced"],
+                        ans: 1,
+                        expl: "Phenology (sinh học hiện tượng) là nghiên cứu về thời điểm diễn ra các sự kiện mùa trong tự nhiên."
+                    },
+                    {
+                        q: "What is the synonym for 'a very large quantity of a species' in the text?",
+                        options: ["Abundance", "Emergence", "Habitat", "Enthusiast"],
+                        ans: 0,
+                        expl: "Abundance (nhiều/dồi dào) miêu tả số lượng lớn của một loài."
+                    },
+                    {
+                        q: "What does 'coppiced woodland' mean?",
+                        options: ["Woodland destroyed by fire", "Woodland where trees are periodically cut back to ground level", "Deep tropical rainforest", "Artificial pine plantation"],
+                        ans: 1,
+                        expl: "Coppiced woodland là khu rừng được quản lý bằng cách tỉa cành cây tới tận gốc định kỳ."
+                    }
+                ];
+
+                let html = `<h3 class="text-xl font-extrabold text-slate-900 border-b pb-3 border-slate-100 flex items-center gap-2"><i class="fa-solid fa-vial text-green-700"></i> IELTS Vocab Challenge — Butterflies</h3>`;
+                sampleQuestions.forEach((q, idx) => {
+                    html += `
+                        <div class="space-y-3 pt-2" id="quiz-q-${idx}">
+                            <p class="text-sm font-bold text-slate-800">${idx + 1}. ${q.q}</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                ${q.options.map((opt, oIdx) => `
+                                    <button onclick="app.checkQuiz(${idx}, ${oIdx}, ${q.ans})" class="quiz-opt-btn text-left p-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-all">
+                                        ${String.fromCharCode(65 + oIdx)}. ${opt}
+                                    </button>
+                                `).join('')}
+                            </div>
+                            <div class="quiz-feedback hidden text-xs p-3 rounded-xl"></div>
+                        </div>
+                    `;
+                });
+
+                quizBox.innerHTML = html;
+            },
+
+            checkQuiz(qIdx, selected, correct) {
+                const qDiv = document.getElementById(`quiz-q-${qIdx}`);
+                const btns = qDiv.querySelectorAll('.quiz-opt-btn');
+                const feedback = qDiv.querySelector('.quiz-feedback');
+
+                btns.forEach((btn, idx) => {
+                    btn.disabled = true;
+                    if (idx === correct) {
+                        btn.className = "quiz-opt-btn text-left p-3 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-900 font-bold text-xs";
+                    } else if (idx === selected) {
+                        btn.className = "quiz-opt-btn text-left p-3 rounded-xl border-2 border-red-400 bg-red-50 text-red-900 font-bold text-xs";
+                    }
+                });
+
+                feedback.classList.remove('hidden');
+                if (selected === correct) {
+                    feedback.className = "quiz-feedback text-xs p-3 rounded-xl bg-emerald-100 text-emerald-900 font-bold border border-emerald-200";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Correct! Excellent job.`;
+                } else {
+                    feedback.className = "quiz-feedback text-xs p-3 rounded-xl bg-red-100 text-red-900 font-bold border border-red-200";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-xmark mr-1"></i> Incorrect. Option ${String.fromCharCode(65 + correct)} is the right answer.`;
+                }
+            }
+        };
+
+        window.onload = () => app.init();
+    </script>
+</body>
+</html>

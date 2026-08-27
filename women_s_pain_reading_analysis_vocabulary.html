@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Women’s Pain Reading Analysis, Translation & Vocabulary</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --app-font-size: 16px;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-size: var(--app-font-size);
+            overflow-x: hidden;
+        }
+        .reading-text {
+            font-family: 'Merriweather', serif;
+            line-height: 2.15;
+            color: #334155;
+        }
+        .reading-text p {
+            margin-bottom: 1.5rem;
+            text-indent: 1.25rem;
+        }
+        .reading-text p:first-of-type {
+            text-indent: 0;
+        }
+
+        .paragraph-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 0.85rem;
+            margin-right: 0.4rem;
+            color: #9f1239;
+            background-color: #ffe4e6;
+            border: 1px solid #fecdd3;
+            text-indent: 0;
+            vertical-align: middle;
+        }
+
+        /* Highlight Targets & Interactive States */
+        .ans-target {
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            position: relative;
+            display: inline;
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+            text-indent: 0;
+        }
+
+        /* Question target color themes */
+        .ans-target-q1 { background-color: #fef08a; border-bottom: 2px solid #eab308; color: #854d0e; }
+        .ans-target-q2 { background-color: #bae6fd; border-bottom: 2px solid #0284c7; color: #075985; }
+        .ans-target-q3 { background-color: #bbf7d0; border-bottom: 2px solid #16a34a; color: #166534; }
+        .ans-target-q4 { background-color: #fbcfe8; border-bottom: 2px solid #db2777; color: #9d174d; }
+        .ans-target-q5 { background-color: #ddd6fe; border-bottom: 2px solid #7c3aed; color: #5b21b6; }
+        .ans-target-q6 { background-color: #fed7aa; border-bottom: 2px solid #ea580c; color: #9a3412; }
+
+        .q-badge {
+            display: inline-block;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72em;
+            font-weight: 800;
+            padding: 1px 6px;
+            border-radius: 4px;
+            margin-right: 4px;
+            vertical-align: baseline;
+            line-height: 1.2;
+            color: #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            text-indent: 0;
+            user-select: none;
+        }
+
+        .ans-target:hover, .ans-target.active-target {
+            outline: 3px solid #e11d48;
+            box-shadow: 0 0 15px rgba(225, 29, 72, 0.4);
+            filter: brightness(0.96);
+            z-index: 20;
+        }
+
+        /* Floating Evidence Popover */
+        .explanation-popover {
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            opacity: 0;
+            visibility: hidden;
+            width: 310px;
+            background-color: #0f172a;
+            color: #f8fafc;
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 0.82rem;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.3);
+            z-index: 50;
+            transition: all 0.25s ease;
+            pointer-events: none;
+            line-height: 1.45;
+            font-weight: normal;
+        }
+        .explanation-popover::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: #0f172a transparent transparent transparent;
+        }
+        .ans-target:hover .explanation-popover, .ans-target.active-target .explanation-popover {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Flashcard Animation */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* SVG Connections */
+        #svg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 30;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .tab-btn.active {
+            background-color: #be123c;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(190, 18, 60, 0.3);
+        }
+
+        @keyframes arrowFlow {
+            from { stroke-dashoffset: 26; }
+            to { stroke-dashoffset: 0; }
+        }
+        .animated-arrow-line {
+            animation: arrowFlow 1s linear infinite;
+        }
+
+        .lang-btn.active {
+            background-color: #0f172a;
+            color: white;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col bg-slate-100">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-white border-b border-slate-200 px-4 sm:px-6 py-3 flex flex-col md:flex-row justify-between items-center shadow-xs shrink-0 gap-3 z-40">
+        <div class="flex items-center space-x-3">
+            <div class="bg-rose-700 text-white p-2.5 rounded-xl shadow-sm">
+                <i class="fa-solid fa-notes-medical text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold text-slate-800">Women’s pain is different from men’s - The drug could be too</h1>
+                <p class="text-xs text-slate-500 font-medium">IELTS Academic Reading Master Companion — Gender-Specific Medicine & Pain Biology</p>
+            </div>
+        </div>
+
+        <!-- Controls: Language Switcher, Font Resize & Arrows Toggle -->
+        <div class="flex items-center space-x-3 flex-wrap gap-y-2">
+            <!-- Language Switcher -->
+            <div class="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200" id="lang-switcher">
+                <button class="lang-btn active px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="en">EN</button>
+                <button class="lang-btn px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="vi">VIE</button>
+                <button class="lang-btn px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="dual">Parallel (EN/VIE)</button>
+            </div>
+
+            <!-- Font Resizer -->
+            <div class="flex items-center space-x-1 bg-slate-100 p-1 rounded-lg border border-slate-200">
+                <button id="btn-dec-font" class="w-7 h-7 flex items-center justify-center rounded bg-white shadow-xs hover:bg-slate-50 font-bold text-xs text-slate-700" title="Decrease Font">A-</button>
+                <button id="btn-inc-font" class="w-7 h-7 flex items-center justify-center rounded bg-white shadow-xs hover:bg-slate-50 font-bold text-xs text-slate-700" title="Increase Font">A+</button>
+            </div>
+
+            <!-- Toggle Arrow Canvas -->
+            <button id="btn-toggle-arrows" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-rose-700 text-white border border-rose-700 font-medium text-xs hover:bg-rose-800 transition-colors shadow-xs">
+                <i class="fa-solid fa-route"></i>
+                <span class="hidden sm:inline">Arrows</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-white border-b border-slate-200 px-6 py-2 overflow-x-auto shrink-0 shadow-xs">
+        <div class="flex space-x-2 min-w-max" id="nav-tabs">
+            <button class="tab-btn active px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="analysis">
+                <i class="fa-solid fa-book-open mr-1.5"></i> 1. Passage & Question Analysis (Q1–Q6)
+            </button>
+            <button class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="vocabulary">
+                <i class="fa-solid fa-spell-check mr-1.5"></i> 2. IELTS Vocabulary Suite (Band 7.0–9.0)
+            </button>
+            <button class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="flashcards">
+                <i class="fa-solid fa-brain mr-1.5"></i> 3. Vocab Flashcards & Practice Quiz
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="flex-1 overflow-hidden relative" id="main-wrapper">
+        <svg id="svg-canvas"></svg>
+
+        <!-- TAB 1: Passage & Question Analysis -->
+        <div id="tab-analysis-content" class="h-full grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden">
+            <!-- Left Pane: Passage View -->
+            <section id="left-pane" class="lg:col-span-6 bg-white overflow-y-auto p-6 lg:p-10 border-r border-slate-200 relative">
+                <div class="max-w-3xl mx-auto">
+                    <div class="flex items-center justify-between mb-6 pb-3 border-b border-slate-100">
+                        <span class="text-xs font-bold uppercase tracking-wider text-rose-700 bg-rose-50 px-3 py-1 rounded-md border border-rose-200">
+                            <i class="fa-solid fa-dna mr-1.5"></i> Reading Passage — Pain & Gender Biology
+                        </span>
+                        <span class="text-xs text-slate-400 font-medium"><i class="fa-solid fa-mouse-pointer mr-1"></i> Hover/Click highlighted evidence</span>
+                    </div>
+
+                    <div id="passage-container" class="reading-text text-base leading-relaxed text-slate-700 space-y-4">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Pane: Questions & Detailed Explanations -->
+            <section id="right-pane" class="lg:col-span-6 bg-slate-50 overflow-y-auto p-6 lg:p-10">
+                <div class="max-w-2xl mx-auto space-y-6" id="explanations-list">
+                    <!-- Rendered dynamically -->
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB 2: Vocabulary Suite -->
+        <div id="tab-vocabulary-content" class="h-full bg-slate-50 overflow-y-auto p-6 lg:p-10 hidden">
+            <div class="max-w-6xl mx-auto space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-book-bookmark text-rose-700"></i> Essential IELTS Reading Vocabulary
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">High-yield terms on neurobiology, clinical trial design, chronic pain, and gender-specific medicine.</p>
+                    </div>
+
+                    <div class="flex items-center space-x-3 w-full md:w-auto">
+                        <div class="relative flex-1 md:w-64">
+                            <i class="fa-solid fa-search absolute left-3 top-3 text-slate-400 text-xs"></i>
+                            <input type="text" id="vocab-search" placeholder="Search word or translation..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-rose-600">
+                        </div>
+                        <select id="vocab-filter" class="bg-slate-50 border border-slate-200 text-xs font-semibold rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-rose-600">
+                            <option value="all">All Categories</option>
+                            <option value="noun">Nouns</option>
+                            <option value="verb">Verbs</option>
+                            <option value="adjective">Adjectives</option>
+                            <option value="medicine">Medicine & Neurobiology</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="vocab-cards-grid">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: Vocab Flashcards & Practice Quiz -->
+        <div id="tab-flashcards-content" class="h-full bg-slate-50 overflow-y-auto p-6 lg:p-10 hidden">
+            <div class="max-w-3xl mx-auto space-y-8">
+                <div class="flex justify-center space-x-3">
+                    <button id="btn-mode-flashcard" class="px-5 py-2.5 rounded-xl text-xs font-extrabold bg-rose-700 text-white shadow-sm transition-all">
+                        <i class="fa-solid fa-clone mr-2"></i> Interactive Flashcards
+                    </button>
+                    <button id="btn-mode-quiz" class="px-5 py-2.5 rounded-xl text-xs font-extrabold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all">
+                        <i class="fa-solid fa-circle-question mr-2"></i> Quick Quiz Mode
+                    </button>
+                </div>
+
+                <!-- Flashcard Display Box -->
+                <div id="flashcard-view" class="flex flex-col items-center space-y-6">
+                    <p class="text-xs text-slate-500 font-semibold">Click the card to flip between Word and Vietnamese Definition</p>
+                    
+                    <div class="w-full max-w-md h-72 perspective-1000 cursor-pointer" id="flashcard-wrapper">
+                        <div id="flashcard-inner" class="relative w-full h-full duration-500 transform-style-3d transition-transform">
+                            <!-- Front -->
+                            <div class="absolute w-full h-full bg-white rounded-3xl border border-slate-200 shadow-md p-8 flex flex-col justify-between items-center text-center backface-hidden">
+                                <span id="fc-category" class="text-[10px] uppercase font-extrabold tracking-widest text-rose-700 bg-rose-50 px-3 py-1 rounded-full border border-rose-200">Category</span>
+                                <div>
+                                    <h3 id="fc-word" class="text-3xl font-black text-slate-900 mb-2">Word</h3>
+                                    <p id="fc-phonetic" class="text-sm font-mono text-slate-500">/phonetic/</p>
+                                </div>
+                                <span class="text-xs font-bold text-rose-700 flex items-center gap-1"><i class="fa-solid fa-rotate mr-1"></i> Flip for meaning</span>
+                            </div>
+                            <!-- Back -->
+                            <div class="absolute w-full h-full bg-slate-900 text-white rounded-3xl shadow-md p-8 flex flex-col justify-between items-center text-center backface-hidden rotate-y-180">
+                                <span class="text-[10px] uppercase font-extrabold tracking-widest text-rose-400 bg-slate-800 px-3 py-1 rounded-full">Vietnamese Meaning</span>
+                                <div>
+                                    <h4 id="fc-meaning" class="text-2xl font-bold text-rose-400 mb-3">Nghĩa tiếng Việt</h4>
+                                    <p id="fc-context" class="text-xs text-slate-300 italic leading-relaxed">"Context sentence..."</p>
+                                </div>
+                                <span class="text-xs font-bold text-slate-400 flex items-center gap-1"><i class="fa-solid fa-rotate mr-1"></i> Flip back</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <button id="btn-fc-prev" class="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 flex items-center justify-center font-bold text-base shadow-xs transition-all">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <span id="fc-counter" class="text-xs font-bold text-slate-600 px-4 py-2 bg-white rounded-xl border border-slate-200">1 / 12</span>
+                        <button id="btn-fc-next" class="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 flex items-center justify-center font-bold text-base shadow-xs transition-all">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Display Box -->
+                <div id="quiz-view" class="hidden space-y-6">
+                    <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6" id="quiz-box">
+                        <!-- Quiz populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const passageData = [
+            {
+                pNum: 'A',
+                en: `Men and women can’t feel each other’s pain. Literally, we have different biological pathways for chronic pain, which means pain-relieving drugs that work for one sex might fail in the other half of the population. So why don’t we have pain medicines designed just for men or women? The reason is simple: Because no one has looked for them. Drug development begins with studies on rats and mice, and until three years ago, almost all that research used only male animals. As a result, women in particular may be left with unnecessary pain—but men might be too.`,
+                vi: `Nam giới và phụ nữ không thể cảm nhận được nỗi đau của nhau. Theo nghĩa đen, chúng ta có các con đường sinh học hoàn toàn khác nhau đối với cơn đau mãn tính, điều đó có nghĩa là những loại thuốc giảm đau phát huy tác dụng ở giới tính này có thể sẽ thất bại ở một nửa còn lại của dân số. Vậy tại sao chúng ta lại không có những loại thuốc điều trị đau được thiết kế dành riêng cho nam giới hoặc phụ nữ? Lý do rất đơn giản: Bởi vì chưa từng có ai tìm kiếm chúng. Quá trình phát triển thuốc khởi đầu bằng các nghiên cứu trên chuột cống và chuột nhắt, và cho đến cách đây ba năm, hầu như tất cả các nghiên cứu đó đều chỉ sử dụng động vật giống đực. Kết quả là, đặc biệt là phụ nữ có thể phải chịu đựng những cơn đau không đáng có – nhưng nam giới cũng có thể rơi vào tình cảnh tương tự.`
+            },
+            {
+                pNum: 'B',
+                en: `Now a study in the journal Brain reveals differences in the sensory nerves that enter the spinal cords of men and women with neuropathic pain, which is persistent shooting or burning pain. The first such study in humans, it provides the most compelling evidence yet that we need different drugs for men and women. “There’s a huge amount of suffering that’s happening that we could solve”, says Ted Price, professor of neuroscience at the University of Texas, Dallas, and an author of the Brain article. “As a field, it would be awesome to start having some success stories.”`,
+                vi: `Hiện nay, một nghiên cứu trên tạp chí Brain đã hé lộ những điểm khác biệt ở các dây thần kinh cảm giác đi vào tủy sống của nam giới và phụ nữ bị đau do bệnh lý thần kinh (neuropathic pain) – một dạng đau nhói hoặc bỏng rát dai dẳng. Là nghiên cứu đầu tiên thuộc loại này được thực hiện trên người, nó cung cấp bằng chứng thuyết phục nhất từ trước đến nay cho thấy chúng ta cần các loại thuốc riêng biệt cho nam giới và phụ nữ. “Có một sự chịu đựng đau đớn khổng lồ đang diễn ra mà chúng ta hoàn toàn có thể giải quyết được”, Ted Price – giáo sư khoa học thần kinh tại Đại học Texas ở Dallas, đồng thời là một tác giả của bài báo trên tạp chí Brain cho biết. “Đối với chuyên ngành này, thật là tuyệt vời khi bắt đầu có được những câu chuyện thành công.”`
+            },
+            {
+                pNum: 'C',
+                en: `Some 50 million people struggle with pain most days or every day, and chronic pain is the <span class="ans-target ans-target-q1" data-q="q1"><span class="q-badge bg-yellow-600">Q1</span>leading cause of long-term disability<span class="explanation-popover"><strong class="text-rose-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q1 Target Evidence</strong>"...chronic pain is the leading cause of long-term disability in the United States." (leading cause = root of).</span></span> in the United States. Women are more likely than men to have a chronic pain condition, such as arthritis, fibromyalgia, or migraines. Meanwhile, pain medications are killing us. About 17,000 people die each year from prescribed opioids as clinicians write almost 200 million opioid prescriptions, or more than one for every two American adults.`,
+                vi: `Có khoảng 50 triệu người phải vật lộn với các cơn đau hầu hết các ngày hoặc mỗi ngày, và đau mãn tính chính là <span class="ans-target ans-target-q1" data-q="q1"><span class="q-badge bg-yellow-600">Q1</span>nguyên nhân hàng đầu gây ra tình trạng tàn tật lâu dài (leading cause of long-term disability / long-term disability)<span class="explanation-popover"><strong class="text-rose-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q1</strong>Đau mãn tính là nguyên nhân hàng đầu (root of) gây ra tình trạng tàn tật lâu dài (long-term disability) tại Hoa Kỳ.</span></span> ở Hoa Kỳ. Phụ nữ có nhiều khả năng mắc phải các tình trạng đau mãn tính hơn nam giới, chẳng hạn như bệnh viêm khớp, đau cơ xơ hóa hoặc chứng đau nửa đầu. Trong khi đó, các loại thuốc giảm đau lại đang giết chết chúng ta. Khoảng 17.000 người tử vong mỗi năm do sử dụng thuốc giảm đau nhóm opioid được kê đơn, khi mà các bác sĩ lâm sàng kê tới gần 200 triệu đơn thuốc opioid – tương đương với việc cứ hai người trưởng thành ở Mỹ thì có hơn một đơn thuốc.`
+            },
+            {
+                pNum: 'D',
+                en: `The failure to include sex differences in the search for better pain relief stems in part from flawed but deep-seated beliefs. “Medical researchers made the assumption that men and women were absolutely identical in every respect, except their <span class="ans-target ans-target-q2" data-q="q2"><span class="q-badge bg-sky-600">Q2</span>reproductive biology<span class="explanation-popover"><strong class="text-rose-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q2 Target Evidence</strong>"Medical researchers made the assumption that men and women were absolutely identical... except their reproductive biology."</span></span>. If there were differences in how their drugs worked between men and women, they didn’t want to hear about it” says Marianne Legato, a cardiologist who began sounding an alarm in the 1980s about differences in heart attack symptoms among women. She went on to pioneer a new field of gender-specific medicine.`,
+                vi: `Sự thất bại trong việc tính đến các yếu tố khác biệt giới tính trong nỗ lực tìm kiếm các giải pháp giảm đau tốt hơn bắt nguồn một phần từ những niềm tin sai lầm nhưng đã ăn sâu bám rễ. “Các nhà nghiên cứu y học từng đưa ra giả định rằng nam giới và phụ nữ hoàn toàn giống hệt nhau về mọi mặt, ngoại trừ <span class="ans-target ans-target-q2" data-q="q2"><span class="q-badge bg-sky-600">Q2</span>đặc điểm sinh học sinh sản (reproductive biology)<span class="explanation-popover"><strong class="text-rose-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q2</strong>Từng có giả định rằng sinh học sinh sản (reproductive biology) là điểm khác biệt duy nhất giữa nam và nữ.</span></span> của họ. Nếu có những sự khác biệt trong cách thức thuốc phát huy tác dụng giữa nam và nữ, họ cũng không muốn lắng nghe về điều đó,” Marianne Legato – một bác sĩ tim mạch từng gióng lên hồi chuông cảnh báo vào những năm 1980 về sự khác biệt trong các triệu chứng đau tim ở phụ nữ chia sẻ. Sau đó, bà đã trở thành người tiên phong khai phá một lĩnh vực y học đặc thù theo giới tính hoàn toàn mới.`
+            },
+            {
+                pNum: 'E',
+                en: `The Brain study came about from a unique opportunity at M.D. Anderson Cancer Center in Houston. You can’t take a biopsy of spinal tissue, but researchers were able to study clusters of sensory neurons in eight women and 18 men who had <span class="ans-target ans-target-q3" data-q="q3"><span class="q-badge bg-emerald-600">Q3</span>spinal tumors removed<span class="explanation-popover"><strong class="text-rose-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q3 Target Evidence</strong>"...eight women and 18 men who had spinal tumors removed." (removed = cut off).</span></span>. The analysis included sequencing RNA to determine which genes are active in the neural cells. They compared men and women who had a history of chronic neuropathic pain to those who didn’t. Their pain wasn’t caused by the tumors themselves. Some patients had nerve compression causing neuropathic pain, while others didn’t have neuropathic pain or chronic pain at all. In men who did have neuropathic pain, <span class="ans-target ans-target-q4" data-q="q4"><span class="q-badge bg-pink-600">Q4</span>macrophages<span class="explanation-popover"><strong class="text-rose-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q4 Target Evidence</strong>"In men who did have neuropathic pain, macrophages—cells of the immune system—were most active." (most active = functioned most strongly).</span></span>—cells of the immune system—were most active. In women, neuropeptides, which are protein-like substances released by neurons, were prominent. “This represents the first direct human evidence that pain seems to be as <span class="ans-target ans-target-q5" data-q="q5"><span class="q-badge bg-purple-600">Q5</span>sex-dependent<span class="explanation-popover"><strong class="text-rose-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q5 Target Evidence</strong>"...pain seems to be as sex-dependent in its underlying biology in humans..."</span></span> in its underlying biology in humans as we have been suggesting for a while now, based on experiments in mice” says Jeffrey Mogil, professor of pain studies at McGill University in Montreal.`,
+                vi: `Nghiên cứu trên tạp chí Brain bắt nguồn từ một cơ hội hiếm có tại Trung tâm Ung thư M.D. Anderson ở Houston. Bạn không thể thực hiện sinh thiết mô tủy sống, nhưng các nhà nghiên cứu đã có thể nghiên cứu các cụm tế bào thần kinh cảm giác ở 8 phụ nữ và 18 nam giới đã từng <span class="ans-target ans-target-q3" data-q="q3"><span class="q-badge bg-emerald-600">Q3</span>cắt bỏ khối u tủy sống (spinal tumors removed / spinal tumors)<span class="explanation-popover"><strong class="text-rose-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q3</strong>Những người tham gia nghiên cứu đều đã được phẫu thuật cắt bỏ khối u tủy sống (spinal tumors removed / cut off).</span></span>. Phân tích này bao gồm việc giải trình tự RNA để xác định những gen nào đang hoạt động trong các tế bào thần kinh. Họ đã so sánh những người nam và nữ có tiền sử đau dây thần kinh mãn tính với những người không mắc chứng này. Cơn đau của họ không phải do chính các khối u gây ra. Một số bệnh nhân bị chèn ép dây thần kinh dẫn đến đau thần kinh, trong khi những người khác không hề bị đau thần kinh hay đau mãn tính. Ở những người nam giới bị đau thần kinh, <span class="ans-target ans-target-q4" data-q="q4"><span class="q-badge bg-pink-600">Q4</span>các đại thực bào (macrophages)<span class="explanation-popover"><strong class="text-rose-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q4</strong>Ở nam giới, các tế bào đại thực bào (macrophages) hoạt động mạnh mẽ nhất (most active / functioned most strongly).</span></span> – các tế bào của hệ thống miễn dịch – hoạt động mạnh mẽ nhất. Ở phụ nữ, các neuropeptide – những chất dạng protein được giải phóng bởi các nơ-ron thần kinh – lại chiếm ưu thế nổi bật. “Đây là bằng chứng trực tiếp đầu tiên trên cơ thể người cho thấy cơn đau dường như mang tính <span class="ans-target ans-target-q5" data-q="q5"><span class="q-badge bg-purple-600">Q5</span>phụ thuộc vào giới tính (sex-dependent / sex dependent)<span class="explanation-popover"><strong class="text-rose-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q5</strong>Cơn đau có xu hướng phụ thuộc vào giới tính (sex-dependent) trong cơ chế sinh học nền tảng ở con người.</span></span> trong cơ chế sinh học nền tảng ở người, giống như những gì chúng tôi đã gợi ý bấy lâu nay dựa trên các thí nghiệm ở loài chuột,” Jeffrey Mogil – giáo sư nghiên cứu về cơn đau tại Đại học McGill ở Montreal nhận định.`
+            },
+            {
+                pNum: 'F',
+                en: `Tailoring new medicines to men or women would be revolutionary, particularly considering that it took many years for women (and female animals) to get included in pain research at all. Fearful of potential birth defects, in 1977 the FDA cautioned against including women of <span class="ans-target ans-target-q6" data-q="q6"><span class="q-badge bg-orange-600">Q6</span>childbearing age<span class="explanation-popover"><strong class="text-rose-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q6 Target Evidence</strong>"...the FDA cautioned against including women of childbearing age in clinical trials..." (cautioned against including = refused to be included).</span></span> in clinical trials, which meant women used drugs solely designed for men. By 1993, the thinking had changed, and Congress passed a law requiring the inclusion of women in clinical trials funded by the National Institutes of Health. Although clinical trials now include both men and women, they often don’t report results by sex.`,
+                vi: `Việc cá nhân hóa các loại thuốc mới dành riêng cho nam giới hoặc phụ nữ sẽ là một cuộc cách mạng mang tính đột phá, đặc biệt khi xét đến việc đã phải mất rất nhiều năm để phụ nữ (và các động vật giống cái) được đưa vào các nghiên cứu về cơn đau. Do lo sợ về các dị tật bẩm sinh tiềm ẩn cho thai nhi, vào năm 1977, Cục Quản lý Thực phẩm và Dược phẩm Hoa Kỳ (FDA) đã khuyến cáo không nên đưa phụ nữ trong <span class="ans-target ans-target-q6" data-q="q6"><span class="q-badge bg-orange-600">Q6</span>độ tuổi sinh đẻ (childbearing age)<span class="explanation-popover"><strong class="text-rose-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q6</strong>Phụ nữ trong độ tuổi sinh đẻ (childbearing age) từng bị khuyến cáo không đưa vào các thử nghiệm lâm sàng.</span></span> vào các thử nghiệm lâm sàng, điều này đồng nghĩa với việc phụ nữ phải sử dụng những loại thuốc chỉ được thiết kế dành riêng cho nam giới. Đến năm 1993, tư duy này đã thay đổi, và Quốc hội Hoa Kỳ đã thông qua một đạo luật bắt buộc phải đưa phụ nữ vào các thử nghiệm lâm sàng do Viện Y tế Quốc gia tài trợ. Mặc dù các thử nghiệm lâm sàng hiện nay đã bao gồm cả nam giới và phụ nữ, họ thường vẫn không báo cáo kết quả chi tiết phân theo giới tính.`
+            },
+            {
+                pNum: 'G',
+                en: `The acknowledgement of sex differences in pain could stir up the field and lead to new advances. Amid the promise of “personalized” medicine, with drugs tailored to patients based on genetic sequencing, developing pain medicines for half the population seems like a no-brainer. “Now there’s a whole new frontier opening up in front of our eyes”, Price says.`,
+                vi: `Sự thừa nhận về những khác biệt giới tính trong cơ chế của cơn đau có thể khuấy động toàn bộ lĩnh vực này và dẫn đến những bước tiến bộ mới mượt mà. Giữa những hứa hẹn đầy triển vọng của nền y học “cá nhân hóa”, với các loại thuốc được điều chế riêng cho từng bệnh nhân dựa trên giải trình tự gen, việc phát triển các loại thuốc giảm đau chuyên biệt cho một nửa dân số thế giới dường như là một điều hiển nhiên không cần bàn cãi. “Giờ đây, có cả một chân trời mới đang mở ra ngay trước mắt chúng ta”, Price khẳng định.`
+            }
+        ];
+
+        const questionsData = [
+            {
+                id: 'q1',
+                num: '1',
+                type: 'Sentence Completion (Max 2 words)',
+                ansKey: 'long-term disability / disability',
+                badgeColor: 'bg-yellow-600',
+                prompt: 'Chronic pain is considered the root of __________________________ in many people in the US.',
+                explEn: 'Paragraph C explicitly states: "...and chronic pain is the leading cause of long-term disability in the United States." "leading cause" paraphrases "the root of".',
+                explVi: 'Đoạn C nêu rõ: "...chronic pain is the leading cause of long-term disability in the United States." Cụm từ "leading cause" đồng nghĩa với "the root of" (nguyên nhân gốc rễ/nguyên nhân hàng đầu). Đáp án là "long-term disability" hoặc "disability".',
+                synonyms: [
+                    { q: 'root of', p: 'leading cause of' },
+                    { q: 'in many people in the US', p: 'in the United States' }
+                ]
+            },
+            {
+                id: 'q2',
+                num: '2',
+                type: 'Sentence Completion (Max 2 words)',
+                ansKey: 'reproductive biology',
+                badgeColor: 'bg-sky-600',
+                prompt: 'It used to be assumed by medical researchers that __________________________ was the only difference found in men and women.',
+                explEn: 'Paragraph D states: "Medical researchers made the assumption that men and women were absolutely identical in every respect, except their reproductive biology."',
+                explVi: 'Đoạn D cho biết: Các nhà nghiên cứu y học từng đưa ra giả định (assumed) rằng nam và nữ hoàn toàn giống nhau về mọi mặt, ngoại trừ "reproductive biology" (sinh học sinh sản) của họ.',
+                synonyms: [
+                    { q: 'assumed by medical researchers', p: 'medical researchers made the assumption' },
+                    { q: 'only difference found', p: 'absolutely identical in every respect, except' }
+                ]
+            },
+            {
+                id: 'q3',
+                num: '3',
+                type: 'Sentence Completion (Max 2 words)',
+                ansKey: 'spinal tumors / tumors',
+                badgeColor: 'bg-emerald-600',
+                prompt: 'The study at M.D. Anderson Cancer Centre included participants whose __________________________ were cut off.',
+                explEn: 'Paragraph E states: "...researchers were able to study clusters of sensory neurons in eight women and 18 men who had spinal tumors removed." "cut off" paraphrases "removed".',
+                explVi: 'Đoạn E chỉ ra: Các nhà nghiên cứu đã nghiên cứu nơ-ron ở 8 phụ nữ và 18 nam giới có "spinal tumors" (khối u tủy sống) được phẫu thuật cắt bỏ (removed = cut off).',
+                synonyms: [
+                    { q: 'cut off', p: 'removed' },
+                    { q: 'participants whose ... were cut off', p: 'men who had spinal tumors removed' }
+                ]
+            },
+            {
+                id: 'q4',
+                num: '4',
+                type: 'Sentence Completion (Max 2 words)',
+                ansKey: 'macrophages / Macrophages',
+                badgeColor: 'bg-pink-600',
+                prompt: '__________________________ functioned the most strongly in men having neuropathic pain.',
+                explEn: 'Paragraph E states: "In men who did have neuropathic pain, macrophages—cells of the immune system—were most active." "functioned the most strongly" paraphrases "were most active".',
+                explVi: 'Đoạn E khẳng định: Ở những người đàn ông bị đau dây thần kinh, "macrophages" (đại thực bào) là các tế bào hoạt động mạnh nhất (were most active = functioned the most strongly).',
+                synonyms: [
+                    { q: 'functioned the most strongly', p: 'were most active' },
+                    { q: 'in men having neuropathic pain', p: 'In men who did have neuropathic pain' }
+                ]
+            },
+            {
+                id: 'q5',
+                num: '5',
+                type: 'Sentence Completion (Max 2 words)',
+                ansKey: 'sex-dependent / sex dependent',
+                badgeColor: 'bg-purple-600',
+                prompt: 'The Brain study suggested that pain was likely to be __________________________ in terms of the biology.',
+                explEn: 'Paragraph E states: "...pain seems to be as sex-dependent in its underlying biology in humans..." "likely to be" paraphrases "seems to be".',
+                explVi: 'Đoạn E kết luận: "...pain seems to be as sex-dependent in its underlying biology in humans..." (cơn đau dường như phụ thuộc giới tính - sex-dependent trong cơ chế sinh học).',
+                synonyms: [
+                    { q: 'likely to be', p: 'seems to be' },
+                    { q: 'in terms of the biology', p: 'in its underlying biology' }
+                ]
+            },
+            {
+                id: 'q6',
+                num: '6',
+                type: 'Sentence Completion (Max 2 words)',
+                ansKey: 'childbearing age',
+                badgeColor: 'bg-orange-600',
+                prompt: 'Women during the __________________________ used to be refused to be included in medical experiments.',
+                explEn: 'Paragraph F states: "...in 1977 the FDA cautioned against including women of childbearing age in clinical trials..." "medical experiments" paraphrases "clinical trials", "refused to be included" paraphrases "cautioned against including".',
+                explVi: 'Đoạn F nêu: Năm 1977 FDA đã cảnh báo không nên đưa phụ nữ trong độ tuổi sinh đẻ ("childbearing age") vào các thử nghiệm lâm sàng (clinical trials = medical experiments).',
+                synonyms: [
+                    { q: 'medical experiments', p: 'clinical trials' },
+                    { q: 'refused to be included', p: 'cautioned against including' }
+                ]
+            }
+        ];
+
+        const vocabList = [
+            {
+                word: 'neuropathic',
+                phonetic: '/ˌnjʊə.rəˈpæθ.ɪk/',
+                vi: 'Đau do tổn thương dây thần kinh',
+                enDef: 'Relating to or caused by a disease or injury affecting the nervous system, characterized by persistent shooting or burning pain.',
+                type: 'adjective',
+                category: 'medicine',
+                context: 'Men and women with neuropathic pain, which is persistent shooting or burning pain.',
+                collocation: 'neuropathic pain / neuropathic condition'
+            },
+            {
+                word: 'macrophages',
+                phonetic: '/ˈmæk.rə.feɪ.dʒɪz/',
+                vi: 'Đại thực bào (tế bào miễn dịch)',
+                enDef: 'Large white blood cells that form an important part of the immune system by engulfing and digesting cellular debris and foreign substances.',
+                type: 'noun',
+                category: 'medicine',
+                context: 'In men who did have neuropathic pain, macrophages—cells of the immune system—were most active.',
+                collocation: 'active macrophages / immune macrophages'
+            },
+            {
+                word: 'neuropeptides',
+                phonetic: '/ˌnjʊə.rəʊˈpep.taɪdz/',
+                vi: 'Protein thần kinh truyền tín hiệu',
+                enDef: 'Small protein-like molecules used by neurons to communicate with each other and modulate neural signals.',
+                type: 'noun',
+                category: 'medicine',
+                context: 'In women, neuropeptides, which are protein-like substances released by neurons, were prominent.',
+                collocation: 'release neuropeptides / neuropeptide receptors'
+            },
+            {
+                word: 'gender-specific',
+                phonetic: '/ˈdʒen.də spəˈsɪf.ɪk/',
+                vi: 'Đặc thù theo giới tính',
+                enDef: 'Designed for or affecting one particular gender specifically.',
+                type: 'adjective',
+                category: 'medicine',
+                context: 'She went on to pioneer a new field of gender-specific medicine.',
+                collocation: 'gender-specific medicine / gender-specific treatment'
+            },
+            {
+                word: 'childbearing age',
+                phonetic: '/ˈtʃaɪldˌbeə.rɪŋ eɪdʒ/',
+                vi: 'Độ tuổi sinh đẻ (thường từ 15–49)',
+                enDef: 'The period of a woman\'s life during which she is biologically capable of having children.',
+                type: 'noun',
+                category: 'medicine',
+                context: 'FDA cautioned against including women of childbearing age in clinical trials.',
+                collocation: 'women of childbearing age / childbearing years'
+            },
+            {
+                word: 'clinical trial',
+                phonetic: '/ˈklɪn.ɪ.kəl traɪəl/',
+                vi: 'Thử nghiệm lâm sàng',
+                enDef: 'A research study conducted on human subjects to evaluate the safety and efficacy of medical treatments or drugs.',
+                type: 'noun',
+                category: 'medicine',
+                context: 'Congress passed a law requiring the inclusion of women in clinical trials.',
+                collocation: 'conduct a clinical trial / clinical trial results'
+            },
+            {
+                word: 'disability',
+                phonetic: '/ˌdɪs.əˈbɪl.ə.ti/',
+                vi: 'Sự tàn tật / Khuyết tật',
+                enDef: 'A physical or mental condition that limits a person\'s movements, senses, or activities.',
+                type: 'noun',
+                category: 'medicine',
+                context: 'Chronic pain is the leading cause of long-term disability in the United States.',
+                collocation: 'long-term disability / physical disability'
+            },
+            {
+                word: 'biopsy',
+                phonetic: '/ˈbaɪ.ɒp.si/',
+                vi: 'Sinh thiết (lấy mô xét nghiệm)',
+                enDef: 'An examination of tissue removed from a living body to discover the presence, cause, or extent of a disease.',
+                type: 'noun',
+                category: 'medicine',
+                context: 'You can’t take a biopsy of spinal tissue, but researchers studied sensory neurons.',
+                collocation: 'perform a biopsy / tissue biopsy'
+            },
+            {
+                word: 'personalized',
+                phonetic: '/ˈpɜː.sən.əl.aɪzd/',
+                vi: 'Cá nhân hóa (y học cá thể hóa)',
+                enDef: 'Designed or tailored to meet an individual\'s specific needs or genetic profile.',
+                type: 'adjective',
+                category: 'adjective',
+                context: 'Amid the promise of personalized medicine, with drugs tailored based on genetic sequencing.',
+                collocation: 'personalized medicine / personalized care'
+            },
+            {
+                word: 'sex-dependent',
+                phonetic: '/seks dɪˈpen.dənt/',
+                vi: 'Phụ thuộc giới tính',
+                enDef: 'Varying or conditioned according to biological sex.',
+                type: 'adjective',
+                category: 'medicine',
+                context: 'Pain seems to be as sex-dependent in its underlying biology in humans.',
+                collocation: 'sex-dependent response / sex-dependent mechanism'
+            },
+            {
+                word: 'opioid',
+                phonetic: '/ˈəʊ.pi.ɔɪd/',
+                vi: 'Thuốc giảm đau gây nghiện (nhóm thuốc phiện)',
+                enDef: 'A class of drugs naturally found in the opium poppy plant or created synthetically that act on the nervous system to relieve pain.',
+                type: 'noun',
+                category: 'medicine',
+                context: 'About 17,000 people die each year from prescribed opioids.',
+                collocation: 'opioid prescription / opioid crisis'
+            },
+            {
+                word: 'no-brainer',
+                phonetic: '/ˌnəʊˈbreɪ.nər/',
+                vi: 'Chuyện hiển nhiên / Quyết định không cần suy nghĩ',
+                enDef: 'Something that is very obvious, easy, or requires no thought to decide upon.',
+                type: 'noun',
+                category: 'noun',
+                context: 'Developing pain medicines for half the population seems like a no-brainer.',
+                collocation: 'a complete no-brainer / seem like a no-brainer'
+            }
+        ];
+    </script>
+
+    <script>
+        const app = {
+            currentLang: 'en',
+            fontSize: 16,
+            showArrows: true,
+            activeTab: 'analysis',
+            fcIndex: 0,
+            fcFlipped: false,
+            arrowAnimFrame: null,
+
+            init() {
+                this.bindEvents();
+                this.renderPassage();
+                this.renderExplanations();
+                this.bindTargetEvents();
+                this.renderVocabGrid();
+                this.setupFlashcard();
+                this.setupQuiz();
+            },
+
+            bindEvents() {
+                // Language Switcher Buttons
+                document.querySelectorAll('#lang-switcher .lang-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('#lang-switcher .lang-btn').forEach(b => b.classList.remove('active'));
+                        e.currentTarget.classList.add('active');
+                        this.currentLang = e.currentTarget.dataset.lang;
+                        this.renderPassage();
+                        this.renderExplanations();
+                        this.bindTargetEvents();
+                        setTimeout(() => this.drawConnections(), 60);
+                    });
+                });
+
+                // Font Resizing
+                document.getElementById('btn-inc-font').addEventListener('click', () => {
+                    if (this.fontSize < 24) {
+                        this.fontSize += 1;
+                        document.documentElement.style.setProperty('--app-font-size', `${this.fontSize}px`);
+                        this.drawConnections();
+                    }
+                });
+                document.getElementById('btn-dec-font').addEventListener('click', () => {
+                    if (this.fontSize > 13) {
+                        this.fontSize -= 1;
+                        document.documentElement.style.setProperty('--app-font-size', `${this.fontSize}px`);
+                        this.drawConnections();
+                    }
+                });
+
+                // Toggle Arrows
+                document.getElementById('btn-toggle-arrows').addEventListener('click', (e) => {
+                    this.showArrows = !this.showArrows;
+                    e.currentTarget.classList.toggle('bg-rose-700');
+                    e.currentTarget.classList.toggle('bg-slate-300');
+                    e.currentTarget.classList.toggle('text-slate-700');
+                    if (!this.showArrows) {
+                        this.clearCanvas();
+                    } else {
+                        this.drawConnections();
+                    }
+                });
+
+                // Scroll Listeners
+                const leftPane = document.getElementById('left-pane');
+                const rightPane = document.getElementById('right-pane');
+                if (leftPane) leftPane.addEventListener('scroll', () => this.drawConnections());
+                if (rightPane) rightPane.addEventListener('scroll', () => this.drawConnections());
+
+                // Navigation Tabs
+                document.querySelectorAll('#nav-tabs .tab-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('#nav-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+                        e.currentTarget.classList.add('active');
+                        const tab = e.currentTarget.dataset.tab;
+                        this.activeTab = tab;
+
+                        document.getElementById('tab-analysis-content').classList.toggle('hidden', tab !== 'analysis');
+                        document.getElementById('tab-vocabulary-content').classList.toggle('hidden', tab !== 'vocabulary');
+                        document.getElementById('tab-flashcards-content').classList.toggle('hidden', tab !== 'flashcards');
+
+                        if (tab !== 'analysis') this.clearCanvas();
+                        else setTimeout(() => this.drawConnections(), 100);
+                    });
+                });
+
+                // Search & Filter Vocab
+                document.getElementById('vocab-search').addEventListener('input', () => this.filterVocab());
+                document.getElementById('vocab-filter').addEventListener('change', () => this.filterVocab());
+
+                // Flashcard Controls
+                document.getElementById('flashcard-wrapper').addEventListener('click', () => {
+                    this.fcFlipped = !this.fcFlipped;
+                    document.getElementById('flashcard-inner').classList.toggle('rotate-y-180', this.fcFlipped);
+                });
+                document.getElementById('btn-fc-prev').addEventListener('click', () => {
+                    if (this.fcIndex > 0) {
+                        this.fcIndex--;
+                        this.updateFlashcard();
+                    }
+                });
+                document.getElementById('btn-fc-next').addEventListener('click', () => {
+                    if (this.fcIndex < vocabList.length - 1) {
+                        this.fcIndex++;
+                        this.updateFlashcard();
+                    }
+                });
+
+                // Mode Switcher in Tab 3
+                document.getElementById('btn-mode-flashcard').addEventListener('click', (e) => {
+                    e.target.classList.replace('bg-white', 'bg-rose-700');
+                    e.target.classList.replace('text-slate-700', 'text-white');
+                    document.getElementById('btn-mode-quiz').classList.replace('bg-rose-700', 'bg-white');
+                    document.getElementById('btn-mode-quiz').classList.replace('text-white', 'text-slate-700');
+                    document.getElementById('flashcard-view').classList.remove('hidden');
+                    document.getElementById('quiz-view').classList.add('hidden');
+                });
+                document.getElementById('btn-mode-quiz').addEventListener('click', (e) => {
+                    e.target.classList.replace('bg-white', 'bg-rose-700');
+                    e.target.classList.replace('text-slate-700', 'text-white');
+                    document.getElementById('btn-mode-flashcard').classList.replace('bg-rose-700', 'bg-white');
+                    document.getElementById('btn-mode-flashcard').classList.replace('text-white', 'text-slate-700');
+                    document.getElementById('quiz-view').classList.remove('hidden');
+                    document.getElementById('flashcard-view').classList.add('hidden');
+                });
+
+                window.addEventListener('resize', () => this.drawConnections());
+            },
+
+            renderPassage() {
+                const container = document.getElementById('passage-container');
+                let html = `
+                    <h2 class="text-2xl font-black text-slate-900 mb-2 text-center leading-tight tracking-tight">WOMEN’S PAIN IS DIFFERENT FROM MEN’S - THE DRUG COULD BE TOO</h2>
+                    <p class="text-xs text-center text-slate-500 italic mb-6">Investigating biological sex differences in neuropathic pain and gender-specific medicine.</p>
+                `;
+
+                passageData.forEach(p => {
+                    if (this.currentLang === 'en') {
+                        html += `<p><span class="paragraph-num">${p.pNum}</span>${p.en}</p>`;
+                    } else if (this.currentLang === 'vi') {
+                        html += `<p><span class="paragraph-num">${p.pNum}</span>${p.vi}</p>`;
+                    } else if (this.currentLang === 'dual') {
+                        html += `
+                            <div class="mb-6 p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                                <div class="text-slate-800 text-sm leading-relaxed border-b border-slate-200 pb-3">
+                                    <strong class="text-xs font-bold text-rose-700 uppercase tracking-wider block mb-1">ENGLISH [Paragraph ${p.pNum}]</strong>
+                                    ${p.en}
+                                </div>
+                                <div class="text-slate-600 text-sm leading-relaxed pt-1">
+                                    <strong class="text-xs font-bold text-red-700 uppercase tracking-wider block mb-1">TIẾNG VIỆT</strong>
+                                    ${p.vi}
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+
+                container.innerHTML = html;
+            },
+
+            renderExplanations() {
+                const container = document.getElementById('explanations-list');
+                let html = `
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+                        <div class="flex items-center space-x-2 text-rose-700 font-bold text-xs uppercase tracking-wide mb-1">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span>Comprehensive Rationale & Evidence Guide</span>
+                        </div>
+                        <h2 class="text-xl font-extrabold text-slate-900">Women’s Pain — Phân Tích Đáp Án Chi Tiết</h2>
+                        <p class="text-xs text-slate-500 mt-1">Click "Locate Text" or hover over any card/slot below to scroll to and highlight the exact text sentence in the reading passage.</p>
+                    </div>
+
+                    <!-- Questions 1–6: Sentence Completion Block -->
+                    <div class="bg-rose-50/70 p-6 rounded-2xl border border-rose-200/80 shadow-xs space-y-4">
+                        <div class="flex items-center justify-between border-b border-rose-200/60 pb-3">
+                            <span class="font-extrabold text-xs text-rose-900 uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-pen-to-square text-rose-700"></i> Questions 1–6 Sentence Completion
+                            </span>
+                            <span class="text-[11px] font-bold text-rose-800 bg-rose-100/90 px-2.5 py-1 rounded-md border border-rose-200">
+                                Choose NO MORE THAN TWO WORDS
+                            </span>
+                        </div>
+
+                        <div class="text-xs sm:text-sm leading-relaxed text-slate-800 space-y-3 font-normal">
+                            <p>
+                                <strong>1.</strong> Chronic pain is considered the root of 
+                                <span class="jump-btn bg-yellow-200 border border-yellow-400 font-bold px-2 py-0.5 rounded cursor-pointer text-yellow-900 hover:bg-yellow-300 transition-all inline-flex items-center gap-1" data-q="q1">
+                                    <strong>1</strong> <span class="underline decoration-dashed">long-term disability</span>
+                                </span> 
+                                in many people in the US.
+                            </p>
+
+                            <p>
+                                <strong>2.</strong> It used to be assumed by medical researchers that 
+                                <span class="jump-btn bg-sky-200 border border-sky-400 font-bold px-2 py-0.5 rounded cursor-pointer text-sky-900 hover:bg-sky-300 transition-all inline-flex items-center gap-1" data-q="q2">
+                                    <strong>2</strong> <span class="underline decoration-dashed">reproductive biology</span>
+                                </span> 
+                                was the only difference found in men and women.
+                            </p>
+
+                            <p>
+                                <strong>3.</strong> The study at M.D. Anderson Cancer Centre included participants whose 
+                                <span class="jump-btn bg-emerald-200 border border-emerald-400 font-bold px-2 py-0.5 rounded cursor-pointer text-emerald-900 hover:bg-emerald-300 transition-all inline-flex items-center gap-1" data-q="q3">
+                                    <strong>3</strong> <span class="underline decoration-dashed">spinal tumors</span>
+                                </span> 
+                                were cut off.
+                            </p>
+
+                            <p>
+                                <strong>4.</strong> 
+                                <span class="jump-btn bg-pink-200 border border-pink-400 font-bold px-2 py-0.5 rounded cursor-pointer text-pink-900 hover:bg-pink-300 transition-all inline-flex items-center gap-1" data-q="q4">
+                                    <strong>4</strong> <span class="underline decoration-dashed">Macrophages</span>
+                                </span> 
+                                functioned the most strongly in men having neuropathic pain.
+                            </p>
+
+                            <p>
+                                <strong>5.</strong> The Brain study suggested that pain was likely to be 
+                                <span class="jump-btn bg-purple-200 border border-purple-400 font-bold px-2 py-0.5 rounded cursor-pointer text-purple-900 hover:bg-purple-300 transition-all inline-flex items-center gap-1" data-q="q5">
+                                    <strong>5</strong> <span class="underline decoration-dashed">sex-dependent</span>
+                                </span> 
+                                in terms of the biology.
+                            </p>
+
+                            <p>
+                                <strong>6.</strong> Women during the 
+                                <span class="jump-btn bg-orange-200 border border-orange-400 font-bold px-2 py-0.5 rounded cursor-pointer text-orange-900 hover:bg-orange-300 transition-all inline-flex items-center gap-1" data-q="q6">
+                                    <strong>6</strong> <span class="underline decoration-dashed">childbearing age</span>
+                                </span> 
+                                used to be refused to be included in medical experiments.
+                            </p>
+                        </div>
+                    </div>
+                `;
+
+                questionsData.forEach(q => {
+                    html += `
+                        <div class="q-card bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4 transition-all hover:border-rose-400" id="q-card-${q.id}">
+                            <div class="flex items-start justify-between">
+                                <span class="bg-slate-100 text-slate-800 font-extrabold text-xs px-3 py-1 rounded-md border border-slate-200">
+                                    Question ${q.num} <span class="text-[10px] font-semibold text-slate-500">(${q.type})</span>
+                                </span>
+                                <div class="flex items-center space-x-2">
+                                    <button class="jump-btn bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs px-2.5 py-1 rounded-md border border-rose-200 transition-colors flex items-center gap-1 cursor-pointer" data-q="${q.id}">
+                                        <i class="fa-solid fa-location-dot"></i> Locate Text
+                                    </button>
+                                    <span class="${q.badgeColor} text-white font-black text-xs px-3 py-1 rounded-full uppercase tracking-wider shadow-xs">
+                                        Answer: ${q.ansKey}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p class="text-sm font-bold text-slate-800 leading-relaxed">${q.prompt}</p>
+                            </div>
+
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-700 space-y-2">
+                                <div class="flex items-center text-rose-700 font-bold text-xs uppercase tracking-wider">
+                                    <i class="fa-solid fa-circle-check mr-1.5"></i>
+                                    <span>Detailed Rationale / Giải Thích:</span>
+                                </div>
+                                <p class="leading-relaxed font-medium text-slate-800">${this.currentLang === 'vi' ? q.explVi : q.explEn}</p>
+                            </div>
+
+                            ${q.synonyms ? `
+                                <div class="pt-2 border-t border-slate-100">
+                                    <h5 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center">
+                                        <i class="fa-solid fa-arrows-rotate mr-1.5 text-rose-600"></i> Paraphrase Keywords Table
+                                    </h5>
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full text-xs text-left border-collapse">
+                                            <thead>
+                                                <tr class="bg-rose-50/70 text-rose-900 font-semibold border-b border-rose-100">
+                                                    <th class="p-2">Question Keyword</th>
+                                                    <th class="p-2">Passage Equivalent</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-slate-100 text-slate-600">
+                                                ${q.synonyms.map(s => `
+                                                    <tr>
+                                                        <td class="p-2 font-medium text-slate-700">${s.q}</td>
+                                                        <td class="p-2 font-semibold text-rose-700">${s.p}</td>
+                                                    </tr>
+                                                `).join('')}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+            },
+
+            bindTargetEvents() {
+                const targets = document.querySelectorAll('.ans-target');
+                const qCards = document.querySelectorAll('.q-card');
+                const jumpBtns = document.querySelectorAll('.jump-btn');
+
+                const activatePair = (targetEl, cardEl, scrollLeft = false, scrollRight = false) => {
+                    document.querySelectorAll('.ans-target').forEach(t => t.classList.remove('active-target'));
+                    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('ring-2', 'ring-rose-600', 'bg-rose-50/40', 'border-rose-400'));
+
+                    if (targetEl) {
+                        targetEl.classList.add('active-target');
+                        if (scrollLeft) {
+                            targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }
+
+                    if (cardEl) {
+                        cardEl.classList.add('ring-2', 'ring-rose-600', 'bg-rose-50/40', 'border-rose-400');
+                        if (scrollRight) {
+                            cardEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }
+                    }
+
+                    this.startSmoothTracking();
+                };
+
+                const deactivateAll = () => {
+                    document.querySelectorAll('.ans-target').forEach(t => t.classList.remove('active-target'));
+                    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('ring-2', 'ring-rose-600', 'bg-rose-50/40', 'border-rose-400'));
+                    this.clearCanvas();
+                };
+
+                targets.forEach(target => {
+                    const qId = target.dataset.q;
+                    const qCard = document.getElementById(`q-card-${qId}`);
+
+                    target.addEventListener('mouseenter', () => activatePair(target, qCard, false, false));
+                    target.addEventListener('mouseleave', deactivateAll);
+                    target.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        activatePair(target, qCard, false, true);
+                    });
+                });
+
+                qCards.forEach(qCard => {
+                    const qId = qCard.id.replace('q-card-', '');
+                    const target = document.querySelector(`.ans-target[data-q="${qId}"]`);
+
+                    qCard.addEventListener('mouseenter', () => activatePair(target, qCard, false, false));
+                    qCard.addEventListener('mouseleave', deactivateAll);
+                    qCard.addEventListener('click', (e) => {
+                        if (e.target.closest('.jump-btn')) return;
+                        activatePair(target, qCard, true, false);
+                    });
+                });
+
+                jumpBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        const qId = btn.dataset.q;
+                        const target = document.querySelector(`.ans-target[data-q="${qId}"]`);
+                        const qCard = document.getElementById(`q-card-${qId}`);
+                        activatePair(target, qCard, true, false);
+                    });
+                });
+            },
+
+            startSmoothTracking() {
+                if (this.arrowAnimFrame) cancelAnimationFrame(this.arrowAnimFrame);
+                const startTime = performance.now();
+                const duration = 800;
+
+                const step = (now) => {
+                    this.drawConnections();
+                    if (now - startTime < duration) {
+                        this.arrowAnimFrame = requestAnimationFrame(step);
+                    }
+                };
+                this.arrowAnimFrame = requestAnimationFrame(step);
+            },
+
+            drawConnections() {
+                const activeTarget = document.querySelector('.ans-target.active-target');
+                if (activeTarget && this.showArrows) {
+                    const qId = activeTarget.dataset.q;
+                    const qCard = document.getElementById(`q-card-${qId}`);
+                    if (qCard) {
+                        this.drawArrow(activeTarget, qCard);
+                        return;
+                    }
+                }
+                this.clearCanvas();
+            },
+
+            drawArrow(fromEl, toEl) {
+                if (!fromEl || !toEl || window.innerWidth < 1024 || !this.showArrows) {
+                    this.clearCanvas();
+                    return;
+                }
+                
+                const svg = document.getElementById('svg-canvas');
+                const wrapper = document.getElementById('main-wrapper');
+                const leftPane = document.getElementById('left-pane');
+                const rightPane = document.getElementById('right-pane');
+
+                if (!svg || !wrapper || !leftPane || !rightPane) return;
+
+                const wrapperRect = wrapper.getBoundingClientRect();
+                const leftPaneRect = leftPane.getBoundingClientRect();
+                const rightPaneRect = rightPane.getBoundingClientRect();
+
+                const clientRects = fromEl.getClientRects();
+                let fromRect = fromEl.getBoundingClientRect();
+                if (clientRects.length > 0) {
+                    fromRect = clientRects[clientRects.length - 1];
+                }
+                const toRect = toEl.getBoundingClientRect();
+
+                const isFromVisible = (fromRect.bottom >= leftPaneRect.top && fromRect.top <= leftPaneRect.bottom);
+                const isToVisible = (toRect.bottom >= rightPaneRect.top && toRect.top <= rightPaneRect.bottom);
+
+                if (!isFromVisible || !isToVisible) {
+                    this.clearCanvas();
+                    return;
+                }
+
+                const x1 = Math.min(fromRect.right - wrapperRect.left, leftPaneRect.right - wrapperRect.left - 8);
+                const y1 = fromRect.top + (fromRect.height / 2) - wrapperRect.top;
+                
+                const x2 = toRect.left - wrapperRect.left;
+                const y2 = toRect.top + Math.min(36, toRect.height / 2) - wrapperRect.top;
+
+                const dx = Math.max(30, (x2 - x1) * 0.45);
+                const pathData = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
+
+                svg.innerHTML = `
+                    <defs>
+                        <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#be123c" />
+                            <stop offset="100%" stop-color="#e11d48" />
+                        </linearGradient>
+                        <filter id="arrowGlowFilter" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#be123c" flood-opacity="0.4"/>
+                        </filter>
+                        <marker id="arrowhead" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                            <polygon points="0 0, 9 3.5, 0 7" fill="#e11d48" />
+                        </marker>
+                    </defs>
+                    <path d="${pathData}" fill="none" stroke="url(#arrowGrad)" stroke-width="3" stroke-dasharray="7,4" class="animated-arrow-line" marker-end="url(#arrowhead)" filter="url(#arrowGlowFilter)"/>
+                    <circle cx="${x1}" cy="${y1}" r="4" fill="#be123c" />
+                    <circle cx="${x2}" cy="${y2}" r="4" fill="#e11d48" />
+                `;
+            },
+
+            clearCanvas() {
+                const svg = document.getElementById('svg-canvas');
+                if (svg) svg.innerHTML = '';
+            },
+
+            renderVocabGrid() {
+                this.filterVocab();
+            },
+
+            filterVocab() {
+                const search = document.getElementById('vocab-search').value.toLowerCase();
+                const filter = document.getElementById('vocab-filter').value;
+                const grid = document.getElementById('vocab-cards-grid');
+
+                const filtered = vocabList.filter(item => {
+                    const matchSearch = item.word.toLowerCase().includes(search) || item.vi.toLowerCase().includes(search);
+                    const matchFilter = filter === 'all' || item.category === filter || item.type === filter;
+                    return matchSearch && matchFilter;
+                });
+
+                let html = '';
+                filtered.forEach(item => {
+                    html += `
+                        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col justify-between hover:border-rose-400 transition-all space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-[10px] font-black uppercase tracking-wider text-rose-700 bg-rose-50 px-2.5 py-1 rounded-md border border-rose-200">${item.type}</span>
+                                    <button onclick="app.speakWord('${item.word}')" class="text-slate-400 hover:text-rose-700 transition-colors" title="Listen pronunciation">
+                                        <i class="fa-solid fa-volume-high text-sm"></i>
+                                    </button>
+                                </div>
+                                <h3 class="text-xl font-extrabold text-slate-900 capitalize">${item.word}</h3>
+                                <p class="text-xs font-mono text-slate-500 mb-2">${item.phonetic}</p>
+                                <p class="text-sm font-bold text-rose-700 bg-rose-50/50 p-2 rounded-lg border border-rose-100 mb-3">${item.vi}</p>
+                                <p class="text-xs text-slate-600 leading-relaxed mb-3">${item.enDef}</p>
+                            </div>
+
+                            <div class="pt-3 border-t border-slate-100 space-y-2 text-xs">
+                                <div>
+                                    <span class="font-bold text-slate-700 block text-[10px] uppercase tracking-wider text-slate-400">Context in Passage:</span>
+                                    <p class="text-slate-600 italic">"${item.context}"</p>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-slate-700 block text-[10px] uppercase tracking-wider text-rose-700">Common Collocation:</span>
+                                    <p class="font-semibold text-rose-950">${item.collocation}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                grid.innerHTML = html || `<p class="text-sm text-slate-500 col-span-full text-center py-8">No vocabulary words match your search filters.</p>`;
+            },
+
+            speakWord(word) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const u = new SpeechSynthesisUtterance(word);
+                    u.lang = 'en-GB';
+                    u.rate = 0.9;
+                    window.speechSynthesis.speak(u);
+                }
+            },
+
+            setupFlashcard() {
+                this.updateFlashcard();
+            },
+
+            updateFlashcard() {
+                const item = vocabList[this.fcIndex];
+                this.fcFlipped = false;
+                document.getElementById('flashcard-inner').classList.remove('rotate-y-180');
+
+                document.getElementById('fc-category').textContent = `${item.type.toUpperCase()} • ${item.category.toUpperCase()}`;
+                document.getElementById('fc-word').textContent = item.word;
+                document.getElementById('fc-phonetic').textContent = item.phonetic;
+                document.getElementById('fc-meaning').textContent = item.vi;
+                document.getElementById('fc-context').textContent = `"${item.context}"`;
+                document.getElementById('fc-counter').textContent = `${this.fcIndex + 1} / ${vocabList.length}`;
+            },
+
+            setupQuiz() {
+                const quizBox = document.getElementById('quiz-box');
+                const sampleQuestions = [
+                    {
+                        q: "Which term refers to 'pain caused by damage or disease affecting the nervous system, described as shooting or burning'?",
+                        options: ["Personalized", "Neuropathic", "Gender-specific", "Biopsy"],
+                        ans: 1,
+                        expl: "Neuropathic pain (tính từ) = Đau dây thần kinh do tổn thương hệ thần kinh."
+                    },
+                    {
+                        q: "What are 'macrophages' in human biology?",
+                        options: ["Protein molecules released by neurons", "Large immune system cells that digest debris and defend against infection", "A type of spinal tumor", "Receptors for opioid medication"],
+                        ans: 1,
+                        expl: "Macrophages (danh từ) = Đại thực bào, tế bào thuộc hệ thống miễn dịch."
+                    },
+                    {
+                        q: "Which phrase describes 'the period of a woman's life during which she is biologically capable of reproducing'?",
+                        options: ["Sex-dependent", "Childbearing age", "Personalized medicine", "Clinical trial"],
+                        ans: 1,
+                        expl: "Childbearing age (danh từ) = Độ tuổi sinh đẻ ở phụ nữ."
+                    }
+                ];
+
+                let html = `<h3 class="text-xl font-extrabold text-slate-900 border-b pb-3 border-slate-100 flex items-center gap-2"><i class="fa-solid fa-vial text-rose-700"></i> IELTS Vocab Challenge — Women’s Pain</h3>`;
+                sampleQuestions.forEach((q, idx) => {
+                    html += `
+                        <div class="space-y-3 pt-2" id="quiz-q-${idx}">
+                            <p class="text-sm font-bold text-slate-800">${idx + 1}. ${q.q}</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                ${q.options.map((opt, oIdx) => `
+                                    <button onclick="app.checkQuiz(${idx}, ${oIdx}, ${q.ans})" class="quiz-opt-btn text-left p-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-all">
+                                        ${String.fromCharCode(65 + oIdx)}. ${opt}
+                                    </button>
+                                `).join('')}
+                            </div>
+                            <div class="quiz-feedback hidden text-xs p-3 rounded-xl"></div>
+                        </div>
+                    `;
+                });
+
+                quizBox.innerHTML = html;
+            },
+
+            checkQuiz(qIdx, selected, correct) {
+                const qDiv = document.getElementById(`quiz-q-${qIdx}`);
+                const btns = qDiv.querySelectorAll('.quiz-opt-btn');
+                const feedback = qDiv.querySelector('.quiz-feedback');
+
+                btns.forEach((btn, idx) => {
+                    btn.disabled = true;
+                    if (idx === correct) {
+                        btn.className = "quiz-opt-btn text-left p-3 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-900 font-bold text-xs";
+                    } else if (idx === selected) {
+                        btn.className = "quiz-opt-btn text-left p-3 rounded-xl border-2 border-red-400 bg-red-50 text-red-900 font-bold text-xs";
+                    }
+                });
+
+                feedback.classList.remove('hidden');
+                if (selected === correct) {
+                    feedback.className = "quiz-feedback text-xs p-3 rounded-xl bg-emerald-100 text-emerald-900 font-bold border border-emerald-200";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Correct! Excellent job.`;
+                } else {
+                    feedback.className = "quiz-feedback text-xs p-3 rounded-xl bg-red-100 text-red-900 font-bold border border-red-200";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-xmark mr-1"></i> Incorrect. Option ${String.fromCharCode(65 + correct)} is the right answer.`;
+                }
+            }
+        };
+
+        window.onload = () => app.init();
+    </script>
+</body>
+</html>

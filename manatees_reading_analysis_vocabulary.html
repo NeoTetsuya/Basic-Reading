@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manatees — IELTS Reading Analysis, Translation & Vocabulary</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --app-font-size: 16px;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-size: var(--app-font-size);
+            overflow-x: hidden;
+        }
+        .reading-text {
+            font-family: 'Merriweather', serif;
+            line-height: 2.1;
+            color: #334155;
+        }
+        .reading-text p {
+            margin-bottom: 1.5rem;
+            text-indent: 1.25rem;
+        }
+        .reading-text p:first-of-type {
+            text-indent: 0;
+        }
+
+        .paragraph-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 0.8rem;
+            margin-right: 0.4rem;
+            color: #0284c7;
+            background-color: #e0f2fe;
+            border: 1px solid #bae6fd;
+            text-indent: 0;
+            vertical-align: middle;
+        }
+
+        /* Highlight Targets & Interactive States */
+        .ans-target {
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            position: relative;
+            display: inline;
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+            text-indent: 0;
+        }
+
+        /* Question target color themes */
+        .ans-target-q1 { background-color: #fef08a; border-bottom: 2px solid #eab308; color: #854d0e; }
+        .ans-target-q2 { background-color: #bae6fd; border-bottom: 2px solid #0284c7; color: #075985; }
+        .ans-target-q3 { background-color: #bbf7d0; border-bottom: 2px solid #16a34a; color: #166534; }
+        .ans-target-q4 { background-color: #fbcfe8; border-bottom: 2px solid #db2777; color: #9d174d; }
+        .ans-target-q5 { background-color: #ddd6fe; border-bottom: 2px solid #7c3aed; color: #5b21b6; }
+        .ans-target-q6 { background-color: #fed7aa; border-bottom: 2px solid #ea580c; color: #9a3412; }
+        .ans-target-q7 { background-color: #ccfbf1; border-bottom: 2px solid #0d9488; color: #115e59; }
+        .ans-target-q8 { background-color: #fef3c7; border-bottom: 2px solid #d97706; color: #92400e; }
+        .ans-target-q9 { background-color: #e0e7ff; border-bottom: 2px solid #4f46e5; color: #3730a3; }
+        .ans-target-q10 { background-color: #fae8ff; border-bottom: 2px solid #c026d3; color: #86198f; }
+        .ans-target-q11 { background-color: #dcfce7; border-bottom: 2px solid #22c55e; color: #14532d; }
+        .ans-target-q12 { background-color: #ffe4e6; border-bottom: 2px solid #f43f5e; color: #881337; }
+        .ans-target-q13 { background-color: #e0f2fe; border-bottom: 2px solid #0369a1; color: #0c4a6e; }
+
+        .q-badge {
+            display: inline-block;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72em;
+            font-weight: 800;
+            padding: 1px 6px;
+            border-radius: 4px;
+            margin-right: 4px;
+            vertical-align: baseline;
+            line-height: 1.2;
+            color: #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            text-indent: 0;
+            user-select: none;
+        }
+
+        .ans-target:hover, .ans-target.active-target {
+            outline: 3px solid #0284c7;
+            box-shadow: 0 0 15px rgba(2, 132, 199, 0.4);
+            filter: brightness(0.96);
+            z-index: 20;
+        }
+
+        /* Floating Evidence Popover */
+        .explanation-popover {
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            opacity: 0;
+            visibility: hidden;
+            width: 300px;
+            background-color: #0f172a;
+            color: #f8fafc;
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 0.82rem;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.3);
+            z-index: 50;
+            transition: all 0.25s ease;
+            pointer-events: none;
+            line-height: 1.45;
+            font-weight: normal;
+        }
+        .explanation-popover::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: #0f172a transparent transparent transparent;
+        }
+        .ans-target:hover .explanation-popover, .ans-target.active-target .explanation-popover {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Flashcard Animation */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* SVG Connections */
+        #svg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 30;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .tab-btn.active {
+            background-color: #0284c7;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.3);
+        }
+
+        @keyframes arrowFlow {
+            from { stroke-dashoffset: 26; }
+            to { stroke-dashoffset: 0; }
+        }
+        .animated-arrow-line {
+            animation: arrowFlow 1s linear infinite;
+        }
+
+        .lang-btn.active {
+            background-color: #0f172a;
+            color: white;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col bg-slate-100">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-white border-b border-slate-200 px-4 sm:px-6 py-3 flex flex-col md:flex-row justify-between items-center shadow-xs shrink-0 gap-3 z-40">
+        <div class="flex items-center space-x-3">
+            <div class="bg-blue-600 text-white p-2.5 rounded-xl shadow-sm">
+                <i class="fa-solid fa-water text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold text-slate-800">Manatees — Analysis, Translation & Vocabulary</h1>
+                <p class="text-xs text-slate-500 font-medium">IELTS Academic Reading Master Companion — Cambridge Style</p>
+            </div>
+        </div>
+
+        <!-- Controls: Language Switcher, Font Resize & Arrows Toggle -->
+        <div class="flex items-center space-x-3 flex-wrap gap-y-2">
+            <!-- Language Switcher -->
+            <div class="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200" id="lang-switcher">
+                <button class="lang-btn active px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="en">EN</button>
+                <button class="lang-btn px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="vi">VIE</button>
+                <button class="lang-btn px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="dual">Parallel (EN/VIE)</button>
+            </div>
+
+            <!-- Font Resizer -->
+            <div class="flex items-center space-x-1 bg-slate-100 p-1 rounded-lg border border-slate-200">
+                <button id="btn-dec-font" class="w-7 h-7 flex items-center justify-center rounded bg-white shadow-xs hover:bg-slate-50 font-bold text-xs text-slate-700" title="Decrease Font">A-</button>
+                <button id="btn-inc-font" class="w-7 h-7 flex items-center justify-center rounded bg-white shadow-xs hover:bg-slate-50 font-bold text-xs text-slate-700" title="Increase Font">A+</button>
+            </div>
+
+            <!-- Toggle Arrow Canvas -->
+            <button id="btn-toggle-arrows" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-sky-600 text-white border border-sky-600 font-medium text-xs hover:bg-sky-700 transition-colors shadow-xs">
+                <i class="fa-solid fa-route"></i>
+                <span class="hidden sm:inline">Arrows</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-white border-b border-slate-200 px-6 py-2 overflow-x-auto shrink-0 shadow-xs">
+        <div class="flex space-x-2 min-w-max" id="nav-tabs">
+            <button class="tab-btn active px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="analysis">
+                <i class="fa-solid fa-book-open mr-1.5"></i> 1. Passage & Question Analysis (Q1–Q13)
+            </button>
+            <button class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="vocabulary">
+                <i class="fa-solid fa-spell-check mr-1.5"></i> 2. IELTS Vocabulary Suite (Band 7.0–9.0)
+            </button>
+            <button class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="flashcards">
+                <i class="fa-solid fa-brain mr-1.5"></i> 3. Vocab Flashcards & Practice Quiz
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="flex-1 overflow-hidden relative" id="main-wrapper">
+        <svg id="svg-canvas"></svg>
+
+        <!-- TAB 1: Passage & Question Analysis -->
+        <div id="tab-analysis-content" class="h-full grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden">
+            <!-- Left Pane: Passage View -->
+            <section id="left-pane" class="lg:col-span-6 bg-white overflow-y-auto p-6 lg:p-10 border-r border-slate-200 relative">
+                <div class="max-w-3xl mx-auto">
+                    <div class="flex items-center justify-between mb-6 pb-3 border-b border-slate-100">
+                        <span class="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded-md border border-blue-200">
+                            <i class="fa-solid fa-fish-fins mr-1.5"></i> Reading Passage — Manatees
+                        </span>
+                        <span class="text-xs text-slate-400 font-medium"><i class="fa-solid fa-mouse-pointer mr-1"></i> Hover/Click highlighted evidence</span>
+                    </div>
+
+                    <div id="passage-container" class="reading-text text-base leading-relaxed text-slate-700 space-y-4">
+                        <!-- Rendered dynamically depending on active language mode -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Pane: Questions & Detailed Explanations -->
+            <section id="right-pane" class="lg:col-span-6 bg-slate-50 overflow-y-auto p-6 lg:p-10">
+                <div class="max-w-2xl mx-auto space-y-6" id="explanations-list">
+                    <!-- Rendered dynamically -->
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB 2: Vocabulary Suite -->
+        <div id="tab-vocabulary-content" class="h-full bg-slate-50 overflow-y-auto p-6 lg:p-10 hidden">
+            <div class="max-w-6xl mx-auto space-y-6">
+                <!-- Vocab Header & Search / Filters -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-book-bookmark text-blue-600"></i> Essential IELTS Reading Vocabulary — Manatees
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">High-frequency academic terms, collocation patterns, and context sentences from "Manatees".</p>
+                    </div>
+
+                    <div class="flex items-center space-x-3 w-full md:w-auto">
+                        <div class="relative flex-1 md:w-64">
+                            <i class="fa-solid fa-search absolute left-3 top-3 text-slate-400 text-xs"></i>
+                            <input type="text" id="vocab-search" placeholder="Search word or translation..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <select id="vocab-filter" class="bg-slate-50 border border-slate-200 text-xs font-semibold rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="all">All Categories</option>
+                            <option value="noun">Nouns</option>
+                            <option value="verb">Verbs</option>
+                            <option value="adjective">Adjectives</option>
+                            <option value="biology">Biology & Conservation</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Vocabulary Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="vocab-cards-grid">
+                    <!-- Vocab cards injected by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: Vocab Flashcards & Practice Quiz -->
+        <div id="tab-flashcards-content" class="h-full bg-slate-50 overflow-y-auto p-6 lg:p-10 hidden">
+            <div class="max-w-3xl mx-auto space-y-8">
+                <!-- Section Switcher -->
+                <div class="flex justify-center space-x-3">
+                    <button id="btn-mode-flashcard" class="px-5 py-2.5 rounded-xl text-xs font-extrabold bg-blue-600 text-white shadow-sm transition-all">
+                        <i class="fa-solid fa-clone mr-2"></i> Interactive Flashcards
+                    </button>
+                    <button id="btn-mode-quiz" class="px-5 py-2.5 rounded-xl text-xs font-extrabold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all">
+                        <i class="fa-solid fa-circle-question mr-2"></i> Quick Quiz Mode
+                    </button>
+                </div>
+
+                <!-- Flashcard Display Box -->
+                <div id="flashcard-view" class="flex flex-col items-center space-y-6">
+                    <p class="text-xs text-slate-500 font-semibold">Click the card to flip between Word and Vietnamese Definition</p>
+                    
+                    <div class="w-full max-w-md h-72 perspective-1000 cursor-pointer" id="flashcard-wrapper">
+                        <div id="flashcard-inner" class="relative w-full h-full duration-500 transform-style-3d transition-transform">
+                            <!-- Front -->
+                            <div class="absolute w-full h-full bg-white rounded-3xl border border-slate-200 shadow-md p-8 flex flex-col justify-between items-center text-center backface-hidden">
+                                <span id="fc-category" class="text-[10px] uppercase font-extrabold tracking-widest text-blue-700 bg-blue-50 px-3 py-1 rounded-full border border-blue-200">Category</span>
+                                <div>
+                                    <h3 id="fc-word" class="text-3xl font-black text-slate-900 mb-2">Word</h3>
+                                    <p id="fc-phonetic" class="text-sm font-mono text-slate-500">/phonetic/</p>
+                                </div>
+                                <span class="text-xs font-bold text-sky-600 flex items-center gap-1"><i class="fa-solid fa-rotate mr-1"></i> Flip for meaning</span>
+                            </div>
+                            <!-- Back -->
+                            <div class="absolute w-full h-full bg-slate-900 text-white rounded-3xl shadow-md p-8 flex flex-col justify-between items-center text-center backface-hidden rotate-y-180">
+                                <span class="text-[10px] uppercase font-extrabold tracking-widest text-blue-400 bg-slate-800 px-3 py-1 rounded-full">Vietnamese Meaning</span>
+                                <div>
+                                    <h4 id="fc-meaning" class="text-2xl font-bold text-blue-400 mb-3">Nghĩa tiếng Việt</h4>
+                                    <p id="fc-context" class="text-xs text-slate-300 italic leading-relaxed">"Context sentence..."</p>
+                                </div>
+                                <span class="text-xs font-bold text-slate-400 flex items-center gap-1"><i class="fa-solid fa-rotate mr-1"></i> Flip back</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flashcard Navigation Buttons -->
+                    <div class="flex items-center space-x-4">
+                        <button id="btn-fc-prev" class="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 flex items-center justify-center font-bold text-base shadow-xs transition-all">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <span id="fc-counter" class="text-xs font-bold text-slate-600 px-4 py-2 bg-white rounded-xl border border-slate-200">1 / 15</span>
+                        <button id="btn-fc-next" class="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 flex items-center justify-center font-bold text-base shadow-xs transition-all">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Display Box -->
+                <div id="quiz-view" class="hidden space-y-6">
+                    <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6" id="quiz-box">
+                        <!-- Quiz populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script>
+        const passageData = [
+            {
+                pNum: 1,
+                en: `Manatees, also known as sea cows, are aquatic mammals that belong to a group of animals called Sirenia. This group also contains dugongs. Dugongs and manatees look quite alike – they are similar in size, colour and shape, and both have flexible flippers for forelimbs. However, the manatee has a broad, rounded <span class="ans-target ans-target-q1" data-q="q1"><span class="q-badge bg-yellow-600">Q1</span>tail<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q1 Target Evidence</strong>Manatees look like dugongs but have a differently shaped broad, rounded tail (dugong's is fluked).</span></span>, whereas the dugong’s is fluked, like that of a whale. There are three species of manatees: the West Indian manatee (Trichechus manatus), the African manatee (Trichechus senegalensis) and the Amazonian manatee (Trichechus inunguis).`,
+                vi: `Lợn biển, còn được gọi là bò biển, là những động vật có vú sống dưới nước thuộc một nhóm động vật được gọi là Sirenia. Nhóm này cũng bao gồm loài cá cúi (dugong). Cá cúi và lợn biển trông khá giống nhau – chúng tương đồng về kích thước, màu sắc và hình dáng thân thể, và cả hai đều có vây chèo linh hoạt ở các chi trước. Tuy nhiên, lợn biển sở hữu một chiếc <span class="ans-target ans-target-q1" data-q="q1"><span class="q-badge bg-yellow-600">Q1</span>đuôi (tail)<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q1</strong>Lợn biển có cái đuôi (tail) rộng và tròn, khác với đuôi có vây chẻ góc của cá cúi.</span></span> rộng và tròn, trong khi đuôi của cá cúi có dạng vây chẻ hai thùy, giống như đuôi của loài cá voi. Có ba loài lợn biển: lợn biển Tây Ấn (Trichechus manatus), lợn biển Châu Phi (Trichechus senegalensis) và lợn biển Amazon (Trichechus inunguis).`
+            },
+            {
+                pNum: 2,
+                en: `Unlike most mammals, manatees have only six bones in their neck – most others, including humans and giraffes, have seven. This short neck allows a manatee to move its head up and down, but not side to side. To see something on its left or its right, a manatee must turn its entire body, steering with its <span class="ans-target ans-target-q2" data-q="q2"><span class="q-badge bg-sky-600">Q2</span>flippers<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q2 Target Evidence</strong>Must turn entire body steering with flippers to look sideways.</span></span>. Manatees have pectoral flippers but no back limbs, only a tail for propulsion. They do have pelvic bones, however – a leftover from their evolution from a four-legged to a fully aquatic animal. Manatees share some visual similarities to elephants. Like elephants, manatees have thick, wrinkled skin. They also have some <span class="ans-target ans-target-q3" data-q="q3"><span class="q-badge bg-emerald-600">Q3</span>hairs<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q3 Target Evidence</strong>Hairs covering their bodies help sense vibrations in the water.</span></span> covering their bodies which help them sense vibrations in the water around them.`,
+                vi: `Không giống như hầu hết các loài động vật có vú khác, lợn biển chỉ có sáu đốt sống cổ – trong khi phần lớn các loài khác, bao gồm cả con người và hươu cao cổ, đều có bảy đốt. Chiếc cổ ngắn này cho phép lợn biển cử động đầu lên xuống, nhưng không thể quay đầu từ bên này sang bên kia. Để nhìn thấy một vật gì đó ở bên trái hoặc bên phải, lợn biển buộc phải xoay toàn bộ cơ thể của mình và điều hướng bằng các <span class="ans-target ans-target-q2" data-q="q2"><span class="q-badge bg-sky-600">Q2</span>vây chèo (flippers)<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q2</strong>Phải xoay cả cơ thể và điều hướng bằng vây chèo (flippers) để quan sát hai bên.</span></span>. Lợn biển có các vây ngực nhưng không có chi sau, chỉ có một chiếc đuôi để tạo lực đẩy về phía trước. Tuy nhiên, chúng vẫn có xương chậu – một dấu tích còn sót lại từ quá trình tiến hóa từ một loài động vật bốn chân trên cạn thành một loài động vật hoàn toàn sống dưới nước. Lợn biển có một số nét tương đồng về mặt thị giác với loài voi. Giống như voi, lợn biển có lớp da dày và nhăn nheo. Chúng cũng có một số <span class="ans-target ans-target-q3" data-q="q3"><span class="q-badge bg-emerald-600">Q3</span>sợi lông (hairs)<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q3</strong>Lớp lông (hairs) bao phủ cơ thể giúp chúng cảm nhận rung động trong nước.</span></span> bao phủ khắp cơ thể giúp chúng cảm nhận được các rung động trong làn nước xung quanh.`
+            },
+            {
+                pNum: 3,
+                en: `<span class="ans-target ans-target-q4" data-q="q4"><span class="q-badge bg-pink-600">Q4</span>Seagrasses<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q4 Target Evidence</strong>Seagrasses make up most of a manatee's diet.</span></span> and other marine plants make up most of a manatee’s diet. Manatees spend about eight hours each day grazing and uprooting plants. They eat up to 15% of their weight in food each day. African manatees are omnivorous – studies have shown that molluscs and fish make up a small part of their diets. West Indian and Amazonian manatees are both herbivores.`,
+                vi: `<span class="ans-target ans-target-q4" data-q="q4"><span class="q-badge bg-pink-600">Q4</span>Cỏ biển (Seagrasses)<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q4</strong>Cỏ biển (Seagrasses) và các thực vật biển khác chiếm phần lớn khẩu phần ăn của lợn biển.</span></span> và các loài thực vật biển khác chiếm phần lớn khẩu phần ăn của lợn biển. Lợn biển dành khoảng tám giờ mỗi ngày để gặm cỏ và nhổ rễ thực vật thủy sinh. Chúng ăn một lượng thức ăn lên tới 15% trọng lượng cơ thể mỗi ngày. Lợn biển Châu Phi là loài ăn tạp – các nghiên cứu đã chỉ ra rằng động vật thân mềm và cá chiếm một phần nhỏ trong chế độ ăn của chúng. Trong khi đó, lợn biển Tây Ấn và lợn biển Amazon đều là những loài động vật hoàn toàn ăn thực vật.`
+            },
+            {
+                pNum: 4,
+                en: `Manatees’ teeth are all molars – flat, rounded teeth for grinding food. Due to manatees’ abrasive aquatic plant diet, these teeth get worn down and they eventually fall out, so they continually grow new teeth that get pushed forward to replace the ones they lose. Instead of having incisors to grasp their food, manatees have <span class="ans-target ans-target-q5" data-q="q5"><span class="q-badge bg-purple-600">Q5</span>lips<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q5 Target Evidence</strong>Lips function like hands to help tear/grasp food away.</span></span> which function like a pair of hands to help tear food away from the seafloor.`,
+                vi: `Răng của lợn biển đều là răng hàm – những chiếc răng phẳng và tròn dùng để nghiền nát thức ăn. Do chế độ ăn thực vật thủy sinh có tính mài mòn cao của lợn biển, những chiếc răng này bị mòn đi và cuối cùng sẽ rụng, vì vậy chúng liên tục mọc những chiếc răng mới được đẩy về phía trước để thay thế những chiếc đã mất. Thay vì có răng cửa để gắp thức ăn, lợn biển có đôi <span class="ans-target ans-target-q5" data-q="q5"><span class="q-badge bg-purple-600">Q5</span>môi (lips)<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q5</strong>Đôi môi (lips) hoạt động như một đôi bàn tay để giúp giật và xé thức ăn từ đáy biển.</span></span> hoạt động giống như một đôi bàn tay để giúp giật và xé thức ăn ra khỏi đáy biển.`
+            },
+            {
+                pNum: 5,
+                en: `Manatees are fully aquatic, but as mammals, they need to come up to the surface to breathe. When awake, they typically surface every two to four minutes, but they can hold their breath for much longer. Adult manatees sleep underwater for 10–12 hours a day, but they come up for air every 15 – 20 minutes. Active manatees need to breathe more frequently. It’s thought that manatees use their muscular diaphragm and breathing to adjust their <span class="ans-target ans-target-q6" data-q="q6"><span class="q-badge bg-orange-600">Q6</span>buoyancy<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q6 Target Evidence</strong>Diaphragm and breathing are used to adjust buoyancy.</span></span>. They may use diaphragm contractions to compress and store gas in folds in their large intestine to help them float.`,
+                vi: `Lợn biển hoàn toàn sống dưới nước, nhưng vì là động vật có vú, chúng cần phải ngoi lên mặt nước để hít thở không khí. Khi thức, chúng thường ngoi lên mặt nước từ 2 đến 4 phút một lần, nhưng chúng có thể nín thở lâu hơn rất nhiều. Lợn biển trưởng thành ngủ dưới nước từ 10 đến 12 giờ một ngày, nhưng chúng vẫn tự động ngoi lên để lấy dưỡng khí sau mỗi 15 đến 20 phút. Lợn biển khi đang hoạt động cần thở thường xuyên hơn. Người ta cho rằng lợn biển sử dụng cơ hoành nhiều cơ bắp và nhịp thở của mình để điều chỉnh <span class="ans-target ans-target-q6" data-q="q6"><span class="q-badge bg-orange-600">Q6</span>sức nổi (buoyancy)<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q6</strong>Cơ hoành và hơi thở được dùng để điều chỉnh sức nổi (buoyancy) của cơ thể.</span></span>. Chúng có thể sử dụng các cơn co thắt cơ hoành để nén và lưu trữ khí trong các nếp gấp ở ruột già nhằm giúp cơ thể nổi lên mặt nước.`
+            },
+            {
+                pNum: 6,
+                en: `The West Indian manatee reaches about 3.5 metres long and weighs on average around 500 kilograms. <span class="ans-target ans-target-q7" data-q="q7"><span class="q-badge bg-teal-600">Q7</span>It moves between fresh water and salt water, taking advantage of coastal mangroves and coral reefs, rivers, lakes and inland lagoons<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q7 Target Evidence</strong>Found in various aquatic habitats (mangroves, reefs, rivers, lakes, lagoons) -> TRUE.</span></span>. There are two subspecies of West Indian manatee: the Antillean manatee is found in waters from the Bahamas to Brazil, whereas the Florida manatee is found in US waters, although some individuals have been recorded in the Bahamas. <span class="ans-target ans-target-q8" data-q="q8"><span class="q-badge bg-amber-600">Q8</span>In winter, the Florida manatee is typically restricted to Florida. When the ambient water temperature drops below 20°C, it takes refuge in naturally and artificially warmed water<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q8 Target Evidence</strong>No direct comparison of water temperature between Florida and Antillean manatees -> NOT GIVEN.</span></span>.`,
+                vi: `Lợn biển Tây Ấn đạt chiều dài khoảng 3,5 mét và có trọng lượng trung bình khoảng 500 kg. <span class="ans-target ans-target-q7" data-q="q7"><span class="q-badge bg-teal-600">Q7</span>Nó di chuyển linh hoạt giữa các vùng nước ngọt và nước mặn, tận dụng tối đa môi trường rừng ngập mặn ven biển, rạn san hô, sông, hồ và các đầm phá nội địa<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q7</strong>Được tìm thấy ở nhiều môi trường sống dưới nước đa dạng khác nhau -> ĐÚNG (TRUE).</span></span>. Có hai phân loài lợn biển Tây Ấn: lợn biển Antillean được tìm thấy ở các vùng biển từ Bahamas đến Brazil, trong khi lợn biển Florida được tìm thấy ở các vùng biển thuộc Hoa Kỳ, mặc dù một số cá thể đã được ghi nhận tại Bahamas. <span class="ans-target ans-target-q8" data-q="q8"><span class="q-badge bg-amber-600">Q8</span>Vào mùa đông, lợn biển Florida thường bị giới hạn phạm vi tại Florida. Khi nhiệt độ nước xung quanh giảm xuống dưới 20°C, nó tìm nơi trú ẩn trong các vùng nước ấm tự nhiên hoặc được làm ấm nhân tạo<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q8</strong>Không có sự so sánh trực tiếp về nhiệt độ nước giữa lợn biển Florida và lợn biển Antillean -> NOT GIVEN.</span></span>.`
+            },
+            {
+                pNum: 7,
+                en: `<span class="ans-target ans-target-q9" data-q="q9"><span class="q-badge bg-indigo-600">Q9</span>The African manatee is also about 3.5 metres long and found in the sea along the west coast of Africa... The species also makes use of rivers, with the mammals seen in landlocked countries such as Mali and Niger<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q9 Target Evidence</strong>Not limited to coastal waters as they are also found in rivers of landlocked countries -> FALSE.</span></span>.`,
+                vi: `<span class="ans-target ans-target-q9" data-q="q9"><span class="q-badge bg-indigo-600">Q9</span>Lợn biển Châu Phi cũng dài khoảng 3,5 mét và được tìm thấy ở vùng biển dọc theo bờ biển phía tây Châu Phi... Loài này cũng tận dụng các dòng sông, với việc các cá thể động vật có vú này được nhìn thấy ở cả những quốc gia không giáp biển như Mali và Niger<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q9</strong>Phạm vi sinh sống không chỉ giới hạn ở vùng biển ven bờ vì chúng còn được tìm thấy ở sông thuộc các nước nội địa -> SAI (FALSE).</span></span>. Các quần thể ở các con sông này tách biệt với các quần thể ven biển và một số sống trong môi trường nước ngọt hoàn toàn.`
+            },
+            {
+                pNum: 8,
+                en: `The Amazonian manatee is the smallest species, though it is still a big animal. It grows to about 2.5 metres long and 350 kilograms. Amazonian manatees favour calm, shallow waters that are above 23°C. This species is found in fresh water in the Amazon Basin in Brazil, as well as in Colombia, Ecuador and Peru.`,
+                vi: `Lợn biển Amazon là loài có kích thước nhỏ nhất, mặc dù nó vẫn là một loài động vật to lớn. Nó phát triển đến chiều dài khoảng 2,5 mét và nặng chừng 350 kg. Lợn biển Amazon ưa chuộng các vùng nước nông, phẳng lặng và có nhiệt độ trên 23°C. Loài này chỉ được tìm thấy ở các vùng nước ngọt thuộc Lưu vực sông Amazon ở Brazil, cũng như tại Colombia, Ecuador và Peru.`
+            },
+            {
+                pNum: 9,
+                en: `All three manatee species are endangered or at a heightened risk of extinction. The African manatee and Amazonian manatee are both listed as Vulnerable by the International Union for Conservation of Nature (IUCN). <span class="ans-target ans-target-q10" data-q="q10"><span class="q-badge bg-fuchsia-600">Q10</span>It is estimated that 140,000 Amazonian manatees were killed between 1935 and 1954 for their meat, fat and skin, with the latter used to make leather<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q10 Target Evidence</strong>No mention of whether the extent of this loss was revealed many years later -> NOT GIVEN.</span></span>. In more recent years, African manatee decline has been tied to incidental capture in fishing nets and hunting. Manatee hunting is now illegal in every country the African species is found in.`,
+                vi: `Cả ba loài lợn biển đều đang bị đe dọa hoặc có nguy cơ tuyệt chủng cao. Lợn biển Châu Phi và lợn biển Amazon đều được Liên minh Bảo tồn Thiên nhiên Quốc tế (IUCN) xếp vào danh sách Sắp nguy cấp (Vulnerable). <span class="ans-target ans-target-q10" data-q="q10"><span class="q-badge bg-fuchsia-600">Q10</span>Ước tính có tới 140.000 cá thể lợn biển Amazon đã bị giết hại trong khoảng thời gian từ năm 1935 đến 1954 để lấy thịt, mỡ và da, trong đó lớp da được dùng để thuộc da làm đồ dùng<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q10</strong>Không có thông tin đề cập đến việc liệu mức độ thiệt hại này có phải nhiều năm sau mới được tiết lộ hay không -> NOT GIVEN.</span></span>. Trong những năm gần đây, sự suy giảm số lượng lợn biển Châu Phi có liên quan đến việc vô tình bị vướng vào lưới đánh cá và nạn săn trộm. Việc săn bắt lợn biển hiện đã bị coi là bất hợp pháp tại mọi quốc gia nơi loài lợn biển Châu Phi sinh sống.`
+            },
+            {
+                pNum: 10,
+                en: `<span class="ans-target ans-target-q11" data-q="q11"><span class="q-badge bg-green-600">Q11</span>The two subspecies of West Indian manatee are listed as Endangered by the IUCN. Both are also expected to undergo a decline of 20% over the next 40 years<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q11 Target Evidence</strong>Expected to decline by 20% in coming decades -> TRUE.</span></span>. <span class="ans-target ans-target-q12" data-q="q12"><span class="q-badge bg-rose-600">Q12</span>A review of almost 1,800 cases of entanglement in fishing nets and of plastic consumption among marine mammals in US waters from 2009 to 2020 found that at least 700 cases involved manatees<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q12 Target Evidence</strong>No statement that the risk increased significantly during 2009-2020 -> NOT GIVEN.</span></span>. The chief cause of death in Florida manatees is boat strikes. However, <span class="ans-target ans-target-q13" data-q="q13"><span class="q-badge bg-sky-800">Q13</span>legislation in certain parts of Florida now limit boat speeds during winter, allowing slow-moving manatees more time to respond<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q13 Target Evidence</strong>Legislation limits boat speeds to reduce boat strikes -> TRUE.</span></span>.`,
+                vi: `<span class="ans-target ans-target-q11" data-q="q11"><span class="q-badge bg-green-600">Q11</span>Cả hai phân loài của lợn biển Tây Ấn đều được IUCN xếp vào danh sách Nguy cấp (Endangered). Cả hai loài này cũng dự kiến sẽ trải qua mức suy giảm 20% trong vòng 40 năm tới<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q11</strong>Dự kiến sẽ giảm 20% số lượng trong các thập kỷ tới -> ĐÚNG (TRUE).</span></span>. <span class="ans-target ans-target-q12" data-q="q12"><span class="q-badge bg-rose-600">Q12</span>Một cuộc đánh giá đối với gần 1.800 trường hợp vướng vào lưới đánh cá và nuốt phải rác thải nhựa ở các loài thú biển tại các vùng biển của Hoa Kỳ từ năm 2009 đến năm 2020 cho thấy ít nhất 700 trường hợp có liên quan đến lợn biển<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q12</strong>Không có nhận định nào khẳng định rủi ro này đã gia tăng đáng kể trong suốt giai đoạn 2009-2020 -> NOT GIVEN.</span></span>. Nguyên nhân tử vong hàng đầu ở lợn biển Florida là do va chạm với tàu thuyền. Tuy nhiên, <span class="ans-target ans-target-q13" data-q="q13"><span class="q-badge bg-sky-800">Q13</span>luật pháp ở một số khu vực nhất định của bang Florida hiện nay đã giới hạn tốc độ di chuyển của tàu thuyền trong suốt mùa đông, cho phép những chú lợn biển di chuyển chậm chạp có thêm nhiều thời gian để phản ứng né tránh<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q13</strong>Luật pháp giới hạn tốc độ tàu thuyền để giảm thiểu các vụ va chạm -> ĐÚNG (TRUE).</span></span>.`
+            }
+        ];
+
+        const questionsData = [
+            {
+                id: 'q1',
+                num: '1',
+                type: 'Notes Completion',
+                ansKey: 'tail',
+                badgeColor: 'bg-yellow-600',
+                prompt: 'Look similar to dugongs, but with a differently shaped ____________.',
+                explEn: 'Paragraph 1 states: "Dugongs and manatees look quite alike... However, the manatee has a broad, rounded tail, whereas the dugong’s is fluked..."',
+                explVi: 'Đoạn 1 nêu rõ: Lợn biển và cá cúi trông rất giống nhau, tuy nhiên lợn biển có cái đuôi (tail) rộng và tròn, khác với đuôi chẻ góc của cá cúi.',
+                synonyms: [
+                    { q: 'differently shaped', p: 'broad, rounded... whereas dugong’s is fluked' }
+                ]
+            },
+            {
+                id: 'q2',
+                num: '2',
+                type: 'Notes Completion',
+                ansKey: 'flippers',
+                badgeColor: 'bg-sky-600',
+                prompt: 'Need to use their ____________ to help to turn their bodies around in order to look sideways.',
+                explEn: 'Paragraph 2 notes: "To see something on its left or its right, a manatee must turn its entire body, steering with its flippers."',
+                explVi: 'Đoạn 2 chỉ ra rằng để nhìn sang trái hay phải, lợn biển phải xoay cả cơ thể và điều hướng bằng vây chèo (flippers).',
+                synonyms: [
+                    { q: 'look sideways', p: 'see something on its left or its right' },
+                    { q: 'turn their bodies', p: 'turn its entire body, steering with' }
+                ]
+            },
+            {
+                id: 'q3',
+                num: '3',
+                type: 'Notes Completion',
+                ansKey: 'hairs',
+                badgeColor: 'bg-emerald-600',
+                prompt: 'Sense vibrations in the water by means of ____________ on their skin.',
+                explEn: 'Paragraph 2 explains: "They also have some hairs covering their bodies which help them sense vibrations in the water around them."',
+                explVi: 'Đoạn 2 giải thích rằng chúng có các sợi lông (hairs) trên da giúp cảm nhận sự rung động trong nước.',
+                synonyms: [
+                    { q: 'by means of', p: 'help them' }
+                ]
+            },
+            {
+                id: 'q4',
+                num: '4',
+                type: 'Notes Completion',
+                ansKey: 'seagrasses',
+                badgeColor: 'bg-pink-600',
+                prompt: 'Eat mainly aquatic vegetation, such as ____________.',
+                explEn: 'Paragraph 3 states: "Seagrasses and other marine plants make up most of a manatee’s diet."',
+                explVi: 'Đoạn 3 khẳng định cỏ biển (seagrasses) và các loài thực vật biển khác tạo nên phần lớn chế độ ăn.',
+                synonyms: [
+                    { q: 'aquatic vegetation', p: 'marine plants' },
+                    { q: 'eat mainly', p: 'make up most of diet' }
+                ]
+            },
+            {
+                id: 'q5',
+                num: '5',
+                type: 'Notes Completion',
+                ansKey: 'lips',
+                badgeColor: 'bg-purple-600',
+                prompt: 'Grasp and pull up plants with their ____________.',
+                explEn: 'Paragraph 4 states: "Instead of having incisors to grasp their food, manatees have lips which function like a pair of hands to help tear food..."',
+                explVi: 'Đoạn 4 nêu: Thay vì dùng răng cửa, lợn biển dùng môi (lips) hoạt động như đôi tay để gắp và xé thực vật.',
+                synonyms: [
+                    { q: 'grasp and pull up', p: 'grasp food / tear food away' }
+                ]
+            },
+            {
+                id: 'q6',
+                num: '6',
+                type: 'Notes Completion',
+                ansKey: 'buoyancy',
+                badgeColor: 'bg-orange-600',
+                prompt: 'May regulate the ____________ of their bodies by using muscles of diaphragm to store air internally.',
+                explEn: 'Paragraph 5 states: "...manatees use their muscular diaphragm and breathing to adjust their buoyancy."',
+                explVi: 'Đoạn 5 nêu: Lợn biển dùng cơ hoành và hơi thở để điều chỉnh sức nổi (buoyancy) của cơ thể.',
+                synonyms: [
+                    { q: 'regulate', p: 'adjust' },
+                    { q: 'muscles of diaphragm', p: 'muscular diaphragm' }
+                ]
+            },
+            {
+                id: 'q7',
+                num: '7',
+                type: 'True/False/Not Given',
+                ansKey: 'TRUE',
+                badgeColor: 'bg-teal-600',
+                prompt: 'West Indian manatees can be found in a variety of different aquatic habitats.',
+                explEn: 'Paragraph 6 confirms: "It moves between fresh water and salt water, taking advantage of coastal mangroves and coral reefs, rivers, lakes and inland lagoons."',
+                explVi: 'Đoạn 6 xác nhận loài này sống ở cả nước ngọt và nước mặn, bao gồm rừng ngập mặn, rạn san hô, sông, hồ và đầm phá -> TRUE.',
+                synonyms: [
+                    { q: 'variety of aquatic habitats', p: 'fresh water, salt water, mangroves, reefs, rivers, lakes, lagoons' }
+                ]
+            },
+            {
+                id: 'q8',
+                num: '8',
+                type: 'True/False/Not Given',
+                ansKey: 'NOT GIVEN',
+                badgeColor: 'bg-amber-600',
+                prompt: 'The Florida manatee lives in warmer waters than the Antillean manatee.',
+                explEn: 'Paragraph 6 mentions location details for both subspecies, but no direct comparison of their water temperatures is made.',
+                explVi: 'Đoạn 6 có nhắc đến vị trí của 2 phân loài nhưng không đưa ra so sánh xem loài nào sống ở vùng nước ấm hơn -> NOT GIVEN.',
+                synonyms: [
+                    { q: 'warmer waters than Antillean', p: 'No comparison in passage' }
+                ]
+            },
+            {
+                id: 'q9',
+                num: '9',
+                type: 'True/False/Not Given',
+                ansKey: 'FALSE',
+                badgeColor: 'bg-indigo-600',
+                prompt: 'The African manatee’s range is limited to coastal waters between Mauritania and Angola.',
+                explEn: 'Paragraph 7 states: "The species also makes use of rivers, with the mammals seen in landlocked countries such as Mali and Niger." Thus, it is NOT limited to coastal waters.',
+                explVi: 'Đoạn 7 cho biết chúng còn sống ở các sông thuộc các quốc gia không giáp biển (Mali, Niger), do đó phạm vi không bị giới hạn ở bờ biển -> FALSE.',
+                synonyms: [
+                    { q: 'limited to coastal waters', p: 'also makes use of rivers in landlocked countries' }
+                ]
+            },
+            {
+                id: 'q10',
+                num: '10',
+                type: 'True/False/Not Given',
+                ansKey: 'NOT GIVEN',
+                badgeColor: 'bg-fuchsia-600',
+                prompt: 'The extent of the loss of Amazonian manatees in the mid-twentieth century was only revealed many years later.',
+                explEn: 'Paragraph 9 estimated 140,000 Amazonian manatees were killed between 1935 and 1954, but does not state when this estimate was revealed.',
+                explVi: 'Đoạn 9 đưa ra con số ước tính thiệt hại từ 1935-1954, nhưng không đề cập xem con số này có phải nhiều năm sau mới lộ ra hay không -> NOT GIVEN.',
+                synonyms: [
+                    { q: 'only revealed many years later', p: 'No information provided' }
+                ]
+            },
+            {
+                id: 'q11',
+                num: '11',
+                type: 'True/False/Not Given',
+                ansKey: 'TRUE',
+                badgeColor: 'bg-green-600',
+                prompt: 'It is predicted that West Indian manatee populations will fall in the coming decades.',
+                explEn: 'Paragraph 10 states: "Both are also expected to undergo a decline of 20% over the next 40 years."',
+                explVi: 'Đoạn 10 nêu rõ: Cả hai phân loài dự kiến sẽ giảm (decline) 20% trong 40 năm tới -> TRUE.',
+                synonyms: [
+                    { q: 'predicted / will fall', p: 'expected to undergo a decline' },
+                    { q: 'in the coming decades', p: 'over the next 40 years' }
+                ]
+            },
+            {
+                id: 'q12',
+                num: '12',
+                type: 'True/False/Not Given',
+                ansKey: 'NOT GIVEN',
+                badgeColor: 'bg-rose-600',
+                prompt: 'The risk to manatees from entanglement and plastic consumption increased significantly in the period 2009–2020.',
+                explEn: 'Paragraph 10 gives total numbers (700 cases out of 1,800), but does not state whether the risk "increased significantly" compared to earlier periods.',
+                explVi: 'Đoạn 10 thống kê số ca từ 2009-2020 nhưng không đưa ra so sánh để kết luận rủi ro có tăng lên đáng kể hay không -> NOT GIVEN.',
+                synonyms: [
+                    { q: 'increased significantly', p: 'No comparative trend stated' }
+                ]
+            },
+            {
+                id: 'q13',
+                num: '13',
+                type: 'True/False/Not Given',
+                ansKey: 'TRUE',
+                badgeColor: 'bg-sky-800',
+                prompt: 'There is some legislation in place which aims to reduce the likelihood of boat strikes on manatees in Florida.',
+                explEn: 'Paragraph 10 states: "legislation in certain parts of Florida now limit boat speeds during winter, allowing slow-moving manatees more time to respond."',
+                explVi: 'Đoạn 10 ghi nhận: Luật pháp (legislation) ở một số vùng của Florida hiện hạn chế tốc độ tàu thuyền để giảm nguy cơ va đụng -> TRUE.',
+                synonyms: [
+                    { q: 'legislation in place', p: 'legislation in certain parts' },
+                    { q: 'reduce likelihood of boat strikes', p: 'limit boat speeds... allowing time to respond' }
+                ]
+            }
+        ];
+
+        const vocabList = [
+            {
+                word: 'aquatic',
+                phonetic: '/əˈkwæt.ɪk/',
+                vi: 'Sống dưới nước',
+                enDef: 'Growing, living in, or frequenting water.',
+                type: 'adjective',
+                category: 'biology',
+                context: 'Manatees are aquatic mammals belonging to the order Sirenia.',
+                collocation: 'aquatic mammals / habitat / ecosystem'
+            },
+            {
+                word: 'propulsion',
+                phonetic: '/prəˈpʌl.ʃən/',
+                vi: 'Lực đẩy',
+                enDef: 'The action of driving or pushing forward.',
+                type: 'noun',
+                category: 'noun',
+                context: 'Manatees have no back limbs, only a tail for propulsion.',
+                collocation: 'jet propulsion / forward propulsion'
+            },
+            {
+                word: 'omnivorous',
+                phonetic: '/ɒmˈnɪv.ər.əs/',
+                vi: 'Động vật ăn tạp',
+                enDef: 'Feeding on food of both plant and animal origin.',
+                type: 'adjective',
+                category: 'biology',
+                context: 'African manatees are omnivorous, consuming molluscs and fish.',
+                collocation: 'omnivorous diet / creature'
+            },
+            {
+                word: 'herbivore',
+                phonetic: '/ˈhɜː.bɪ.vɔːr/',
+                vi: 'Động vật ăn thực vật',
+                enDef: 'An animal that feeds on plants.',
+                type: 'noun',
+                category: 'biology',
+                context: 'West Indian and Amazonian manatees are both herbivores.',
+                collocation: 'large herbivore / strict herbivore'
+            },
+            {
+                word: 'abrasive',
+                phonetic: '/əˈbreɪ.sɪv/',
+                vi: 'Có tính mài mòn',
+                enDef: 'Capable of polishing or cleaning a hard surface by rubbing or grinding.',
+                type: 'adjective',
+                category: 'adjective',
+                context: 'Due to their abrasive aquatic plant diet, their teeth get worn down.',
+                collocation: 'abrasive diet / material'
+            },
+            {
+                word: 'buoyancy',
+                phonetic: '/ˈbɔɪ.ən.si/',
+                vi: 'Khả năng nổi / Sức nổi',
+                enDef: 'The ability or tendency to float in water or air or some other fluid.',
+                type: 'noun',
+                category: 'biology',
+                context: 'Manatees use their muscular diaphragm to adjust their buoyancy.',
+                collocation: 'adjust buoyancy / neutral buoyancy'
+            },
+            {
+                word: 'ambient',
+                phonetic: '/ˈæm.bi.ənt/',
+                vi: 'Môi trường xung quanh',
+                enDef: 'Relating to the immediate surroundings of something.',
+                type: 'adjective',
+                category: 'adjective',
+                context: 'When the ambient water temperature drops below 20°C, they seek warm water.',
+                collocation: 'ambient temperature / noise'
+            },
+            {
+                word: 'landlocked',
+                phonetic: '/ˈlænd.lɒkt/',
+                vi: 'Không giáp biển (nội địa)',
+                enDef: 'Almost or entirely surrounded by land; having no coastline.',
+                type: 'adjective',
+                category: 'adjective',
+                context: 'They are seen in landlocked countries such as Mali and Niger.',
+                collocation: 'landlocked country / nation'
+            },
+            {
+                word: 'incidental',
+                phonetic: '/ˌɪn.sɪˈden.təl/',
+                vi: 'Ngẫu nhiên / Vô tình',
+                enDef: 'Happening as a minor accompaniment to something else.',
+                type: 'adjective',
+                category: 'adjective',
+                context: 'Manatee decline is tied to incidental capture in fishing nets.',
+                collocation: 'incidental capture / catch'
+            },
+            {
+                word: 'entanglement',
+                phonetic: '/ɪnˈtæŋ.ɡəl.mənt/',
+                vi: 'Sự mắc vướng / vướng lưới',
+                enDef: 'The state of being entwined or tangled in something.',
+                type: 'noun',
+                category: 'biology',
+                context: 'Cases of entanglement in fishing nets remain a major risk.',
+                collocation: 'net entanglement / risk of entanglement'
+            },
+            {
+                word: 'legislation',
+                phonetic: '/ˌledʒ.ɪˈsleɪ.ʃən/',
+                vi: 'Hệ thống luật pháp / Quy định',
+                enDef: 'Laws, considered collectively.',
+                type: 'noun',
+                category: 'noun',
+                context: 'Legislation in Florida limits boat speeds during winter.',
+                collocation: 'pass legislation / introduce legislation'
+            },
+            {
+                word: 'subspecies',
+                phonetic: '/ˈsʌbˌspiː.ʃiːz/',
+                vi: 'Phân loài',
+                enDef: 'A taxonomic category that ranks below species.',
+                type: 'noun',
+                category: 'biology',
+                context: 'There are two subspecies of West Indian manatee.',
+                collocation: 'distinct subspecies / endangered subspecies'
+            },
+            {
+                word: 'refuge',
+                phonetic: '/ˈref.juːdʒ/',
+                vi: 'Nơi trú ẩn',
+                enDef: 'A condition of being safe or sheltered from pursuit, danger, or trouble.',
+                type: 'noun',
+                category: 'noun',
+                context: 'The Florida manatee takes refuge in artificially warmed water.',
+                collocation: 'take refuge / wildlife refuge'
+            },
+            {
+                word: 'extinction',
+                phonetic: '/ɪkˈstɪŋk.ʃən/',
+                vi: 'Sự tuyệt chủng',
+                enDef: 'The fact or process of a species, family, or other group of animals or plants becoming extinct.',
+                type: 'noun',
+                category: 'biology',
+                context: 'All three species are at a heightened risk of extinction.',
+                collocation: 'risk of extinction / face extinction'
+            },
+            {
+                word: 'diaphragm',
+                phonetic: '/ˈdaɪ.ə.fræm/',
+                vi: 'Cơ hoành',
+                enDef: 'A dome-shaped, muscular partition separating the thorax from the abdomen in mammals.',
+                type: 'noun',
+                category: 'biology',
+                context: 'They use diaphragm contractions to compress and store gas.',
+                collocation: 'muscular diaphragm / diaphragm contractions'
+            }
+        ];
+
+        // --- APP STATE & MANAGEMENT ---
+        const app = {
+            currentLang: 'en',
+            fontSize: 16,
+            showArrows: true,
+            activeTab: 'analysis',
+            fcIndex: 0,
+            fcFlipped: false,
+            arrowAnimFrame: null,
+
+            init() {
+                this.bindEvents();
+                this.renderPassage();
+                this.renderExplanations();
+                this.bindTargetEvents(); // Ensure target events bind after render
+                this.renderVocabGrid();
+                this.setupFlashcard();
+                this.setupQuiz();
+            },
+
+            bindEvents() {
+                // Language Switcher Buttons
+                document.querySelectorAll('#lang-switcher .lang-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('#lang-switcher .lang-btn').forEach(b => b.classList.remove('active'));
+                        e.currentTarget.classList.add('active');
+                        this.currentLang = e.currentTarget.dataset.lang;
+                        this.renderPassage();
+                        this.renderExplanations();
+                        this.bindTargetEvents();
+                        setTimeout(() => this.drawConnections(), 60);
+                    });
+                });
+
+                // Font Resizing
+                document.getElementById('btn-inc-font').addEventListener('click', () => {
+                    if (this.fontSize < 24) {
+                        this.fontSize += 1;
+                        document.documentElement.style.setProperty('--app-font-size', `${this.fontSize}px`);
+                        this.drawConnections();
+                    }
+                });
+                document.getElementById('btn-dec-font').addEventListener('click', () => {
+                    if (this.fontSize > 13) {
+                        this.fontSize -= 1;
+                        document.documentElement.style.setProperty('--app-font-size', `${this.fontSize}px`);
+                        this.drawConnections();
+                    }
+                });
+
+                // Toggle Arrows
+                document.getElementById('btn-toggle-arrows').addEventListener('click', (e) => {
+                    this.showArrows = !this.showArrows;
+                    e.currentTarget.classList.toggle('bg-sky-600');
+                    e.currentTarget.classList.toggle('bg-slate-300');
+                    e.currentTarget.classList.toggle('text-slate-700');
+                    if (!this.showArrows) {
+                        this.clearCanvas();
+                    } else {
+                        this.drawConnections();
+                    }
+                });
+
+                // Live scroll listeners to update arrow tracking continuously
+                const leftPane = document.getElementById('left-pane');
+                const rightPane = document.getElementById('right-pane');
+                if (leftPane) leftPane.addEventListener('scroll', () => this.drawConnections());
+                if (rightPane) rightPane.addEventListener('scroll', () => this.drawConnections());
+
+                // Navigation Tabs
+                document.querySelectorAll('#nav-tabs .tab-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('#nav-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+                        e.currentTarget.classList.add('active');
+                        const tab = e.currentTarget.dataset.tab;
+                        this.activeTab = tab;
+
+                        document.getElementById('tab-analysis-content').classList.toggle('hidden', tab !== 'analysis');
+                        document.getElementById('tab-vocabulary-content').classList.toggle('hidden', tab !== 'vocabulary');
+                        document.getElementById('tab-flashcards-content').classList.toggle('hidden', tab !== 'flashcards');
+
+                        if (tab !== 'analysis') this.clearCanvas();
+                        else setTimeout(() => this.drawConnections(), 100);
+                    });
+                });
+
+                // Search & Filter Vocab
+                document.getElementById('vocab-search').addEventListener('input', () => this.filterVocab());
+                document.getElementById('vocab-filter').addEventListener('change', () => this.filterVocab());
+
+                // Flashcard Controls
+                document.getElementById('flashcard-wrapper').addEventListener('click', () => {
+                    this.fcFlipped = !this.fcFlipped;
+                    document.getElementById('flashcard-inner').classList.toggle('rotate-y-180', this.fcFlipped);
+                });
+                document.getElementById('btn-fc-prev').addEventListener('click', () => {
+                    if (this.fcIndex > 0) {
+                        this.fcIndex--;
+                        this.updateFlashcard();
+                    }
+                });
+                document.getElementById('btn-fc-next').addEventListener('click', () => {
+                    if (this.fcIndex < vocabList.length - 1) {
+                        this.fcIndex++;
+                        this.updateFlashcard();
+                    }
+                });
+
+                // Mode switcher in Flashcards tab
+                document.getElementById('btn-mode-flashcard').addEventListener('click', (e) => {
+                    e.target.classList.replace('bg-white', 'bg-blue-600');
+                    e.target.classList.replace('text-slate-700', 'text-white');
+                    document.getElementById('btn-mode-quiz').classList.replace('bg-blue-600', 'bg-white');
+                    document.getElementById('btn-mode-quiz').classList.replace('text-white', 'text-slate-700');
+                    document.getElementById('flashcard-view').classList.remove('hidden');
+                    document.getElementById('quiz-view').classList.add('hidden');
+                });
+                document.getElementById('btn-mode-quiz').addEventListener('click', (e) => {
+                    e.target.classList.replace('bg-white', 'bg-blue-600');
+                    e.target.classList.replace('text-slate-700', 'text-white');
+                    document.getElementById('btn-mode-flashcard').classList.replace('bg-blue-600', 'bg-white');
+                    document.getElementById('btn-mode-flashcard').classList.replace('text-white', 'text-slate-700');
+                    document.getElementById('quiz-view').classList.remove('hidden');
+                    document.getElementById('flashcard-view').classList.add('hidden');
+                });
+
+                window.addEventListener('resize', () => this.drawConnections());
+            },
+
+            renderPassage() {
+                const container = document.getElementById('passage-container');
+                let html = `
+                    <h2 class="text-2xl font-black text-slate-900 mb-2 text-center leading-tight tracking-tight">Manatees</h2>
+                    <p class="text-xs text-center text-slate-500 italic mb-6">Gentle aquatic mammals navigating fresh and saltwater ecosystems worldwide.</p>
+                `;
+
+                passageData.forEach(p => {
+                    if (this.currentLang === 'en') {
+                        html += `<p><span class="paragraph-num">${p.pNum}</span>${p.en}</p>`;
+                    } else if (this.currentLang === 'vi') {
+                        html += `<p><span class="paragraph-num">${p.pNum}</span>${p.vi}</p>`;
+                    } else if (this.currentLang === 'dual') {
+                        html += `
+                            <div class="mb-6 p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                                <div class="text-slate-800 text-sm leading-relaxed border-b border-slate-200 pb-3">
+                                    <strong class="text-xs font-bold text-sky-700 uppercase tracking-wider block mb-1">ENGLISH [Đoạn ${p.pNum}]</strong>
+                                    ${p.en}
+                                </div>
+                                <div class="text-slate-600 text-sm leading-relaxed pt-1">
+                                    <strong class="text-xs font-bold text-blue-700 uppercase tracking-wider block mb-1">TIẾNG VIỆT</strong>
+                                    ${p.vi}
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+
+                container.innerHTML = html;
+            },
+
+            renderExplanations() {
+                const container = document.getElementById('explanations-list');
+                let html = `
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+                        <div class="flex items-center space-x-2 text-blue-700 font-bold text-xs uppercase tracking-wide mb-1">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span>Comprehensive Rationale & Evidence Guide</span>
+                        </div>
+                        <h2 class="text-xl font-extrabold text-slate-900">Manatees — Phân Tích Đáp Án</h2>
+                        <p class="text-xs text-slate-500 mt-1">Click "Locate Text" or hover over any card below to scroll to and highlight the exact text sentence in the reading passage.</p>
+                    </div>
+                `;
+
+                questionsData.forEach(q => {
+                    html += `
+                        <div class="q-card bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4 transition-all hover:border-sky-300" id="q-card-${q.id}">
+                            <div class="flex items-start justify-between">
+                                <span class="bg-slate-100 text-slate-800 font-extrabold text-xs px-3 py-1 rounded-md border border-slate-200">
+                                    Question ${q.num} <span class="text-[10px] font-semibold text-slate-500">(${q.type})</span>
+                                </span>
+                                <div class="flex items-center space-x-2">
+                                    <button class="jump-btn bg-sky-50 hover:bg-sky-100 text-sky-700 font-bold text-xs px-2.5 py-1 rounded-md border border-sky-200 transition-colors flex items-center gap-1 cursor-pointer" data-q="${q.id}">
+                                        <i class="fa-solid fa-location-dot"></i> Locate Text
+                                    </button>
+                                    <span class="${q.badgeColor} text-white font-black text-xs px-3 py-1 rounded-full uppercase tracking-wider shadow-xs">
+                                        Answer: ${q.ansKey}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p class="text-sm font-bold text-slate-800 leading-relaxed">${q.prompt}</p>
+                            </div>
+
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-700 space-y-2">
+                                <div class="flex items-center text-blue-700 font-bold text-xs uppercase tracking-wider">
+                                    <i class="fa-solid fa-circle-check mr-1.5"></i>
+                                    <span>Detailed Rationale / Giải Thích:</span>
+                                </div>
+                                <p class="leading-relaxed font-medium text-slate-800">${this.currentLang === 'vi' ? q.explVi : q.explEn}</p>
+                            </div>
+
+                            ${q.synonyms ? `
+                                <div class="pt-2 border-t border-slate-100">
+                                    <h5 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center">
+                                        <i class="fa-solid fa-arrows-rotate mr-1.5 text-sky-500"></i> Paraphrase Keywords Table
+                                    </h5>
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full text-xs text-left border-collapse">
+                                            <thead>
+                                                <tr class="bg-sky-50/70 text-sky-900 font-semibold border-b border-sky-100">
+                                                    <th class="p-2">Question Keyword</th>
+                                                    <th class="p-2">Passage Equivalent</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-slate-100 text-slate-600">
+                                                ${q.synonyms.map(s => `
+                                                    <tr>
+                                                        <td class="p-2 font-medium text-slate-700">${s.q}</td>
+                                                        <td class="p-2 font-semibold text-sky-700">${s.p}</td>
+                                                    </tr>
+                                                `).join('')}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+            },
+
+            bindTargetEvents() {
+                const targets = document.querySelectorAll('.ans-target');
+                const qCards = document.querySelectorAll('.q-card');
+                const jumpBtns = document.querySelectorAll('.jump-btn');
+
+                const activatePair = (targetEl, cardEl, scrollLeft = false, scrollRight = false) => {
+                    document.querySelectorAll('.ans-target').forEach(t => t.classList.remove('active-target'));
+                    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('ring-2', 'ring-sky-500', 'bg-sky-50/40', 'border-sky-400'));
+
+                    if (targetEl) {
+                        targetEl.classList.add('active-target');
+                        if (scrollLeft) {
+                            targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }
+
+                    if (cardEl) {
+                        cardEl.classList.add('ring-2', 'ring-sky-500', 'bg-sky-50/40', 'border-sky-400');
+                        if (scrollRight) {
+                            cardEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }
+                    }
+
+                    this.startSmoothTracking();
+                };
+
+                const deactivateAll = () => {
+                    document.querySelectorAll('.ans-target').forEach(t => t.classList.remove('active-target'));
+                    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('ring-2', 'ring-sky-500', 'bg-sky-50/40', 'border-sky-400'));
+                    this.clearCanvas();
+                };
+
+                // Targets in reading passage
+                targets.forEach(target => {
+                    const qId = target.dataset.q;
+                    const qCard = document.getElementById(`q-card-${qId}`);
+
+                    target.addEventListener('mouseenter', () => activatePair(target, qCard, false, false));
+                    target.addEventListener('mouseleave', deactivateAll);
+                    target.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        activatePair(target, qCard, false, true);
+                    });
+                });
+
+                // Question Cards
+                qCards.forEach(qCard => {
+                    const qId = qCard.id.replace('q-card-', '');
+                    const target = document.querySelector(`.ans-target[data-q="${qId}"]`);
+
+                    qCard.addEventListener('mouseenter', () => activatePair(target, qCard, false, false));
+                    qCard.addEventListener('mouseleave', deactivateAll);
+                    qCard.addEventListener('click', (e) => {
+                        if (e.target.closest('.jump-btn')) return;
+                        activatePair(target, qCard, true, false);
+                    });
+                });
+
+                // "Locate Text" Buttons
+                jumpBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        const qId = btn.dataset.q;
+                        const target = document.querySelector(`.ans-target[data-q="${qId}"]`);
+                        const qCard = document.getElementById(`q-card-${qId}`);
+                        activatePair(target, qCard, true, false);
+                    });
+                });
+            },
+
+            startSmoothTracking() {
+                if (this.arrowAnimFrame) cancelAnimationFrame(this.arrowAnimFrame);
+                const startTime = performance.now();
+                const duration = 800; // Continuous tracking during smooth scrolling animation
+
+                const step = (now) => {
+                    this.drawConnections();
+                    if (now - startTime < duration) {
+                        this.arrowAnimFrame = requestAnimationFrame(step);
+                    }
+                };
+                this.arrowAnimFrame = requestAnimationFrame(step);
+            },
+
+            drawConnections() {
+                const activeTarget = document.querySelector('.ans-target.active-target');
+                if (activeTarget && this.showArrows) {
+                    const qId = activeTarget.dataset.q;
+                    const qCard = document.getElementById(`q-card-${qId}`);
+                    if (qCard) {
+                        this.drawArrow(activeTarget, qCard);
+                        return;
+                    }
+                }
+                this.clearCanvas();
+            },
+
+            drawArrow(fromEl, toEl) {
+                if (!fromEl || !toEl || window.innerWidth < 1024 || !this.showArrows) {
+                    this.clearCanvas();
+                    return;
+                }
+                
+                const svg = document.getElementById('svg-canvas');
+                const wrapper = document.getElementById('main-wrapper');
+                const leftPane = document.getElementById('left-pane');
+                const rightPane = document.getElementById('right-pane');
+
+                if (!svg || !wrapper || !leftPane || !rightPane) return;
+
+                const wrapperRect = wrapper.getBoundingClientRect();
+                const leftPaneRect = leftPane.getBoundingClientRect();
+                const rightPaneRect = rightPane.getBoundingClientRect();
+
+                // Get client rects for multi-line text inline wrapper
+                const clientRects = fromEl.getClientRects();
+                let fromRect = fromEl.getBoundingClientRect();
+                if (clientRects.length > 0) {
+                    fromRect = clientRects[clientRects.length - 1];
+                }
+                const toRect = toEl.getBoundingClientRect();
+
+                // Check visibility inside pane scrollports
+                const isFromVisible = (fromRect.bottom >= leftPaneRect.top && fromRect.top <= leftPaneRect.bottom);
+                const isToVisible = (toRect.bottom >= rightPaneRect.top && toRect.top <= rightPaneRect.bottom);
+
+                if (!isFromVisible || !isToVisible) {
+                    this.clearCanvas();
+                    return;
+                }
+
+                // Coordinates relative to main wrapper container
+                const x1 = Math.min(fromRect.right - wrapperRect.left, leftPaneRect.right - wrapperRect.left - 8);
+                const y1 = fromRect.top + (fromRect.height / 2) - wrapperRect.top;
+                
+                const x2 = toRect.left - wrapperRect.left;
+                const y2 = toRect.top + Math.min(36, toRect.height / 2) - wrapperRect.top;
+
+                const dx = Math.max(30, (x2 - x1) * 0.45);
+                const pathData = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
+
+                svg.innerHTML = `
+                    <defs>
+                        <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#0284c7" />
+                            <stop offset="100%" stop-color="#0369a1" />
+                        </linearGradient>
+                        <filter id="arrowGlowFilter" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#0284c7" flood-opacity="0.4"/>
+                        </filter>
+                        <marker id="arrowhead" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                            <polygon points="0 0, 9 3.5, 0 7" fill="#0369a1" />
+                        </marker>
+                    </defs>
+                    <path d="${pathData}" fill="none" stroke="url(#arrowGrad)" stroke-width="3" stroke-dasharray="7,4" class="animated-arrow-line" marker-end="url(#arrowhead)" filter="url(#arrowGlowFilter)"/>
+                    <circle cx="${x1}" cy="${y1}" r="4" fill="#0284c7" />
+                    <circle cx="${x2}" cy="${y2}" r="4" fill="#0369a1" />
+                `;
+            },
+
+            clearCanvas() {
+                const svg = document.getElementById('svg-canvas');
+                if (svg) svg.innerHTML = '';
+            },
+
+            renderVocabGrid() {
+                this.filterVocab();
+            },
+
+            filterVocab() {
+                const search = document.getElementById('vocab-search').value.toLowerCase();
+                const filter = document.getElementById('vocab-filter').value;
+                const grid = document.getElementById('vocab-cards-grid');
+
+                const filtered = vocabList.filter(item => {
+                    const matchSearch = item.word.toLowerCase().includes(search) || item.vi.toLowerCase().includes(search);
+                    const matchFilter = filter === 'all' || item.category === filter || item.type === filter;
+                    return matchSearch && matchFilter;
+                });
+
+                let html = '';
+                filtered.forEach(item => {
+                    html += `
+                        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col justify-between hover:border-blue-400 transition-all space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-[10px] font-black uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-200">${item.type}</span>
+                                    <button onclick="app.speakWord('${item.word}')" class="text-slate-400 hover:text-blue-600 transition-colors" title="Listen pronunciation">
+                                        <i class="fa-solid fa-volume-high text-sm"></i>
+                                    </button>
+                                </div>
+                                <h3 class="text-xl font-extrabold text-slate-900 capitalize">${item.word}</h3>
+                                <p class="text-xs font-mono text-slate-500 mb-2">${item.phonetic}</p>
+                                <p class="text-sm font-bold text-blue-700 bg-blue-50/50 p-2 rounded-lg border border-blue-100 mb-3">${item.vi}</p>
+                                <p class="text-xs text-slate-600 leading-relaxed mb-3">${item.enDef}</p>
+                            </div>
+
+                            <div class="pt-3 border-t border-slate-100 space-y-2 text-xs">
+                                <div>
+                                    <span class="font-bold text-slate-700 block text-[10px] uppercase tracking-wider text-slate-400">Context in Passage:</span>
+                                    <p class="text-slate-600 italic">"${item.context}"</p>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-slate-700 block text-[10px] uppercase tracking-wider text-sky-600">Common Collocation:</span>
+                                    <p class="font-semibold text-sky-800">${item.collocation}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                grid.innerHTML = html || `<p class="text-sm text-slate-500 col-span-full text-center py-8">No vocabulary words match your search filters.</p>`;
+            },
+
+            speakWord(word) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const u = new SpeechSynthesisUtterance(word);
+                    u.lang = 'en-GB';
+                    u.rate = 0.9;
+                    window.speechSynthesis.speak(u);
+                }
+            },
+
+            setupFlashcard() {
+                this.updateFlashcard();
+            },
+
+            updateFlashcard() {
+                const item = vocabList[this.fcIndex];
+                this.fcFlipped = false;
+                document.getElementById('flashcard-inner').classList.remove('rotate-y-180');
+
+                document.getElementById('fc-category').textContent = `${item.type.toUpperCase()} • ${item.category.toUpperCase()}`;
+                document.getElementById('fc-word').textContent = item.word;
+                document.getElementById('fc-phonetic').textContent = item.phonetic;
+                document.getElementById('fc-meaning').textContent = item.vi;
+                document.getElementById('fc-context').textContent = `"${item.context}"`;
+                document.getElementById('fc-counter').textContent = `${this.fcIndex + 1} / ${vocabList.length}`;
+            },
+
+            setupQuiz() {
+                const quizBox = document.getElementById('quiz-box');
+                const sampleQuestions = [
+                    {
+                        q: "Which term describes 'the ability or tendency of an object to float in water'?",
+                        options: ["Propulsion", "Buoyancy", "Entanglement", "Abrasive"],
+                        ans: 1,
+                        expl: "Buoyancy (nhiều khả năng nổi, sức nổi) là từ miêu tả khả năng nổi trong nước."
+                    },
+                    {
+                        q: "What does 'incidental capture' mean in marine conservation?",
+                        options: ["Hunting for profit", "Accidental/unintended catching of marine animals in nets", "Intentional breeding", "Relocating animals"],
+                        ans: 1,
+                        expl: "Incidental capture = Sự vô tình/sự ngẫu nhiên đánh bắt trúng động vật biển."
+                    },
+                    {
+                        q: "Which word is an adjective meaning 'relating to immediate surroundings' (e.g. temperature)?",
+                        options: ["Aquatic", "Ambient", "Omnivorous", "Landlocked"],
+                        ans: 1,
+                        expl: "Ambient (tính từ) nghĩa là thuộc môi trường bao quanh (ví dụ: ambient temperature)."
+                    }
+                ];
+
+                let html = `<h3 class="text-xl font-extrabold text-slate-900 border-b pb-3 border-slate-100 flex items-center gap-2"><i class="fa-solid fa-vial text-blue-600"></i> IELTS Vocab Challenge — Manatees</h3>`;
+                sampleQuestions.forEach((q, idx) => {
+                    html += `
+                        <div class="space-y-3 pt-2" id="quiz-q-${idx}">
+                            <p class="text-sm font-bold text-slate-800">${idx + 1}. ${q.q}</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                ${q.options.map((opt, oIdx) => `
+                                    <button onclick="app.checkQuiz(${idx}, ${oIdx}, ${q.ans})" class="quiz-opt-btn text-left p-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-all">
+                                        ${String.fromCharCode(65 + oIdx)}. ${opt}
+                                    </button>
+                                `).join('')}
+                            </div>
+                            <div class="quiz-feedback hidden text-xs p-3 rounded-xl"></div>
+                        </div>
+                    `;
+                });
+
+                quizBox.innerHTML = html;
+            },
+
+            checkQuiz(qIdx, selected, correct) {
+                const qDiv = document.getElementById(`quiz-q-${qIdx}`);
+                const btns = qDiv.querySelectorAll('.quiz-opt-btn');
+                const feedback = qDiv.querySelector('.quiz-feedback');
+
+                btns.forEach((btn, idx) => {
+                    btn.disabled = true;
+                    if (idx === correct) {
+                        btn.className = "quiz-opt-btn text-left p-3 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-900 font-bold text-xs";
+                    } else if (idx === selected) {
+                        btn.className = "quiz-opt-btn text-left p-3 rounded-xl border-2 border-red-400 bg-red-50 text-red-900 font-bold text-xs";
+                    }
+                });
+
+                feedback.classList.remove('hidden');
+                if (selected === correct) {
+                    feedback.className = "quiz-feedback text-xs p-3 rounded-xl bg-emerald-100 text-emerald-900 font-bold border border-emerald-200";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Correct! Excellent job.`;
+                } else {
+                    feedback.className = "quiz-feedback text-xs p-3 rounded-xl bg-red-100 text-red-900 font-bold border border-red-200";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-xmark mr-1"></i> Incorrect. Option ${String.fromCharCode(65 + correct)} is the right answer.`;
+                }
+            }
+        };
+
+        window.onload = () => app.init();
+    </script>
+</body>
+</html>

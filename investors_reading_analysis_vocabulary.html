@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Careful Buyers, Careless Sellers — IELTS Reading Analysis, Translation & Vocabulary</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --app-font-size: 16px;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-size: var(--app-font-size);
+            overflow-x: hidden;
+        }
+        .reading-text {
+            font-family: 'Merriweather', serif;
+            line-height: 2.15;
+            color: #334155;
+        }
+        .reading-text p {
+            margin-bottom: 1.5rem;
+            text-indent: 1.25rem;
+        }
+        .reading-text p:first-of-type {
+            text-indent: 0;
+        }
+
+        .paragraph-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 0.85rem;
+            margin-right: 0.4rem;
+            color: #0369a1;
+            background-color: #e0f2fe;
+            border: 1px solid #bae6fd;
+            text-indent: 0;
+            vertical-align: middle;
+        }
+
+        /* Highlight Targets & Interactive States */
+        .ans-target {
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            position: relative;
+            display: inline;
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+            text-indent: 0;
+        }
+
+        /* Question target color themes */
+        .ans-target-q1 { background-color: #fef08a; border-bottom: 2px solid #eab308; color: #854d0e; }
+        .ans-target-q2 { background-color: #bae6fd; border-bottom: 2px solid #0284c7; color: #075985; }
+        .ans-target-q3 { background-color: #bbf7d0; border-bottom: 2px solid #16a34a; color: #166534; }
+        .ans-target-q4 { background-color: #fbcfe8; border-bottom: 2px solid #db2777; color: #9d174d; }
+
+        .q-badge {
+            display: inline-block;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72em;
+            font-weight: 800;
+            padding: 1px 6px;
+            border-radius: 4px;
+            margin-right: 4px;
+            vertical-align: baseline;
+            line-height: 1.2;
+            color: #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            text-indent: 0;
+            user-select: none;
+        }
+
+        .ans-target:hover, .ans-target.active-target {
+            outline: 3px solid #0284c7;
+            box-shadow: 0 0 15px rgba(2, 132, 199, 0.4);
+            filter: brightness(0.96);
+            z-index: 20;
+        }
+
+        /* Floating Evidence Popover */
+        .explanation-popover {
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            opacity: 0;
+            visibility: hidden;
+            width: 310px;
+            background-color: #0f172a;
+            color: #f8fafc;
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 0.82rem;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.3);
+            z-index: 50;
+            transition: all 0.25s ease;
+            pointer-events: none;
+            line-height: 1.45;
+            font-weight: normal;
+        }
+        .explanation-popover::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: #0f172a transparent transparent transparent;
+        }
+        .ans-target:hover .explanation-popover, .ans-target.active-target .explanation-popover {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Flashcard Animation */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* SVG Connections */
+        #svg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 30;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .tab-btn.active {
+            background-color: #0369a1;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(3, 105, 161, 0.3);
+        }
+
+        @keyframes arrowFlow {
+            from { stroke-dashoffset: 26; }
+            to { stroke-dashoffset: 0; }
+        }
+        .animated-arrow-line {
+            animation: arrowFlow 1s linear infinite;
+        }
+
+        .lang-btn.active {
+            background-color: #0f172a;
+            color: white;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col bg-slate-100">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-white border-b border-slate-200 px-4 sm:px-6 py-3 flex flex-col md:flex-row justify-between items-center shadow-xs shrink-0 gap-3 z-40">
+        <div class="flex items-center space-x-3">
+            <div class="bg-sky-700 text-white p-2.5 rounded-xl shadow-sm">
+                <i class="fa-solid fa-chart-line text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold text-slate-800">Careful Buyers, Careless Sellers — Analysis, Translation & Vocabulary</h1>
+                <p class="text-xs text-slate-500 font-medium">IELTS Academic Reading Master Companion — Financial & Behavioral Economics</p>
+            </div>
+        </div>
+
+        <!-- Controls: Language Switcher, Font Resize & Arrows Toggle -->
+        <div class="flex items-center space-x-3 flex-wrap gap-y-2">
+            <!-- Language Switcher -->
+            <div class="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200" id="lang-switcher">
+                <button class="lang-btn active px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="en">EN</button>
+                <button class="lang-btn px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="vi">VIE</button>
+                <button class="lang-btn px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="dual">Parallel (EN/VIE)</button>
+            </div>
+
+            <!-- Font Resizer -->
+            <div class="flex items-center space-x-1 bg-slate-100 p-1 rounded-lg border border-slate-200">
+                <button id="btn-dec-font" class="w-7 h-7 flex items-center justify-center rounded bg-white shadow-xs hover:bg-slate-50 font-bold text-xs text-slate-700" title="Decrease Font">A-</button>
+                <button id="btn-inc-font" class="w-7 h-7 flex items-center justify-center rounded bg-white shadow-xs hover:bg-slate-50 font-bold text-xs text-slate-700" title="Increase Font">A+</button>
+            </div>
+
+            <!-- Toggle Arrow Canvas -->
+            <button id="btn-toggle-arrows" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-sky-700 text-white border border-sky-700 font-medium text-xs hover:bg-sky-800 transition-colors shadow-xs">
+                <i class="fa-solid fa-route"></i>
+                <span class="hidden sm:inline">Arrows</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-white border-b border-slate-200 px-6 py-2 overflow-x-auto shrink-0 shadow-xs">
+        <div class="flex space-x-2 min-w-max" id="nav-tabs">
+            <button class="tab-btn active px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="analysis">
+                <i class="fa-solid fa-book-open mr-1.5"></i> 1. Passage & Question Analysis (Q1–Q4)
+            </button>
+            <button class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="vocabulary">
+                <i class="fa-solid fa-spell-check mr-1.5"></i> 2. IELTS Vocabulary Suite (Band 7.0–9.0)
+            </button>
+            <button class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="flashcards">
+                <i class="fa-solid fa-brain mr-1.5"></i> 3. Vocab Flashcards & Practice Quiz
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="flex-1 overflow-hidden relative" id="main-wrapper">
+        <svg id="svg-canvas"></svg>
+
+        <!-- TAB 1: Passage & Question Analysis -->
+        <div id="tab-analysis-content" class="h-full grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden">
+            <!-- Left Pane: Passage View -->
+            <section id="left-pane" class="lg:col-span-6 bg-white overflow-y-auto p-6 lg:p-10 border-r border-slate-200 relative">
+                <div class="max-w-3xl mx-auto">
+                    <div class="flex items-center justify-between mb-6 pb-3 border-b border-slate-100">
+                        <span class="text-xs font-bold uppercase tracking-wider text-sky-700 bg-sky-50 px-3 py-1 rounded-md border border-sky-200">
+                            <i class="fa-solid fa-newspaper mr-1.5"></i> Reading Passage — Careful Buyers, Careless Sellers
+                        </span>
+                        <span class="text-xs text-slate-400 font-medium"><i class="fa-solid fa-mouse-pointer mr-1"></i> Hover/Click highlighted evidence</span>
+                    </div>
+
+                    <div id="passage-container" class="reading-text text-base leading-relaxed text-slate-700 space-y-4">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Pane: Questions & Detailed Explanations -->
+            <section id="right-pane" class="lg:col-span-6 bg-slate-50 overflow-y-auto p-6 lg:p-10">
+                <div class="max-w-2xl mx-auto space-y-6" id="explanations-list">
+                    <!-- Rendered dynamically -->
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB 2: Vocabulary Suite -->
+        <div id="tab-vocabulary-content" class="h-full bg-slate-50 overflow-y-auto p-6 lg:p-10 hidden">
+            <div class="max-w-6xl mx-auto space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-book-bookmark text-sky-700"></i> Essential IELTS Reading Vocabulary
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">High-yield financial, psychological, and decision-making terms from the passage.</p>
+                    </div>
+
+                    <div class="flex items-center space-x-3 w-full md:w-auto">
+                        <div class="relative flex-1 md:w-64">
+                            <i class="fa-solid fa-search absolute left-3 top-3 text-slate-400 text-xs"></i>
+                            <input type="text" id="vocab-search" placeholder="Search word or translation..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-sky-600">
+                        </div>
+                        <select id="vocab-filter" class="bg-slate-50 border border-slate-200 text-xs font-semibold rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-600">
+                            <option value="all">All Categories</option>
+                            <option value="noun">Nouns</option>
+                            <option value="verb">Verbs</option>
+                            <option value="adjective">Adjectives</option>
+                            <option value="finance">Finance & Economics</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="vocab-cards-grid">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: Vocab Flashcards & Practice Quiz -->
+        <div id="tab-flashcards-content" class="h-full bg-slate-50 overflow-y-auto p-6 lg:p-10 hidden">
+            <div class="max-w-3xl mx-auto space-y-8">
+                <div class="flex justify-center space-x-3">
+                    <button id="btn-mode-flashcard" class="px-5 py-2.5 rounded-xl text-xs font-extrabold bg-sky-700 text-white shadow-sm transition-all">
+                        <i class="fa-solid fa-clone mr-2"></i> Interactive Flashcards
+                    </button>
+                    <button id="btn-mode-quiz" class="px-5 py-2.5 rounded-xl text-xs font-extrabold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all">
+                        <i class="fa-solid fa-circle-question mr-2"></i> Quick Quiz Mode
+                    </button>
+                </div>
+
+                <!-- Flashcard Display Box -->
+                <div id="flashcard-view" class="flex flex-col items-center space-y-6">
+                    <p class="text-xs text-slate-500 font-semibold">Click the card to flip between Word and Vietnamese Definition</p>
+                    
+                    <div class="w-full max-w-md h-72 perspective-1000 cursor-pointer" id="flashcard-wrapper">
+                        <div id="flashcard-inner" class="relative w-full h-full duration-500 transform-style-3d transition-transform">
+                            <!-- Front -->
+                            <div class="absolute w-full h-full bg-white rounded-3xl border border-slate-200 shadow-md p-8 flex flex-col justify-between items-center text-center backface-hidden">
+                                <span id="fc-category" class="text-[10px] uppercase font-extrabold tracking-widest text-sky-700 bg-sky-50 px-3 py-1 rounded-full border border-sky-200">Category</span>
+                                <div>
+                                    <h3 id="fc-word" class="text-3xl font-black text-slate-900 mb-2">Word</h3>
+                                    <p id="fc-phonetic" class="text-sm font-mono text-slate-500">/phonetic/</p>
+                                </div>
+                                <span class="text-xs font-bold text-sky-700 flex items-center gap-1"><i class="fa-solid fa-rotate mr-1"></i> Flip for meaning</span>
+                            </div>
+                            <!-- Back -->
+                            <div class="absolute w-full h-full bg-slate-900 text-white rounded-3xl shadow-md p-8 flex flex-col justify-between items-center text-center backface-hidden rotate-y-180">
+                                <span class="text-[10px] uppercase font-extrabold tracking-widest text-sky-400 bg-slate-800 px-3 py-1 rounded-full">Vietnamese Meaning</span>
+                                <div>
+                                    <h4 id="fc-meaning" class="text-2xl font-bold text-sky-400 mb-3">Nghĩa tiếng Việt</h4>
+                                    <p id="fc-context" class="text-xs text-slate-300 italic leading-relaxed">"Context sentence..."</p>
+                                </div>
+                                <span class="text-xs font-bold text-slate-400 flex items-center gap-1"><i class="fa-solid fa-rotate mr-1"></i> Flip back</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <button id="btn-fc-prev" class="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 flex items-center justify-center font-bold text-base shadow-xs transition-all">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <span id="fc-counter" class="text-xs font-bold text-slate-600 px-4 py-2 bg-white rounded-xl border border-slate-200">1 / 10</span>
+                        <button id="btn-fc-next" class="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 flex items-center justify-center font-bold text-base shadow-xs transition-all">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Display Box -->
+                <div id="quiz-view" class="hidden space-y-6">
+                    <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6" id="quiz-box">
+                        <!-- Quiz populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const passageData = [
+            {
+                pNum: 'A',
+                en: `Jack Schwager was once a moderately successful trader who wondered why he was not an immoderately successful trader. Perhaps if he knew the secrets of trading superstars, such as Paul Tudor Jones or Jim Rogers, he might improve. So he asked them for those secrets. “Market Wizards”, his book of interviews with hedge-fund traders, was published in 1989. A second volume soon followed.`,
+                vi: `Jack Schwager từng là một nhà giao dịch thành công ở mức vừa phải, người luôn tự hỏi tại sao mình lại không phải là một nhà giao dịch thành công xuất chúng. Có lẽ nếu biết được những bí quyết của các siêu sao giao dịch như Paul Tudor Jones hay Jim Rogers, ông có thể cải thiện năng lực của bản thân. Vì vậy, ông đã hỏi họ về những bí quyết đó. Cuốn sách “Market Wizards” (Những phù thủy thị trường) tập hợp các cuộc phỏng vấn của ông với các nhà giao dịch quỹ đầu cơ (hedge-fund) đã được xuất bản vào năm 1989. Tập thứ hai của cuốn sách cũng nhanh chóng ra mắt ngay sau đó.`
+            },
+            {
+                pNum: 'B',
+                en: `Both books have since been pored over by a generation of hedge-fund wannabes. They are full of <span class="ans-target ans-target-q1" data-q="q1"><span class="q-badge bg-yellow-600">Q1</span>great stories and tips<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q1 Target Evidence</strong>"They are full of great stories and tips covering a range of investing styles."</span></span> covering a range of investing styles. Yet there are common elements. It is striking, for instance, how little emphasis the wizards put on getting into a position—finding the right trade at the right entry price—compared with when to get out of it. That makes sense. Deciding what and when to sell surely matters at least as much as, and perhaps more than, deciding what to buy.`,
+                vi: `Cả hai cuốn sách kể từ đó đã được cả một thế hệ những người khao khát bước chân vào ngành quỹ đầu cơ nghiền ngẫm kỹ lưỡng. Chúng chứa đầy <span class="ans-target ans-target-q1" data-q="q1"><span class="q-badge bg-yellow-600">Q1</span>những câu chuyện tuyệt vời và các lời khuyên (great stories and tips)<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q1</strong>Bài đọc nêu cuốn sách "full of great stories and tips" (chứa đầy những câu chuyện tuyệt vời và các lời khuyên).</span></span> bao quát nhiều phong cách đầu tư đa dạng. Tuy nhiên, vẫn có những yếu tố chung cốt lõi. Chẳng hạn, thật đáng kinh ngạc khi thấy các phù thủy thị trường ít chú trọng đến việc mở một vị thế giao dịch (tìm kiếm giao dịch phù hợp với mức giá vào lệnh hợp lý) đến mức nào so với việc khi nào nên thoát khỏi vị thế đó. Điều này hoàn toàn có lý. Việc quyết định bán cái gì và khi nào bán chắc chắn quan trọng ít nhất cũng bằng, hoặc thậm chí quan trọng hơn, việc quyết định mua cái gì.`
+            },
+            {
+                pNum: 'C',
+                en: `The wizardly injunction to cut your losses and let your winners ride has hardened into hedge-fund doctrine. Even so, it is not widely practised in mainstream investing. Fund managers pay lots of attention to buying decisions. But they are remarkably careless in deciding what to sell.`,
+                vi: `Lời răn dạy mang tính phù thủy về việc hãy cắt lỗ thật nhanh và để các khoản lợi nhuận tiếp tục sinh sôi đã trở thành giáo điều bất di bất dịch trong giới quỹ đầu cơ. Mặc dù vậy, điều này lại không được áp dụng rộng rãi trong giới đầu tư chính thống. Các nhà quản lý quỹ dành rất nhiều sự chú ý cho các quyết định mua vào. Nhưng họ lại bất cẩn một cách đáng ngạc nhiên khi quyết định bán ra cái gì.`
+            },
+            {
+                pNum: 'D',
+                en: `That is the central finding of “Selling Fast and Buying Slow”, published late last year by a trio of academics—Klakow Akepanidtaworn of the University of Chicago’s Booth School of Business, Alex Imas of Carnegie Mellon University and Lawrence Schmidt of the Massachusetts Institute of Technology—together with Rick Di Mascio of Inalytics, a data firm. They examined the daily turnover of hundreds of portfolios over several years, tracking more than 2 million stock purchases and almost as many sales. Buying decisions, they found, were good: the addition of a stock generally improved a portfolio. But selling decisions were bad—so bad that a fund manager would have been much better off choosing a stock to sell at random.`,
+                vi: `Đó là phát hiện trọng tâm của công trình nghiên cứu “Bán nhanh và Mua chậm” (Selling Fast and Buying Slow), được xuất bản vào cuối năm ngoái bởi một nhóm ba học giả gồm Klakow Akepanidtaworn thuộc Trường Kinh doanh Booth - Đại học Chicago, Alex Imas thuộc Đại học Carnegie Mellon và Lawrence Schmidt thuộc Viện Công nghệ Massachusetts (MIT) cùng với Rick Di Mascio của Inalytics – một công ty dữ liệu. Họ đã kiểm tra lượng giao dịch luân chuyển hàng ngày của hàng trăm danh mục đầu tư trong suốt nhiều năm, theo dõi hơn 2 triệu lượt mua cổ phiếu và gần như ngần ấy lượt bán ra. Họ nhận thấy các quyết định mua vào đều rất tốt: việc bổ sung thêm một cổ phiếu nhìn chung đã cải thiện danh mục đầu tư. Nhưng các quyết định bán ra lại rất tồi tệ – tồi tệ đến mức một nhà quản lý quỹ thà chọn ngẫu nhiên một cổ phiếu để bán thì kết quả mang lại sẽ tốt hơn nhiều.`
+            },
+            {
+                pNum: 'E',
+                en: `The disparity between sales and purchases is explained by the <span class="ans-target ans-target-q2" data-q="q2"><span class="q-badge bg-sky-600">Q2</span>attention<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q2 Target Evidence</strong>"The disparity between sales and purchases is explained by the attention given to each."</span></span> given to each. Fund managers are careful buyers. Purchases come at the end of a long period of serious thought and research. But they do not give stock sales anything like the same attention. That is especially true when they are stressed because their portfolio has recently done badly. Instead of deliberating, they use a mental shortcut. Stocks that have done either really well or really badly, and so stick in the mind, are far more likely to be sold. The more inclined fund managers are to sell in this way, the worse they perform.`,
+                vi: `Sự chênh lệch giữa việc bán ra và mua vào được giải thích bởi <span class="ans-target ans-target-q2" data-q="q2"><span class="q-badge bg-sky-600">Q2</span>mức độ chú ý (attention)<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q2</strong>Bài đọc chỉ ra sự chênh lệch được giải thích bởi mức độ chú ý dành cho mỗi bên (attention given to each).</span></span> dành cho mỗi bên. Các nhà quản lý quỹ là những người mua rất cẩn trọng. Các quyết định mua vào là kết quả cuối cùng sau một giai đoạn dài suy nghĩ và nghiên cứu nghiêm túc. Nhưng họ lại không hề dành cho các đợt bán cổ phiếu bất kỳ sự chú ý tương tự nào. Điều này đặc biệt đúng khi họ bị căng thẳng vì danh mục đầu tư của họ gần đây hoạt động kém hiệu quả. Thay vì cân nhắc kỹ lưỡng, họ sử dụng một đường tắt tư duy (mental shortcut). Những cổ phiếu có biểu hiện hoặc cực kỳ tốt hoặc cực kỳ tệ, và do đó hằn sâu trong tâm trí họ, thường có khả năng bị bán ra cao hơn rất nhiều. Các nhà quản lý quỹ càng có xu hướng bán theo cách này, thành tích hoạt động của họ càng trở nên tồi tệ hơn.`
+            },
+            {
+                pNum: 'F',
+                en: `They do not realise that careless selling is harmful, it seems. “Selling is simply a cash raising exercise for the next buying idea,” one told the paper’s authors. “Buying is an investment decision; selling is something else,” said another. Fund managers sell the stocks that come most readily to mind. Yet they are able to sell wisely, if they pay attention. Sales made when they are focused on information about a stock, for example around the time of an earnings report, are almost as smart as buying decisions, the authors say.`,
+                vi: `Dường như họ không nhận ra rằng việc bán cẩu thả lại tai hại đến thế. “Bán chỉ đơn giản là một hoạt động huy động tiền mặt cho ý tưởng mua vào tiếp theo,” một nhà quản lý quỹ nói với các tác giả bài báo. “Mua là một quyết định đầu tư; còn bán là một việc gì đó hoàn toàn khác,” một người khác chia sẻ. Các nhà quản lý quỹ thường bán những cổ phiếu nảy ra đầu tiên trong đầu họ một cách dễ dàng nhất. Tuy nhiên, họ hoàn toàn có khả năng bán một cách khôn ngoan nếu họ chịu tập trung chú ý. Các tác giả cho biết các đợt bán được thực hiện khi họ tập trung vào thông tin về một cổ phiếu, ví dụ như vào khoảng thời gian công bố báo cáo kết quả kinh doanh, đều thông minh gần như các quyết định mua vào.`
+            },
+            {
+                pNum: 'G',
+                en: `The message is clear. If fund managers took more care over selling, they would be more successful. But the world is not arranged in such a way as to make them take that care. They will be asked often for their best buying ideas, but rarely about stocks they own that are ripe for selling. This lopsided approach to decision-making is not confined to fund management. Businesses often spend an age deciding whom to hire but put off thinking about whom to let go until there is <span class="ans-target ans-target-q3" data-q="q3"><span class="q-badge bg-emerald-600">Q3</span>a pressing financial need<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q3 Target Evidence</strong>"put off thinking about whom to let go until there is a pressing financial need, by which point the decision is likely to be rushed."</span></span>, by which point the decision is likely to be rushed.`,
+                vi: `Thông điệp ở đây là rất rõ ràng. Nếu các nhà quản lý quỹ cẩn trọng hơn đối với việc bán ra, họ sẽ thành công hơn nhiều. Nhưng thế giới lại không được sắp đặt theo cách thúc đẩy họ phải cẩn trọng như vậy. Họ sẽ thường xuyên được hỏi về những ý tưởng mua vào tốt nhất của mình, nhưng hiếm khi được hỏi về những cổ phiếu mà họ đang sở hữu đã chín muồi để bán. Cách tiếp cận lệch lạc này trong việc ra quyết định không chỉ giới hạn ở ngành quản lý quỹ. Các doanh nghiệp thường mất cả một khoảng thời gian dài để quyết định nên tuyển dụng ai, nhưng lại trì hoãn việc suy nghĩ về việc nên sa thải ai cho đến khi xuất hiện <span class="ans-target ans-target-q3" data-q="q3"><span class="q-badge bg-emerald-600">Q3</span>nhu cầu tài chính cấp bách (a pressing financial need)<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q3</strong>Doanh nghiệp trì hoãn việc sa thải nhân viên cho đến khi xuất hiện nhu cầu tài chính cấp bách (a pressing financial need).</span></span>, mà vào thời điểm đó thì quyết định nhiều khả năng sẽ bị đưa ra một cách vội vã.`
+            },
+            {
+                pNum: 'H',
+                en: `Why do fund managers take their losses on bad stocks too late and their profits on good stocks too early? A body of empirical research, surveyed by Brad Barber and Terrance Odean of the University of California, finds that individual investors show a strong preference for selling winners over losers. They may be impatient to experience the <span class="ans-target ans-target-q4" data-q="q4"><span class="q-badge bg-pink-600">Q4</span>burst of pride<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q4 Target Evidence</strong>"impatient to experience the burst of pride that comes from selling a winner."</span></span> that comes from selling a winner. And they hold on to losers for too long in the hope of avoiding feelings of regret.`,
+                vi: `Tại sao các nhà quản lý quỹ lại cắt lỗ những cổ phiếu xấu quá muộn và chốt lời những cổ phiếu tốt quá sớm? Một tập hợp các nghiên cứu thực nghiệm được Brad Barber và Terrance Odean thuộc Đại học California khảo sát cho thấy các nhà đầu tư cá nhân thể hiện sự ưa chuộng mãnh liệt đối với việc bán những cổ phiếu sinh lời hơn là những cổ phiếu thua lỗ. Họ có thể nôn nóng muốn được trải nghiệm <span class="ans-target ans-target-q4" data-q="q4"><span class="q-badge bg-pink-600">Q4</span>cảm giác tự hào bùng nổ (burst of pride)<span class="explanation-popover"><strong class="text-sky-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q4</strong>Muốn trải nghiệm cảm giác tự hào bùng nổ (burst of pride) khi bán một cổ phiếu chiến thắng sinh lời.</span></span> đến từ việc bán đi một cổ phiếu chiến thắng. Và họ nắm giữ những cổ phiếu thua lỗ quá lâu với hy vọng tránh được cảm giác hối hận.`
+            }
+        ];
+
+        const questionsData = [
+            {
+                id: 'q1',
+                num: '1',
+                type: 'Short Answer (Max 3 words)',
+                ansKey: 'great stories and tips / stories and tips',
+                badgeColor: 'bg-yellow-600',
+                prompt: 'What kind of contents do Jack Schwager’s two books cover?',
+                explEn: 'Paragraph B explicitly states: "Both books have since been pored over by a generation... They are full of great stories and tips covering a range of investing styles."',
+                explVi: 'Đoạn B khẳng định rõ ràng: "They are full of great stories and tips covering a range of investing styles." (Chúng chứa đầy những câu chuyện tuyệt vời và các mẹo/lời khuyên).',
+                synonyms: [
+                    { q: 'contents cover', p: 'full of ... covering a range of investing styles' }
+                ]
+            },
+            {
+                id: 'q2',
+                num: '2',
+                type: 'Short Answer (Max 3 words)',
+                ansKey: 'attention / the attention',
+                badgeColor: 'bg-sky-600',
+                prompt: 'What factor from fund managers affects the difference between purchases and sales?',
+                explEn: 'Paragraph E states: "The disparity between sales and purchases is explained by the attention given to each." Disparity = difference.',
+                explVi: 'Đoạn E chỉ ra: "Sự chênh lệch/khác biệt (disparity) giữa bán và mua được giải thích bằng mức độ chú ý (attention) dành cho từng quyết định."',
+                synonyms: [
+                    { q: 'difference between purchases and sales', p: 'disparity between sales and purchases' },
+                    { q: 'affects / explains', p: 'explained by the attention given to each' }
+                ]
+            },
+            {
+                id: 'q3',
+                num: '3',
+                type: 'Short Answer (Max 3 words)',
+                ansKey: 'pressing financial need / a pressing financial need',
+                badgeColor: 'bg-emerald-600',
+                prompt: 'What makes businesses arrive at a fast decision of stop holding their employees?',
+                explEn: 'Paragraph G states: "Businesses often spend an age deciding whom to hire but put off thinking about whom to let go until there is a pressing financial need, by which point the decision is likely to be rushed."',
+                explVi: 'Đoạn G cho biết các doanh nghiệp hoãn lại việc sa thải (stop holding employees = let go) cho đến khi xuất hiện nhu cầu tài chính cấp bách (pressing financial need), khiến quyết định bị vội vã (fast/rushed decision).',
+                synonyms: [
+                    { q: 'stop holding their employees', p: 'let go' },
+                    { q: 'fast decision', p: 'decision is likely to be rushed' }
+                ]
+            },
+            {
+                id: 'q4',
+                num: '4',
+                type: 'Short Answer (Max 3 words)',
+                ansKey: 'burst of pride / a burst of pride',
+                badgeColor: 'bg-pink-600',
+                prompt: 'What is the main motivation behind most individual investors\' decision to sell a winner?',
+                explEn: 'Paragraph H explains: "They may be impatient to experience the burst of pride that comes from selling a winner." Motivation = desire/impatience to experience.',
+                explVi: 'Đoạn H giải thích động lực khiến nhà đầu tư cá nhân chốt lời cổ phiếu chiến thắng: họ nôn nóng muốn trải nghiệm cảm giác tự hào dâng trào/bùng nổ (burst of pride).',
+                synonyms: [
+                    { q: 'motivation behind decision', p: 'impatient to experience' },
+                    { q: 'sell a winner', p: 'comes from selling a winner' }
+                ]
+            }
+        ];
+
+        const vocabList = [
+            {
+                word: 'injunction',
+                phonetic: '/ɪnˈdʒʌŋk.ʃən/',
+                vi: 'Lời khuyên nghiêm cẩn / Lệnh chỉ thị',
+                enDef: 'An authoritative warning or order; an earnest advice.',
+                type: 'noun',
+                category: 'finance',
+                context: 'The wizardly injunction to cut your losses and let your winners ride.',
+                collocation: 'court injunction / wizardly injunction'
+            },
+            {
+                word: 'doctrine',
+                phonetic: '/ˈdɒk.trɪn/',
+                vi: 'Học thuyết / Nguyên tắc niềm tin',
+                enDef: 'A belief or set of beliefs held and taught by a group or organization.',
+                type: 'noun',
+                category: 'noun',
+                context: 'Cut your losses and let your winners ride has hardened into hedge-fund doctrine.',
+                collocation: 'economic doctrine / strict doctrine'
+            },
+            {
+                word: 'disparity',
+                phonetic: '/dɪˈspær.ə.ti/',
+                vi: 'Sự chênh lệch / Sự khác biệt',
+                enDef: 'A great difference or inequality between two things.',
+                type: 'noun',
+                category: 'finance',
+                context: 'The disparity between sales and purchases is explained by the attention given to each.',
+                collocation: 'growing disparity / wide disparity'
+            },
+            {
+                word: 'deliberate',
+                phonetic: '/dɪˈlɪb.ər.eɪt/',
+                vi: 'Cân nhắc kỹ lưỡng / Thảo luận suy tính',
+                enDef: 'To think about or discuss something very carefully before making a decision.',
+                type: 'verb',
+                category: 'verb',
+                context: 'Instead of deliberating, they use a mental shortcut.',
+                collocation: 'deliberate on options / deliberate carefully'
+            },
+            {
+                word: 'shortcut',
+                phonetic: '/ˈʃɔːt.kʌt/',
+                vi: 'Lối tắt / Khái niệm tắt trong tư duy',
+                enDef: 'A quicker way of doing something, or a cognitive heuristic in decision-making.',
+                type: 'noun',
+                category: 'noun',
+                context: 'Instead of deliberating, fund managers use a mental shortcut.',
+                collocation: 'mental shortcut / take a shortcut'
+            },
+            {
+                word: 'lopsided',
+                phonetic: '/ˌlɒpˈsaɪ.dɪd/',
+                vi: 'Mất cân đối / Lệch về một bên',
+                enDef: 'With one side lower or smaller than the other; disproportionately weighted.',
+                type: 'adjective',
+                category: 'adjective',
+                context: 'This lopsided approach to decision-making is not confined to fund management.',
+                collocation: 'lopsided approach / lopsided victory'
+            },
+            {
+                word: 'empirical',
+                phonetic: '/ɪmˈpɪr.ɪ.kəl/',
+                vi: 'Thực nghiệm / Dựa trên quan sát',
+                enDef: 'Based on, concerned with, or verifiable by observation or experience rather than theory.',
+                type: 'adjective',
+                category: 'adjective',
+                context: 'A body of empirical research finds that individual investors show a strong preference.',
+                collocation: 'empirical evidence / empirical research'
+            },
+            {
+                word: 'impatient',
+                phonetic: '/ɪmˈpeɪ.ʃənt/',
+                vi: 'Nôn nóng / Trằn trọc không kiên nhẫn',
+                enDef: 'Having or showing a tendency to be quickly irritated or eager for something.',
+                type: 'adjective',
+                category: 'adjective',
+                context: 'They may be impatient to experience the burst of pride.',
+                collocation: 'impatient for results / grow impatient'
+            },
+            {
+                word: 'rushed',
+                phonetic: '/rʌʃt/',
+                vi: 'Vội vã / Hấp tấp',
+                enDef: 'Done or completed too hurriedly, without sufficient time.',
+                type: 'adjective',
+                category: 'adjective',
+                context: 'By which point the decision is likely to be rushed.',
+                collocation: 'rushed decision / rushed job'
+            },
+            {
+                word: 'preference',
+                phonetic: '/ˈpref.ər.əns/',
+                vi: 'Sự ưu tiên / Sự ưa thích hơn',
+                enDef: 'A greater liking for one alternative over another or others.',
+                type: 'noun',
+                category: 'noun',
+                context: 'Investors show a strong preference for selling winners over losers.',
+                collocation: 'strong preference / clear preference'
+            }
+        ];
+
+        // --- APPLICATION CONTROLLER ---
+        const app = {
+            currentLang: 'en',
+            fontSize: 16,
+            showArrows: true,
+            activeTab: 'analysis',
+            fcIndex: 0,
+            fcFlipped: false,
+            arrowAnimFrame: null,
+
+            init() {
+                this.bindEvents();
+                this.renderPassage();
+                this.renderExplanations();
+                this.bindTargetEvents();
+                this.renderVocabGrid();
+                this.setupFlashcard();
+                this.setupQuiz();
+            },
+
+            bindEvents() {
+                // Language Switcher Buttons
+                document.querySelectorAll('#lang-switcher .lang-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('#lang-switcher .lang-btn').forEach(b => b.classList.remove('active'));
+                        e.currentTarget.classList.add('active');
+                        this.currentLang = e.currentTarget.dataset.lang;
+                        this.renderPassage();
+                        this.renderExplanations();
+                        this.bindTargetEvents();
+                        setTimeout(() => this.drawConnections(), 60);
+                    });
+                });
+
+                // Font Resizing
+                document.getElementById('btn-inc-font').addEventListener('click', () => {
+                    if (this.fontSize < 24) {
+                        this.fontSize += 1;
+                        document.documentElement.style.setProperty('--app-font-size', `${this.fontSize}px`);
+                        this.drawConnections();
+                    }
+                });
+                document.getElementById('btn-dec-font').addEventListener('click', () => {
+                    if (this.fontSize > 13) {
+                        this.fontSize -= 1;
+                        document.documentElement.style.setProperty('--app-font-size', `${this.fontSize}px`);
+                        this.drawConnections();
+                    }
+                });
+
+                // Toggle Arrows
+                document.getElementById('btn-toggle-arrows').addEventListener('click', (e) => {
+                    this.showArrows = !this.showArrows;
+                    e.currentTarget.classList.toggle('bg-sky-700');
+                    e.currentTarget.classList.toggle('bg-slate-300');
+                    e.currentTarget.classList.toggle('text-slate-700');
+                    if (!this.showArrows) {
+                        this.clearCanvas();
+                    } else {
+                        this.drawConnections();
+                    }
+                });
+
+                // Scroll Listeners
+                const leftPane = document.getElementById('left-pane');
+                const rightPane = document.getElementById('right-pane');
+                if (leftPane) leftPane.addEventListener('scroll', () => this.drawConnections());
+                if (rightPane) rightPane.addEventListener('scroll', () => this.drawConnections());
+
+                // Navigation Tabs
+                document.querySelectorAll('#nav-tabs .tab-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('#nav-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+                        e.currentTarget.classList.add('active');
+                        const tab = e.currentTarget.dataset.tab;
+                        this.activeTab = tab;
+
+                        document.getElementById('tab-analysis-content').classList.toggle('hidden', tab !== 'analysis');
+                        document.getElementById('tab-vocabulary-content').classList.toggle('hidden', tab !== 'vocabulary');
+                        document.getElementById('tab-flashcards-content').classList.toggle('hidden', tab !== 'flashcards');
+
+                        if (tab !== 'analysis') this.clearCanvas();
+                        else setTimeout(() => this.drawConnections(), 100);
+                    });
+                });
+
+                // Search & Filter Vocab
+                document.getElementById('vocab-search').addEventListener('input', () => this.filterVocab());
+                document.getElementById('vocab-filter').addEventListener('change', () => this.filterVocab());
+
+                // Flashcard Controls
+                document.getElementById('flashcard-wrapper').addEventListener('click', () => {
+                    this.fcFlipped = !this.fcFlipped;
+                    document.getElementById('flashcard-inner').classList.toggle('rotate-y-180', this.fcFlipped);
+                });
+                document.getElementById('btn-fc-prev').addEventListener('click', () => {
+                    if (this.fcIndex > 0) {
+                        this.fcIndex--;
+                        this.updateFlashcard();
+                    }
+                });
+                document.getElementById('btn-fc-next').addEventListener('click', () => {
+                    if (this.fcIndex < vocabList.length - 1) {
+                        this.fcIndex++;
+                        this.updateFlashcard();
+                    }
+                });
+
+                // Mode Switcher
+                document.getElementById('btn-mode-flashcard').addEventListener('click', (e) => {
+                    e.target.classList.replace('bg-white', 'bg-sky-700');
+                    e.target.classList.replace('text-slate-700', 'text-white');
+                    document.getElementById('btn-mode-quiz').classList.replace('bg-sky-700', 'bg-white');
+                    document.getElementById('btn-mode-quiz').classList.replace('text-white', 'text-slate-700');
+                    document.getElementById('flashcard-view').classList.remove('hidden');
+                    document.getElementById('quiz-view').classList.add('hidden');
+                });
+                document.getElementById('btn-mode-quiz').addEventListener('click', (e) => {
+                    e.target.classList.replace('bg-white', 'bg-sky-700');
+                    e.target.classList.replace('text-slate-700', 'text-white');
+                    document.getElementById('btn-mode-flashcard').classList.replace('bg-sky-700', 'bg-white');
+                    document.getElementById('btn-mode-flashcard').classList.replace('text-white', 'text-slate-700');
+                    document.getElementById('quiz-view').classList.remove('hidden');
+                    document.getElementById('flashcard-view').classList.add('hidden');
+                });
+
+                window.addEventListener('resize', () => this.drawConnections());
+            },
+
+            renderPassage() {
+                const container = document.getElementById('passage-container');
+                let html = `
+                    <h2 class="text-2xl font-black text-slate-900 mb-2 text-center leading-tight tracking-tight">WHY INVESTORS ARE CAREFUL BUYERS BUT CARELESS SELLERS</h2>
+                    <p class="text-xs text-center text-slate-500 italic mb-6">Only the very best think as hard about exiting positions as entering them.</p>
+                `;
+
+                passageData.forEach(p => {
+                    if (this.currentLang === 'en') {
+                        html += `<p><span class="paragraph-num">${p.pNum}</span>${p.en}</p>`;
+                    } else if (this.currentLang === 'vi') {
+                        html += `<p><span class="paragraph-num">${p.pNum}</span>${p.vi}</p>`;
+                    } else if (this.currentLang === 'dual') {
+                        html += `
+                            <div class="mb-6 p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                                <div class="text-slate-800 text-sm leading-relaxed border-b border-slate-200 pb-3">
+                                    <strong class="text-xs font-bold text-sky-700 uppercase tracking-wider block mb-1">ENGLISH [Paragraph ${p.pNum}]</strong>
+                                    ${p.en}
+                                </div>
+                                <div class="text-slate-600 text-sm leading-relaxed pt-1">
+                                    <strong class="text-xs font-bold text-blue-700 uppercase tracking-wider block mb-1">TIẾNG VIỆT</strong>
+                                    ${p.vi}
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+
+                container.innerHTML = html;
+            },
+
+            renderExplanations() {
+                const container = document.getElementById('explanations-list');
+                let html = `
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+                        <div class="flex items-center space-x-2 text-sky-700 font-bold text-xs uppercase tracking-wide mb-1">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span>Comprehensive Rationale & Evidence Guide</span>
+                        </div>
+                        <h2 class="text-xl font-extrabold text-slate-900">Careful Buyers, Careless Sellers — Phân Tích Đáp Án</h2>
+                        <p class="text-xs text-slate-500 mt-1">Click "Locate Text" or hover over any card below to scroll to and highlight the exact text sentence in the reading passage.</p>
+                    </div>
+                `;
+
+                questionsData.forEach(q => {
+                    html += `
+                        <div class="q-card bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4 transition-all hover:border-sky-400" id="q-card-${q.id}">
+                            <div class="flex items-start justify-between">
+                                <span class="bg-slate-100 text-slate-800 font-extrabold text-xs px-3 py-1 rounded-md border border-slate-200">
+                                    Question ${q.num} <span class="text-[10px] font-semibold text-slate-500">(${q.type})</span>
+                                </span>
+                                <div class="flex items-center space-x-2">
+                                    <button class="jump-btn bg-sky-50 hover:bg-sky-100 text-sky-700 font-bold text-xs px-2.5 py-1 rounded-md border border-sky-200 transition-colors flex items-center gap-1 cursor-pointer" data-q="${q.id}">
+                                        <i class="fa-solid fa-location-dot"></i> Locate Text
+                                    </button>
+                                    <span class="${q.badgeColor} text-white font-black text-xs px-3 py-1 rounded-full uppercase tracking-wider shadow-xs">
+                                        Answer: ${q.ansKey}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p class="text-sm font-bold text-slate-800 leading-relaxed">${q.prompt}</p>
+                            </div>
+
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-700 space-y-2">
+                                <div class="flex items-center text-sky-700 font-bold text-xs uppercase tracking-wider">
+                                    <i class="fa-solid fa-circle-check mr-1.5"></i>
+                                    <span>Detailed Rationale / Giải Thích:</span>
+                                </div>
+                                <p class="leading-relaxed font-medium text-slate-800">${this.currentLang === 'vi' ? q.explVi : q.explEn}</p>
+                            </div>
+
+                            ${q.synonyms ? `
+                                <div class="pt-2 border-t border-slate-100">
+                                    <h5 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center">
+                                        <i class="fa-solid fa-arrows-rotate mr-1.5 text-sky-600"></i> Paraphrase Keywords Table
+                                    </h5>
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full text-xs text-left border-collapse">
+                                            <thead>
+                                                <tr class="bg-sky-50/70 text-sky-900 font-semibold border-b border-sky-100">
+                                                    <th class="p-2">Question Keyword</th>
+                                                    <th class="p-2">Passage Equivalent</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-slate-100 text-slate-600">
+                                                ${q.synonyms.map(s => `
+                                                    <tr>
+                                                        <td class="p-2 font-medium text-slate-700">${s.q}</td>
+                                                        <td class="p-2 font-semibold text-sky-700">${s.p}</td>
+                                                    </tr>
+                                                `).join('')}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+            },
+
+            bindTargetEvents() {
+                const targets = document.querySelectorAll('.ans-target');
+                const qCards = document.querySelectorAll('.q-card');
+                const jumpBtns = document.querySelectorAll('.jump-btn');
+
+                const activatePair = (targetEl, cardEl, scrollLeft = false, scrollRight = false) => {
+                    document.querySelectorAll('.ans-target').forEach(t => t.classList.remove('active-target'));
+                    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('ring-2', 'ring-sky-600', 'bg-sky-50/40', 'border-sky-400'));
+
+                    if (targetEl) {
+                        targetEl.classList.add('active-target');
+                        if (scrollLeft) {
+                            targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }
+
+                    if (cardEl) {
+                        cardEl.classList.add('ring-2', 'ring-sky-600', 'bg-sky-50/40', 'border-sky-400');
+                        if (scrollRight) {
+                            cardEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }
+                    }
+
+                    this.startSmoothTracking();
+                };
+
+                const deactivateAll = () => {
+                    document.querySelectorAll('.ans-target').forEach(t => t.classList.remove('active-target'));
+                    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('ring-2', 'ring-sky-600', 'bg-sky-50/40', 'border-sky-400'));
+                    this.clearCanvas();
+                };
+
+                targets.forEach(target => {
+                    const qId = target.dataset.q;
+                    const qCard = document.getElementById(`q-card-${qId}`);
+
+                    target.addEventListener('mouseenter', () => activatePair(target, qCard, false, false));
+                    target.addEventListener('mouseleave', deactivateAll);
+                    target.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        activatePair(target, qCard, false, true);
+                    });
+                });
+
+                qCards.forEach(qCard => {
+                    const qId = qCard.id.replace('q-card-', '');
+                    const target = document.querySelector(`.ans-target[data-q="${qId}"]`);
+
+                    qCard.addEventListener('mouseenter', () => activatePair(target, qCard, false, false));
+                    qCard.addEventListener('mouseleave', deactivateAll);
+                    qCard.addEventListener('click', (e) => {
+                        if (e.target.closest('.jump-btn')) return;
+                        activatePair(target, qCard, true, false);
+                    });
+                });
+
+                jumpBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        const qId = btn.dataset.q;
+                        const target = document.querySelector(`.ans-target[data-q="${qId}"]`);
+                        const qCard = document.getElementById(`q-card-${qId}`);
+                        activatePair(target, qCard, true, false);
+                    });
+                });
+            },
+
+            startSmoothTracking() {
+                if (this.arrowAnimFrame) cancelAnimationFrame(this.arrowAnimFrame);
+                const startTime = performance.now();
+                const duration = 800;
+
+                const step = (now) => {
+                    this.drawConnections();
+                    if (now - startTime < duration) {
+                        this.arrowAnimFrame = requestAnimationFrame(step);
+                    }
+                };
+                this.arrowAnimFrame = requestAnimationFrame(step);
+            },
+
+            drawConnections() {
+                const activeTarget = document.querySelector('.ans-target.active-target');
+                if (activeTarget && this.showArrows) {
+                    const qId = activeTarget.dataset.q;
+                    const qCard = document.getElementById(`q-card-${qId}`);
+                    if (qCard) {
+                        this.drawArrow(activeTarget, qCard);
+                        return;
+                    }
+                }
+                this.clearCanvas();
+            },
+
+            drawArrow(fromEl, toEl) {
+                if (!fromEl || !toEl || window.innerWidth < 1024 || !this.showArrows) {
+                    this.clearCanvas();
+                    return;
+                }
+                
+                const svg = document.getElementById('svg-canvas');
+                const wrapper = document.getElementById('main-wrapper');
+                const leftPane = document.getElementById('left-pane');
+                const rightPane = document.getElementById('right-pane');
+
+                if (!svg || !wrapper || !leftPane || !rightPane) return;
+
+                const wrapperRect = wrapper.getBoundingClientRect();
+                const leftPaneRect = leftPane.getBoundingClientRect();
+                const rightPaneRect = rightPane.getBoundingClientRect();
+
+                const clientRects = fromEl.getClientRects();
+                let fromRect = fromEl.getBoundingClientRect();
+                if (clientRects.length > 0) {
+                    fromRect = clientRects[clientRects.length - 1];
+                }
+                const toRect = toEl.getBoundingClientRect();
+
+                const isFromVisible = (fromRect.bottom >= leftPaneRect.top && fromRect.top <= leftPaneRect.bottom);
+                const isToVisible = (toRect.bottom >= rightPaneRect.top && toRect.top <= rightPaneRect.bottom);
+
+                if (!isFromVisible || !isToVisible) {
+                    this.clearCanvas();
+                    return;
+                }
+
+                const x1 = Math.min(fromRect.right - wrapperRect.left, leftPaneRect.right - wrapperRect.left - 8);
+                const y1 = fromRect.top + (fromRect.height / 2) - wrapperRect.top;
+                
+                const x2 = toRect.left - wrapperRect.left;
+                const y2 = toRect.top + Math.min(36, toRect.height / 2) - wrapperRect.top;
+
+                const dx = Math.max(30, (x2 - x1) * 0.45);
+                const pathData = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
+
+                svg.innerHTML = `
+                    <defs>
+                        <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#0369a1" />
+                            <stop offset="100%" stop-color="#0284c7" />
+                        </linearGradient>
+                        <filter id="arrowGlowFilter" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#0369a1" flood-opacity="0.4"/>
+                        </filter>
+                        <marker id="arrowhead" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                            <polygon points="0 0, 9 3.5, 0 7" fill="#0284c7" />
+                        </marker>
+                    </defs>
+                    <path d="${pathData}" fill="none" stroke="url(#arrowGrad)" stroke-width="3" stroke-dasharray="7,4" class="animated-arrow-line" marker-end="url(#arrowhead)" filter="url(#arrowGlowFilter)"/>
+                    <circle cx="${x1}" cy="${y1}" r="4" fill="#0369a1" />
+                    <circle cx="${x2}" cy="${y2}" r="4" fill="#0284c7" />
+                `;
+            },
+
+            clearCanvas() {
+                const svg = document.getElementById('svg-canvas');
+                if (svg) svg.innerHTML = '';
+            },
+
+            renderVocabGrid() {
+                this.filterVocab();
+            },
+
+            filterVocab() {
+                const search = document.getElementById('vocab-search').value.toLowerCase();
+                const filter = document.getElementById('vocab-filter').value;
+                const grid = document.getElementById('vocab-cards-grid');
+
+                const filtered = vocabList.filter(item => {
+                    const matchSearch = item.word.toLowerCase().includes(search) || item.vi.toLowerCase().includes(search);
+                    const matchFilter = filter === 'all' || item.category === filter || item.type === filter;
+                    return matchSearch && matchFilter;
+                });
+
+                let html = '';
+                filtered.forEach(item => {
+                    html += `
+                        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col justify-between hover:border-sky-400 transition-all space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-[10px] font-black uppercase tracking-wider text-sky-700 bg-sky-50 px-2.5 py-1 rounded-md border border-sky-200">${item.type}</span>
+                                    <button onclick="app.speakWord('${item.word}')" class="text-slate-400 hover:text-sky-700 transition-colors" title="Listen pronunciation">
+                                        <i class="fa-solid fa-volume-high text-sm"></i>
+                                    </button>
+                                </div>
+                                <h3 class="text-xl font-extrabold text-slate-900 capitalize">${item.word}</h3>
+                                <p class="text-xs font-mono text-slate-500 mb-2">${item.phonetic}</p>
+                                <p class="text-sm font-bold text-sky-700 bg-sky-50/50 p-2 rounded-lg border border-sky-100 mb-3">${item.vi}</p>
+                                <p class="text-xs text-slate-600 leading-relaxed mb-3">${item.enDef}</p>
+                            </div>
+
+                            <div class="pt-3 border-t border-slate-100 space-y-2 text-xs">
+                                <div>
+                                    <span class="font-bold text-slate-700 block text-[10px] uppercase tracking-wider text-slate-400">Context in Passage:</span>
+                                    <p class="text-slate-600 italic">"${item.context}"</p>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-slate-700 block text-[10px] uppercase tracking-wider text-sky-700">Common Collocation:</span>
+                                    <p class="font-semibold text-sky-900">${item.collocation}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                grid.innerHTML = html || `<p class="text-sm text-slate-500 col-span-full text-center py-8">No vocabulary words match your search filters.</p>`;
+            },
+
+            speakWord(word) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const u = new SpeechSynthesisUtterance(word);
+                    u.lang = 'en-GB';
+                    u.rate = 0.9;
+                    window.speechSynthesis.speak(u);
+                }
+            },
+
+            setupFlashcard() {
+                this.updateFlashcard();
+            },
+
+            updateFlashcard() {
+                const item = vocabList[this.fcIndex];
+                this.fcFlipped = false;
+                document.getElementById('flashcard-inner').classList.remove('rotate-y-180');
+
+                document.getElementById('fc-category').textContent = `${item.type.toUpperCase()} • ${item.category.toUpperCase()}`;
+                document.getElementById('fc-word').textContent = item.word;
+                document.getElementById('fc-phonetic').textContent = item.phonetic;
+                document.getElementById('fc-meaning').textContent = item.vi;
+                document.getElementById('fc-context').textContent = `"${item.context}"`;
+                document.getElementById('fc-counter').textContent = `${this.fcIndex + 1} / ${vocabList.length}`;
+            },
+
+            setupQuiz() {
+                const quizBox = document.getElementById('quiz-box');
+                const sampleQuestions = [
+                    {
+                        q: "Which term refers to 'a great difference or inequality between two things'?",
+                        options: ["Injunction", "Disparity", "Doctrine", "Preference"],
+                        ans: 1,
+                        expl: "Disparity (danh từ) = Sự chênh lệch / sự khác biệt lớn."
+                    },
+                    {
+                        q: "What does 'lopsided' mean in decision-making?",
+                        options: ["Balanced equally", "With one side disproportionately weighted or lower", "Fast and effective", "Completely random"],
+                        ans: 1,
+                        expl: "Lopsided (tính từ) = Lệch một bên, không cân đối."
+                    },
+                    {
+                        q: "Which word means 'based on observation or experience rather than theory'?",
+                        options: ["Empirical", "Impatient", "Rushed", "Deliberate"],
+                        ans: 0,
+                        expl: "Empirical (tính từ) = Dựa trên thực nghiệm và nghiên cứu thực tế."
+                    }
+                ];
+
+                let html = `<h3 class="text-xl font-extrabold text-slate-900 border-b pb-3 border-slate-100 flex items-center gap-2"><i class="fa-solid fa-vial text-sky-700"></i> IELTS Vocab Challenge — Investors</h3>`;
+                sampleQuestions.forEach((q, idx) => {
+                    html += `
+                        <div class="space-y-3 pt-2" id="quiz-q-${idx}">
+                            <p class="text-sm font-bold text-slate-800">${idx + 1}. ${q.q}</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                ${q.options.map((opt, oIdx) => `
+                                    <button onclick="app.checkQuiz(${idx}, ${oIdx}, ${q.ans})" class="quiz-opt-btn text-left p-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-all">
+                                        ${String.fromCharCode(65 + oIdx)}. ${opt}
+                                    </button>
+                                `).join('')}
+                            </div>
+                            <div class="quiz-feedback hidden text-xs p-3 rounded-xl"></div>
+                        </div>
+                    `;
+                });
+
+                quizBox.innerHTML = html;
+            },
+
+            checkQuiz(qIdx, selected, correct) {
+                const qDiv = document.getElementById(`quiz-q-${qIdx}`);
+                const btns = qDiv.querySelectorAll('.quiz-opt-btn');
+                const feedback = qDiv.querySelector('.quiz-feedback');
+
+                btns.forEach((btn, idx) => {
+                    btn.disabled = true;
+                    if (idx === correct) {
+                        btn.className = "quiz-opt-btn text-left p-3 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-900 font-bold text-xs";
+                    } else if (idx === selected) {
+                        btn.className = "quiz-opt-btn text-left p-3 rounded-xl border-2 border-red-400 bg-red-50 text-red-900 font-bold text-xs";
+                    }
+                });
+
+                feedback.classList.remove('hidden');
+                if (selected === correct) {
+                    feedback.className = "quiz-feedback text-xs p-3 rounded-xl bg-emerald-100 text-emerald-900 font-bold border border-emerald-200";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Correct! Excellent job.`;
+                } else {
+                    feedback.className = "quiz-feedback text-xs p-3 rounded-xl bg-red-100 text-red-900 font-bold border border-red-200";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-xmark mr-1"></i> Incorrect. Option ${String.fromCharCode(65 + correct)} is the right answer.`;
+                }
+            }
+        };
+
+        window.onload = () => app.init();
+    </script>
+</body>
+</html>

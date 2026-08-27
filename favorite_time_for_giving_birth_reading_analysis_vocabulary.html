@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorite time for giving birth — IELTS Reading Analysis, Translation & Vocabulary</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --app-font-size: 16px;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-size: var(--app-font-size);
+            overflow-x: hidden;
+        }
+        .reading-text {
+            font-family: 'Merriweather', serif;
+            line-height: 2.15;
+            color: #334155;
+        }
+        .reading-text p {
+            margin-bottom: 1.5rem;
+            text-indent: 1.25rem;
+        }
+        .reading-text p:first-of-type {
+            text-indent: 0;
+        }
+
+        .paragraph-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 0.85rem;
+            margin-right: 0.4rem;
+            color: #c026d3;
+            background-color: #fae8ff;
+            border: 1px solid #f5d0fe;
+            text-indent: 0;
+            vertical-align: middle;
+        }
+
+        /* Highlight Targets & Interactive States */
+        .ans-target {
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            position: relative;
+            display: inline;
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+            text-indent: 0;
+        }
+
+        /* Question target color themes */
+        .ans-target-q1 { background-color: #fef08a; border-bottom: 2px solid #eab308; color: #854d0e; }
+        .ans-target-q2 { background-color: #bae6fd; border-bottom: 2px solid #0284c7; color: #075985; }
+        .ans-target-q3 { background-color: #bbf7d0; border-bottom: 2px solid #16a34a; color: #166534; }
+        .ans-target-q4 { background-color: #fbcfe8; border-bottom: 2px solid #db2777; color: #9d174d; }
+
+        .q-badge {
+            display: inline-block;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72em;
+            font-weight: 800;
+            padding: 1px 6px;
+            border-radius: 4px;
+            margin-right: 4px;
+            vertical-align: baseline;
+            line-height: 1.2;
+            color: #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            text-indent: 0;
+            user-select: none;
+        }
+
+        .ans-target:hover, .ans-target.active-target {
+            outline: 3px solid #c026d3;
+            box-shadow: 0 0 15px rgba(192, 38, 211, 0.4);
+            filter: brightness(0.96);
+            z-index: 20;
+        }
+
+        /* Floating Evidence Popover */
+        .explanation-popover {
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            opacity: 0;
+            visibility: hidden;
+            width: 310px;
+            background-color: #0f172a;
+            color: #f8fafc;
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 0.82rem;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.3);
+            z-index: 50;
+            transition: all 0.25s ease;
+            pointer-events: none;
+            line-height: 1.45;
+            font-weight: normal;
+        }
+        .explanation-popover::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: #0f172a transparent transparent transparent;
+        }
+        .ans-target:hover .explanation-popover, .ans-target.active-target .explanation-popover {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Flashcard Animation */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* SVG Connections */
+        #svg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 30;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .tab-btn.active {
+            background-color: #c026d3;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(192, 38, 211, 0.3);
+        }
+
+        @keyframes arrowFlow {
+            from { stroke-dashoffset: 26; }
+            to { stroke-dashoffset: 0; }
+        }
+        .animated-arrow-line {
+            animation: arrowFlow 1s linear infinite;
+        }
+
+        .lang-btn.active {
+            background-color: #0f172a;
+            color: white;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col bg-slate-100">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-white border-b border-slate-200 px-4 sm:px-6 py-3 flex flex-col md:flex-row justify-between items-center shadow-xs shrink-0 gap-3 z-40">
+        <div class="flex items-center space-x-3">
+            <div class="bg-fuchsia-700 text-white p-2.5 rounded-xl shadow-sm">
+                <i class="fa-solid fa-baby text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold text-slate-800">Favorite time for giving birth — Reading Analysis & Vocabulary</h1>
+                <p class="text-xs text-slate-500 font-medium">IELTS Academic Master Companion — Birth Seasonality & Evolutionary Biology</p>
+            </div>
+        </div>
+
+        <!-- Controls: Language Switcher, Font Resize & Arrows Toggle -->
+        <div class="flex items-center space-x-3 flex-wrap gap-y-2">
+            <!-- Language Switcher -->
+            <div class="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200" id="lang-switcher">
+                <button class="lang-btn active px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="en">EN</button>
+                <button class="lang-btn px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="vi">VIE</button>
+                <button class="lang-btn px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="dual">Parallel (EN/VIE)</button>
+            </div>
+
+            <!-- Font Resizer -->
+            <div class="flex items-center space-x-1 bg-slate-100 p-1 rounded-lg border border-slate-200">
+                <button id="btn-dec-font" class="w-7 h-7 flex items-center justify-center rounded bg-white shadow-xs hover:bg-slate-50 font-bold text-xs text-slate-700" title="Decrease Font">A-</button>
+                <button id="btn-inc-font" class="w-7 h-7 flex items-center justify-center rounded bg-white shadow-xs hover:bg-slate-50 font-bold text-xs text-slate-700" title="Increase Font">A+</button>
+            </div>
+
+            <!-- Toggle Arrow Canvas -->
+            <button id="btn-toggle-arrows" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-fuchsia-700 text-white border border-fuchsia-700 font-medium text-xs hover:bg-fuchsia-800 transition-colors shadow-xs">
+                <i class="fa-solid fa-route"></i>
+                <span class="hidden sm:inline">Arrows</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-white border-b border-slate-200 px-6 py-2 overflow-x-auto shrink-0 shadow-xs">
+        <div class="flex space-x-2 min-w-max" id="nav-tabs">
+            <button class="tab-btn active px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="analysis">
+                <i class="fa-solid fa-book-open mr-1.5"></i> 1. Passage & Question Analysis (Q1–Q4)
+            </button>
+            <button class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="vocabulary">
+                <i class="fa-solid fa-spell-check mr-1.5"></i> 2. IELTS Vocabulary Suite (Band 7.0–9.0)
+            </button>
+            <button class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="flashcards">
+                <i class="fa-solid fa-brain mr-1.5"></i> 3. Vocab Flashcards & Practice Quiz
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="flex-1 overflow-hidden relative" id="main-wrapper">
+        <svg id="svg-canvas"></svg>
+
+        <!-- TAB 1: Passage & Question Analysis -->
+        <div id="tab-analysis-content" class="h-full grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden">
+            <!-- Left Pane: Passage View -->
+            <section id="left-pane" class="lg:col-span-6 bg-white overflow-y-auto p-6 lg:p-10 border-r border-slate-200 relative">
+                <div class="max-w-3xl mx-auto">
+                    <div class="flex items-center justify-between mb-6 pb-3 border-b border-slate-100">
+                        <span class="text-xs font-bold uppercase tracking-wider text-fuchsia-700 bg-fuchsia-50 px-3 py-1 rounded-md border border-fuchsia-200">
+                            <i class="fa-solid fa-dna mr-1.5"></i> Reading Passage — Birth Seasonality
+                        </span>
+                        <span class="text-xs text-slate-400 font-medium"><i class="fa-solid fa-mouse-pointer mr-1"></i> Hover/Click highlighted evidence</span>
+                    </div>
+
+                    <div id="passage-container" class="reading-text text-base leading-relaxed text-slate-700 space-y-4">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Pane: Questions & Detailed Explanations -->
+            <section id="right-pane" class="lg:col-span-6 bg-slate-50 overflow-y-auto p-6 lg:p-10">
+                <div class="max-w-2xl mx-auto space-y-6" id="explanations-list">
+                    <!-- Rendered dynamically -->
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB 2: Vocabulary Suite -->
+        <div id="tab-vocabulary-content" class="h-full bg-slate-50 overflow-y-auto p-6 lg:p-10 hidden">
+            <div class="max-w-6xl mx-auto space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-book-bookmark text-fuchsia-700"></i> Essential IELTS Reading Vocabulary
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">High-yield terms on evolutionary biology, seasonality, demographics, and social ecology.</p>
+                    </div>
+
+                    <div class="flex items-center space-x-3 w-full md:w-auto">
+                        <div class="relative flex-1 md:w-64">
+                            <i class="fa-solid fa-search absolute left-3 top-3 text-slate-400 text-xs"></i>
+                            <input type="text" id="vocab-search" placeholder="Search word or translation..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-fuchsia-600">
+                        </div>
+                        <select id="vocab-filter" class="bg-slate-50 border border-slate-200 text-xs font-semibold rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-fuchsia-600">
+                            <option value="all">All Categories</option>
+                            <option value="noun">Nouns</option>
+                            <option value="verb">Verbs</option>
+                            <option value="adjective">Adjectives</option>
+                            <option value="biology">Biology & Demographics</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="vocab-cards-grid">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: Vocab Flashcards & Practice Quiz -->
+        <div id="tab-flashcards-content" class="h-full bg-slate-50 overflow-y-auto p-6 lg:p-10 hidden">
+            <div class="max-w-3xl mx-auto space-y-8">
+                <div class="flex justify-center space-x-3">
+                    <button id="btn-mode-flashcard" class="px-5 py-2.5 rounded-xl text-xs font-extrabold bg-fuchsia-700 text-white shadow-sm transition-all">
+                        <i class="fa-solid fa-clone mr-2"></i> Interactive Flashcards
+                    </button>
+                    <button id="btn-mode-quiz" class="px-5 py-2.5 rounded-xl text-xs font-extrabold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all">
+                        <i class="fa-solid fa-circle-question mr-2"></i> Quick Quiz Mode
+                    </button>
+                </div>
+
+                <!-- Flashcard Display Box -->
+                <div id="flashcard-view" class="flex flex-col items-center space-y-6">
+                    <p class="text-xs text-slate-500 font-semibold">Click the card to flip between Word and Vietnamese Definition</p>
+                    
+                    <div class="w-full max-w-md h-72 perspective-1000 cursor-pointer" id="flashcard-wrapper">
+                        <div id="flashcard-inner" class="relative w-full h-full duration-500 transform-style-3d transition-transform">
+                            <!-- Front -->
+                            <div class="absolute w-full h-full bg-white rounded-3xl border border-slate-200 shadow-md p-8 flex flex-col justify-between items-center text-center backface-hidden">
+                                <span id="fc-category" class="text-[10px] uppercase font-extrabold tracking-widest text-fuchsia-700 bg-fuchsia-50 px-3 py-1 rounded-full border border-fuchsia-200">Category</span>
+                                <div>
+                                    <h3 id="fc-word" class="text-3xl font-black text-slate-900 mb-2">Word</h3>
+                                    <p id="fc-phonetic" class="text-sm font-mono text-slate-500">/phonetic/</p>
+                                </div>
+                                <span class="text-xs font-bold text-fuchsia-700 flex items-center gap-1"><i class="fa-solid fa-rotate mr-1"></i> Flip for meaning</span>
+                            </div>
+                            <!-- Back -->
+                            <div class="absolute w-full h-full bg-slate-900 text-white rounded-3xl shadow-md p-8 flex flex-col justify-between items-center text-center backface-hidden rotate-y-180">
+                                <span class="text-[10px] uppercase font-extrabold tracking-widest text-fuchsia-400 bg-slate-800 px-3 py-1 rounded-full">Vietnamese Meaning</span>
+                                <div>
+                                    <h4 id="fc-meaning" class="text-2xl font-bold text-fuchsia-400 mb-3">Nghĩa tiếng Việt</h4>
+                                    <p id="fc-context" class="text-xs text-slate-300 italic leading-relaxed">"Context sentence..."</p>
+                                </div>
+                                <span class="text-xs font-bold text-slate-400 flex items-center gap-1"><i class="fa-solid fa-rotate mr-1"></i> Flip back</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <button id="btn-fc-prev" class="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 flex items-center justify-center font-bold text-base shadow-xs transition-all">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <span id="fc-counter" class="text-xs font-bold text-slate-600 px-4 py-2 bg-white rounded-xl border border-slate-200">1 / 10</span>
+                        <button id="btn-fc-next" class="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 flex items-center justify-center font-bold text-base shadow-xs transition-all">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Display Box -->
+                <div id="quiz-view" class="hidden space-y-6">
+                    <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6" id="quiz-box">
+                        <!-- Quiz populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const passageData = [
+            {
+                pNum: 'A',
+                en: `Does it ever seem like you’re invited to an awful lot of summer birthday gatherings? For good reason. In the United States, most births occur between June and early November. Count back nine months, and you’ll see that places most conceptions in the fall and winter. What’s going on? Is the crisp autumn air, or the joy (or anxiety) of the holiday season, triggering more unprotected sexual intercourse? Or is it something else entirely?`,
+                vi: `Đã bao giờ bạn cảm thấy mình được mời tham dự rất nhiều buổi tiệc sinh nhật vào mùa hè? Điều đó hoàn toàn có lý do. Tại Hoa Kỳ, hầu hết các ca sinh diễn ra từ tháng 6 đến đầu tháng 11. Đếm ngược lại chín tháng, bạn sẽ thấy thời điểm thụ thai phần lớn rơi vào mùa thu và mùa đông. Điều gì đang diễn ra? Liệu không khí se lạnh của mùa thu, hay niềm vui (hoặc sự lo âu) của mùa lễ hội có kích hoạt nhiều cuộc quan hệ tình dục không sử dụng biện pháp bảo vệ hơn? Hay đó là một điều gì đó hoàn toàn khác?`
+            },
+            {
+                pNum: 'B',
+                en: `It turns out reproduction is seasonal across all living organisms, from plants to insects, to reptiles, to birds and mammals – including human beings. The ultimate explanation for this phenomenon is an evolutionary one. Earth’s environment is seasonal. Above or below the <span class="ans-target ans-target-q1" data-q="q1"><span class="q-badge bg-yellow-600">Q1</span>equator<span class="explanation-popover"><strong class="text-fuchsia-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q1 Target Evidence</strong>"Above or below the equator, the year is structured by the winter, spring, summer and fall. In equatorial regions, the wet and dry seasons punctuate the year."</span></span>, the year is structured by the winter, spring, summer and fall. In equatorial regions, the wet and dry seasons punctuate the year. Organisms have evolved strategies to reproduce at the time of year that will maximize their lifetime reproductive success. Humans are no exception and maintain this evolutionary outcome: birth seasonality. Researchers, including us, have recently been working to understand more about why births are seasonal because these patterns can have a big impact on childhood disease outbreaks.`,
+                vi: `Hóa ra sự sinh sản mang tính mùa vụ ở tất cả các sinh vật sống, từ thực vật, côn trùng, bò sát, đến các loài chim và động vật có vú – bao gồm cả con người. Lời giải thích tối hậu cho hiện tượng này mang tính tiến hóa. Môi trường của Trái Đất có tính mùa. Phía trên hoặc phía dưới <span class="ans-target ans-target-q1" data-q="q1"><span class="q-badge bg-yellow-600">Q1</span>đường xích đạo (equator)<span class="explanation-popover"><strong class="text-fuchsia-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q1</strong>Ở các vùng phía trên hoặc phía dưới xích đạo (equator) có 4 mùa rõ rệt; ở vùng xích đạo có mùa mưa và mùa khô.</span></span>, một năm được cấu trúc bởi các mùa đông, xuân, hạ và thu. Ở các vùng xích đạo, mùa mưa và mùa khô tạo nên nhịp điệu của cả năm. Các sinh vật đã tiến hóa những chiến lược để sinh sản vào thời điểm trong năm giúp tối đa hóa khả năng thành công sinh sản trong suốt cuộc đời của chúng. Con người cũng không phải là ngoại lệ và duy trì kết quả tiến hóa này: tính mùa vụ trong sinh sản. Các nhà nghiên cứu, bao gồm cả chúng tôi, gần đây đã nỗ lực tìm hiểu sâu hơn về lý do tại sao các ca sinh lại mang tính mùa vụ, bởi vì những mô hình này có thể có tác động rất lớn đến các đợt bùng phát dịch bệnh ở trẻ em.`
+            },
+            {
+                pNum: 'C',
+                en: `The monthly birth rate over time was per 1,000 people. Over the decades, it’s not a smooth line because each year has an internal peak. The annual timing of each state’s peak in number of births correlates with its latitude. More northern regions see a birth peak in June or July while more southern areas have more births in October or November. The pattern holds even as the overall birth rate varies in different states.`,
+                vi: `Tỷ lệ sinh hàng tháng theo thời gian được tính trên 1.000 dân. Qua nhiều thập kỷ, đây không phải là một đường thẳng mượt mà bởi vì mỗi năm đều có một đỉnh điểm nội tại riêng. Thời điểm đạt đỉnh số lượng ca sinh hàng năm của mỗi bang có mối tương quan chặt chẽ với vĩ độ của bang đó. Các khu vực phía bắc nhiều hơn thường chứng kiến đỉnh sinh nở vào tháng 6 hoặc tháng 7, trong khi các khu vực phía nam lại ghi nhận nhiều ca sinh hơn vào tháng 10 hoặc tháng 11. Mô hình này vẫn giữ nguyên ngay cả khi tỷ lệ sinh tổng thể có sự chênh lệch giữa các bang khác nhau.`
+            },
+            {
+                pNum: 'D',
+                en: `The first studies demonstrating human birth seasonality date back to the early 1800s. In some countries, local customs can also explain birth seasonality. For example, in the 1990s, researchers showed that the traditional July-August <span class="ans-target ans-target-q2" data-q="q2"><span class="q-badge bg-sky-600">Q2</span>wedding<span class="explanation-popover"><strong class="text-fuchsia-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q2 Target Evidence</strong>"...the traditional July-August wedding season in Catholic communities in Poland resulted in lots of births in the spring."</span></span> season in Catholic communities in Poland resulted in lots of births in the spring. But wedding season does not drive birth seasonality everywhere, and there is only a small <span class="ans-target ans-target-q3" data-q="q3"><span class="q-badge bg-emerald-600">Q3</span>correlation<span class="explanation-popover"><strong class="text-fuchsia-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q3 Target Evidence</strong>"...there is only a small correlation between weddings and births 9 to 15 months later in most locations."</span></span> between weddings and births 9 to 15 months later in most locations. Thus, nuptial beds are not the full story.`,
+                vi: `Những nghiên cứu đầu tiên chứng minh tính mùa vụ của sinh sản ở người bắt đầu từ những năm đầu thế kỷ 19. Ở một số quốc gia, phong tục tập quán địa phương cũng có thể giải thích tính mùa vụ trong sinh đẻ. Chẳng hạn, vào những năm 1990, các nhà nghiên cứu đã chỉ ra rằng mùa <span class="ans-target ans-target-q2" data-q="q2"><span class="q-badge bg-sky-600">Q2</span>cưới hỏi (wedding)<span class="explanation-popover"><strong class="text-fuchsia-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q2</strong>Mùa cưới (wedding season) truyền thống tháng 7-8 ở các cộng đồng Công giáo Ba Lan dẫn đến nhiều ca sinh vào mùa xuân tiếp theo.</span></span> truyền thống vào tháng 7 - tháng 8 tại các cộng đồng Công giáo ở Ba Lan đã dẫn đến rất nhiều ca sinh nở vào mùa xuân tiếp theo. Nhưng mùa cưới không phải là yếu tố chi phối tính mùa vụ của sinh sản ở mọi nơi, và chỉ có một <span class="ans-target ans-target-q3" data-q="q3"><span class="q-badge bg-emerald-600">Q3</span>mối tương quan (correlation)<span class="explanation-popover"><strong class="text-fuchsia-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q3</strong>Chỉ có một mối tương quan nhỏ (small correlation) giữa các đám cưới và tỷ lệ sinh nở 9-15 tháng sau đó.</span></span> nhỏ giữa các đám cưới và các ca sinh từ 9 đến 15 tháng sau đó ở hầu hết các địa điểm. Do đó, chuyện giường chiếu tân hôn không phải là toàn bộ câu chuyện.`
+            },
+            {
+                pNum: 'E',
+                en: `Research shows that the seasonality of births correlates with changes in local temperature and day length. And regions with extreme temperatures typically have two peaks in births every year. For example, data from the early 1900s showed two pronounced birth peaks per year in West Greenland and Eastern Europe. Rural populations tend to have a more dramatic seasonal birth pulse than urban populations, probably because country dwellers may be more subject to environmental conditions, including changes in temperature and day length. Environmental factors like these could influence human sexual behavior.`,
+                vi: `Nghiên cứu chỉ ra rằng tính mùa vụ của sinh sản có mối tương quan với những thay đổi về nhiệt độ địa phương và độ dài thời gian ban ngày. Và những khu vực có nhiệt độ khắc nghiệt thường có hai đỉnh sinh nở vào mỗi năm. Chẳng hạn, dữ liệu từ đầu những năm 1900 cho thấy hai đỉnh sinh rõ rệt mỗi năm ở Tây Greenland và Đông Âu. Các quần thể dân cư nông thôn có xu hướng có nhịp sinh sản theo mùa mạnh mẽ hơn so với dân cư thành thị, có lẽ là do những người sống ở nông thôn chịu tác động trực tiếp nhiều hơn từ các điều kiện môi trường, bao gồm cả những thay đổi về nhiệt độ và độ dài ban ngày. Các yếu tố môi trường như thế này có thể ảnh hưởng đến hành vi tình dục của con người.`
+            },
+            {
+                pNum: 'F',
+                en: `Additionally, as in other animals, these environmental changes could drive seasonal changes in fertility. This means that, rather than just an increase in frequency of sexual intercourse, female and/or male fertility may change throughout the year, as an endogenous biological phenomenon, making people more likely to conceive at certain times – with the prerequisite of sexual intercourse, of course. Biologists know that the fertility of nonhuman mammals is influenced by day length, which may act like a reproductive calendar. For example, deer use the shortening days of autumn as a signal for timing reproduction. Females get pregnant in the fall and carry their pregnancy through winter. The goal is to give birth at a time when plenty of resources are available for newborns – being born in springtime is evolutionarily beneficial. Humans may not be so different from other mammals. Day-length has the potential to influence human fertility and it does seem to explain the patterns of birth seasonality in some places, but not others. In addition to the length of day, researchers have shown that social status and changes in the standard of living also affect birth seasonality. There seems to be no single driver for birth seasonality in people, with an array of social, environmental and cultural factors all playing a role.`,
+                vi: `Ngoài ra, tương tự như ở các loài động vật khác, những biến đổi môi trường này có thể thúc đẩy những thay đổi theo mùa trong khả năng sinh sản. Điều này có nghĩa là, thay vì chỉ là sự gia tăng tần suất quan hệ tình dục, khả năng sinh sản của nữ giới và/hoặc nam giới có thể thay đổi trong suốt cả năm như một hiện tượng sinh học nội sinh, khiến con người dễ thụ thai hơn vào những thời điểm nhất định – tất nhiên với điều kiện tiên quyết là phải có quan hệ tình dục. Các nhà sinh học biết rằng khả năng sinh sản của các loài thú không phải con người chịu ảnh hưởng bởi độ dài ban ngày, vốn có thể hoạt động như một chiếc đồng hồ sinh sản. Ví dụ, loài hươu sử dụng những ngày ngắn lại của mùa thu làm tín hiệu định thời điểm sinh sản. Hươu cái mang thai vào mùa thu và duy trì thai kỳ suốt mùa đông. Mục tiêu là để sinh con vào thời điểm có nguồn tài nguyên dồi dào cho con non – việc được sinh ra vào mùa xuân mang lại lợi ích tiến hóa lớn. Con người có thể không quá khác biệt so với các loài thú khác. Độ dài ban ngày có tiềm năng ảnh hưởng đến khả năng sinh sản của con người và nó dường như giải thích được các mô hình mùa vụ sinh nở ở một số nơi, dù không phải ở mọi nơi. Bên cạnh độ dài của ngày, các nhà nghiên cứu đã chứng minh rằng địa vị xã hội và sự thay đổi trong mức sống cũng ảnh hưởng đến tính mùa vụ của sinh sản. Dường như không có một yếu tố thúc đẩy duy nhất nào cho tính mùa vụ sinh nở ở người, mà cả một tập hợp các yếu tố xã hội, môi trường và văn hóa đều đóng vai trò nhất định.`
+            },
+            {
+                pNum: 'G',
+                en: `Additionally, urban residents are believed to be less susceptible because they are less affected by environmental changes than their <span class="ans-target ans-target-q4" data-q="q4"><span class="q-badge bg-pink-600">Q4</span>country<span class="explanation-popover"><strong class="text-fuchsia-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q4 Target Evidence</strong>"Rural populations... probably because country dwellers may be more subject to environmental conditions..." (country / rural dwellers as counterparts to urban residents).</span></span> counterparts. Country dwellers spend more time outdoors and are directly exposed to nature.`,
+                vi: `Ngoài ra, cư dân thành thị được cho là ít bị ảnh hưởng hơn bởi vì họ ít chịu tác động từ những thay đổi của môi trường so với các đồng nghiệp ở vùng <span class="ans-target ans-target-q4" data-q="q4"><span class="q-badge bg-pink-600">Q4</span>nông thôn / đồng quê (country / country dwellers)<span class="explanation-popover"><strong class="text-fuchsia-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q4</strong>Cư dân đô thị ít bị ảnh hưởng hơn so với cư dân nông thôn/đồng quê (country counterparts / country dwellers).</span></span> của họ. Những người sống ở nông thôn dành nhiều thời gian hơn ở ngoài trời và tiếp xúc trực tiếp với thiên nhiên.`
+            },
+            {
+                pNum: 'H',
+                en: `However, people are starting to lose birth seasonality throughout the Northern Hemisphere. There are two pieces of evidence to support this. First, the strength of the birth pulse – from June to November in the U.S. – has been decreasing for decades; and second, locations that had two birth peaks per year now only have one. This loss of birth seasonality may be partially due to social factors, such as pregnancy planning and the increasing disconnect humans have with the natural environment and, therefore, the seasons. The root of this change is likely tied to industrialization and its downstream societal effects, including indoor work, fewer seasonal jobs, access to family planning, and modern housing and artificial light that obscures the natural day length that could influence fertility. Whatever the cause of birth seasonality, one thing remains clear, at least here in the U.S. – right now remains the prime time for conception.`,
+                vi: `Tuy nhiên, con người đang bắt đầu mất dần tính mùa vụ trong sinh sản trên khắp Bắc Bán cầu. Có hai bằng chứng ủng hộ điều này. Thứ nhất, cường độ của đợt bùng nổ sinh đẻ – từ tháng 6 đến tháng 11 ở Hoa Kỳ – đã suy giảm trong nhiều thập kỷ qua; và thứ hai, các địa điểm từng có hai đỉnh sinh mỗi năm giờ đây chỉ còn lại một đỉnh. Sự mất mát tính mùa vụ sinh sản này có thể một phần là do các yếu tố xã hội, chẳng hạn như kế hoạch hóa gia đình và sự mất kết nối ngày càng tăng của con người với môi trường tự nhiên, và do đó, với các mùa trong năm. Nguồn gốc của sự thay đổi này có khả năng gắn liền với quá trình công nghiệp hóa và những tác động xã hội kéo theo sau đó, bao gồm làm việc trong nhà, ít công việc mang tính mùa vụ hơn, khả năng tiếp cận kế hoạch hóa gia đình tốt hơn, cùng với nhà ở hiện đại và ánh sáng nhân tạo đã làm lu mờ độ dài ngày tự nhiên vốn có thể tác động đến khả năng thụ thai. Dù nguyên nhân của tính mùa vụ sinh sản là gì, một điều vẫn luôn rõ ràng, ít nhất là tại Hoa Kỳ – thời điểm hiện tại vẫn là thời kỳ hoàng kim lý tưởng nhất cho việc thụ thai.`
+            }
+        ];
+
+        const questionsData = [
+            {
+                id: 'q1',
+                num: '1',
+                type: 'Summary Completion (Max 1 word)',
+                ansKey: 'equator',
+                badgeColor: 'bg-yellow-600',
+                prompt: 'Evolution is seen as the main cause of birth seasonality. Geographically, there are four seasons in regions far from the 1 ____________ or two seasons in those near it; animals have to choose the optimal season to give birth for higher chances of survival.',
+                explEn: 'Paragraph B explicitly states: "Above or below the equator, the year is structured by the winter, spring, summer and fall. In equatorial regions, the wet and dry seasons punctuate the year." Thus, regions far from the equator have four seasons.',
+                explVi: 'Đoạn B nêu rõ: Phía trên hoặc phía dưới xích đạo (equator) năm có 4 mùa, trong khi các vùng xích đạo chỉ có 2 mùa (mưa và khô). Do đó từ cần điền là "equator".',
+                synonyms: [
+                    { q: 'regions far from the', p: 'Above or below the equator' },
+                    { q: 'two seasons in those near it', p: 'In equatorial regions, the wet and dry seasons' }
+                ]
+            },
+            {
+                id: 'q2',
+                num: '2',
+                type: 'Summary Completion (Max 1 word)',
+                ansKey: 'wedding / weddings',
+                badgeColor: 'bg-sky-600',
+                prompt: 'Although some people believe more children are born in spring than other seasons possibly because the 2 ____________ of their parents is traditionally and religiously held in the summer...',
+                explEn: 'Paragraph D states: "...the traditional July-August wedding season in Catholic communities in Poland resulted in lots of births in the spring." "wedding" fits grammatically as a single word.',
+                explVi: 'Đoạn D chỉ ra: Mùa cưới (wedding season) truyền thống vào tháng 7-8 dẫn đến nhiều ca sinh vào mùa xuân. Từ đơn cần điền là "wedding".',
+                synonyms: [
+                    { q: 'traditionally held in the summer', p: 'traditional July-August wedding season' }
+                ]
+            },
+            {
+                id: 'q3',
+                num: '3',
+                type: 'Summary Completion (Max 1 word)',
+                ansKey: 'correlation',
+                badgeColor: 'bg-emerald-600',
+                prompt: '...the 3 ____________ between such an event and later birth is not strong enough to account for this phenomenon.',
+                explEn: 'Paragraph D states: "...and there is only a small correlation between weddings and births 9 to 15 months later in most locations." "correlation" means the connection/link.',
+                explVi: 'Đoạn D nêu: Chỉ có một mối tương quan nhỏ (small correlation) giữa lễ cưới và ca sinh 9-15 tháng sau đó. Từ cần điền là "correlation".',
+                synonyms: [
+                    { q: 'not strong enough', p: 'only a small' },
+                    { q: 'between such an event and later birth', p: 'between weddings and births 9 to 15 months later' }
+                ]
+            },
+            {
+                id: 'q4',
+                num: '4',
+                type: 'Summary Completion (Max 1 word)',
+                ansKey: 'country / rural',
+                badgeColor: 'bg-pink-600',
+                prompt: 'Additionally, changes in temperature and day length can also be a cause of birth seasonality to which urban residents are believed to be less susceptible because they are less affected by such changes than their 4 ____________ counterparts.',
+                explEn: 'Paragraph E states: "Rural populations tend to have a more dramatic seasonal birth pulse than urban populations, probably because country dwellers may be more subject to environmental conditions..." "country" or "rural" describes their counterparts.',
+                explVi: 'Đoạn E & G so sánh cư dân đô thị (urban residents) ít bị ảnh hưởng hơn so với cư dân nông thôn/đồng quê (country / rural counterparts).',
+                synonyms: [
+                    { q: 'urban residents less affected', p: 'country dwellers may be more subject to environmental conditions' },
+                    { q: 'counterparts', p: 'country / rural dwellers' }
+                ]
+            }
+        ];
+
+        const vocabList = [
+            {
+                word: 'conception',
+                phonetic: '/kənˈsep.ʃən/',
+                vi: 'Sự thụ thai / Sự bắt đầu mang thai',
+                enDef: 'The process of becoming pregnant involving the fertilization of an ovum.',
+                type: 'noun',
+                category: 'biology',
+                context: 'Places most conceptions in the fall and winter.',
+                collocation: 'prime time for conception / moment of conception'
+            },
+            {
+                word: 'seasonality',
+                phonetic: '/ˌsiː.zənˈæl.ə.ti/',
+                vi: 'Tính mùa vụ / Biến động theo mùa',
+                enDef: 'The quality of being seasonal or occurring at specific times of the year.',
+                type: 'noun',
+                category: 'biology',
+                context: 'Maintain this evolutionary outcome: birth seasonality.',
+                collocation: 'birth seasonality / loss of seasonality'
+            },
+            {
+                word: 'equatorial',
+                phonetic: '/ˌek.wəˈtɔː.ri.əl/',
+                vi: 'Thuộc vùng xích đạo',
+                enDef: 'Relating to or near the equator of the Earth.',
+                type: 'adjective',
+                category: 'biology',
+                context: 'In equatorial regions, the wet and dry seasons punctuate the year.',
+                collocation: 'equatorial climate / equatorial regions'
+            },
+            {
+                word: 'punctuate',
+                phonetic: '/ˈpʌŋk.tʃu.eɪt/',
+                vi: 'Điểm xuyết / Ngắt quãng định kỳ',
+                enDef: 'To occur at intervals throughout an event or period of time.',
+                type: 'verb',
+                category: 'verb',
+                context: 'The wet and dry seasons punctuate the year in equatorial regions.',
+                collocation: 'punctuate the year / punctuated by events'
+            },
+            {
+                word: 'nuptial',
+                phonetic: '/ˈnʌp.ʃəl/',
+                vi: 'Thuộc về hôn nhân / Hôn lễ',
+                enDef: 'Relating to marriage or weddings.',
+                type: 'adjective',
+                category: 'adjective',
+                context: 'Thus, nuptial beds are not the full story.',
+                collocation: 'nuptial ceremony / nuptial bliss'
+            },
+            {
+                word: 'correlation',
+                phonetic: '/ˌkɒr.əˈleɪ.ʃən/',
+                vi: 'Mối tương quan / Mối liên hệ',
+                enDef: 'A mutual relationship or connection between two or more things.',
+                type: 'noun',
+                category: 'noun',
+                context: 'There is only a small correlation between weddings and births 9 to 15 months later.',
+                collocation: 'strong correlation / direct correlation'
+            },
+            {
+                word: 'susceptible',
+                phonetic: '/səˈsep.tə.bəl/',
+                vi: 'Dễ bị ảnh hưởng / Nhạy cảm với',
+                enDef: 'Likely or liable to be influenced or harmed by a particular thing.',
+                type: 'adjective',
+                category: 'adjective',
+                context: 'Urban residents are believed to be less susceptible to environmental changes.',
+                collocation: 'susceptible to change / highly susceptible'
+            },
+            {
+                word: 'endogenous',
+                phonetic: '/enˈdɒdʒ.ɪ.nəs/',
+                vi: 'Nội sinh / Phát sinh từ bên trong',
+                enDef: 'Having an internal cause or origin within an organism.',
+                type: 'adjective',
+                category: 'biology',
+                context: 'Female fertility may change as an endogenous biological phenomenon.',
+                collocation: 'endogenous rhythm / endogenous factor'
+            },
+            {
+                word: 'prerequisite',
+                phonetic: '/ˌpriːˈrek.wɪ.zɪt/',
+                vi: 'Điều kiện tiên quyết / Yêu cầu bắt buộc',
+                enDef: 'A thing that is required as a prior condition for something else to happen.',
+                type: 'noun',
+                category: 'noun',
+                context: 'With the prerequisite of sexual intercourse, of course.',
+                collocation: 'essential prerequisite / prerequisite for success'
+            },
+            {
+                word: 'obscure',
+                phonetic: '/əbˈskjʊər/',
+                vi: 'Che khuất / Làm mờ nhạt',
+                enDef: 'To keep from being seen or conceal from view.',
+                type: 'verb',
+                category: 'verb',
+                context: 'Artificial light that obscures the natural day length.',
+                collocation: 'obscure the view / obscure the truth'
+            }
+        ];
+    </script>
+
+    <script>
+        const app = {
+            currentLang: 'en',
+            fontSize: 16,
+            showArrows: true,
+            activeTab: 'analysis',
+            fcIndex: 0,
+            fcFlipped: false,
+            arrowAnimFrame: null,
+
+            init() {
+                this.bindEvents();
+                this.renderPassage();
+                this.renderExplanations();
+                this.bindTargetEvents();
+                this.renderVocabGrid();
+                this.setupFlashcard();
+                this.setupQuiz();
+            },
+
+            bindEvents() {
+                // Language Switcher Buttons
+                document.querySelectorAll('#lang-switcher .lang-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('#lang-switcher .lang-btn').forEach(b => b.classList.remove('active'));
+                        e.currentTarget.classList.add('active');
+                        this.currentLang = e.currentTarget.dataset.lang;
+                        this.renderPassage();
+                        this.renderExplanations();
+                        this.bindTargetEvents();
+                        setTimeout(() => this.drawConnections(), 60);
+                    });
+                });
+
+                // Font Resizing
+                document.getElementById('btn-inc-font').addEventListener('click', () => {
+                    if (this.fontSize < 24) {
+                        this.fontSize += 1;
+                        document.documentElement.style.setProperty('--app-font-size', `${this.fontSize}px`);
+                        this.drawConnections();
+                    }
+                });
+                document.getElementById('btn-dec-font').addEventListener('click', () => {
+                    if (this.fontSize > 13) {
+                        this.fontSize -= 1;
+                        document.documentElement.style.setProperty('--app-font-size', `${this.fontSize}px`);
+                        this.drawConnections();
+                    }
+                });
+
+                // Toggle Arrows
+                document.getElementById('btn-toggle-arrows').addEventListener('click', (e) => {
+                    this.showArrows = !this.showArrows;
+                    e.currentTarget.classList.toggle('bg-fuchsia-700');
+                    e.currentTarget.classList.toggle('bg-slate-300');
+                    e.currentTarget.classList.toggle('text-slate-700');
+                    if (!this.showArrows) {
+                        this.clearCanvas();
+                    } else {
+                        this.drawConnections();
+                    }
+                });
+
+                // Scroll Listeners
+                const leftPane = document.getElementById('left-pane');
+                const rightPane = document.getElementById('right-pane');
+                if (leftPane) leftPane.addEventListener('scroll', () => this.drawConnections());
+                if (rightPane) rightPane.addEventListener('scroll', () => this.drawConnections());
+
+                // Navigation Tabs
+                document.querySelectorAll('#nav-tabs .tab-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('#nav-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+                        e.currentTarget.classList.add('active');
+                        const tab = e.currentTarget.dataset.tab;
+                        this.activeTab = tab;
+
+                        document.getElementById('tab-analysis-content').classList.toggle('hidden', tab !== 'analysis');
+                        document.getElementById('tab-vocabulary-content').classList.toggle('hidden', tab !== 'vocabulary');
+                        document.getElementById('tab-flashcards-content').classList.toggle('hidden', tab !== 'flashcards');
+
+                        if (tab !== 'analysis') this.clearCanvas();
+                        else setTimeout(() => this.drawConnections(), 100);
+                    });
+                });
+
+                // Search & Filter Vocab
+                document.getElementById('vocab-search').addEventListener('input', () => this.filterVocab());
+                document.getElementById('vocab-filter').addEventListener('change', () => this.filterVocab());
+
+                // Flashcard Controls
+                document.getElementById('flashcard-wrapper').addEventListener('click', () => {
+                    this.fcFlipped = !this.fcFlipped;
+                    document.getElementById('flashcard-inner').classList.toggle('rotate-y-180', this.fcFlipped);
+                });
+                document.getElementById('btn-fc-prev').addEventListener('click', () => {
+                    if (this.fcIndex > 0) {
+                        this.fcIndex--;
+                        this.updateFlashcard();
+                    }
+                });
+                document.getElementById('btn-fc-next').addEventListener('click', () => {
+                    if (this.fcIndex < vocabList.length - 1) {
+                        this.fcIndex++;
+                        this.updateFlashcard();
+                    }
+                });
+
+                // Mode Switcher
+                document.getElementById('btn-mode-flashcard').addEventListener('click', (e) => {
+                    e.target.classList.replace('bg-white', 'bg-fuchsia-700');
+                    e.target.classList.replace('text-slate-700', 'text-white');
+                    document.getElementById('btn-mode-quiz').classList.replace('bg-fuchsia-700', 'bg-white');
+                    document.getElementById('btn-mode-quiz').classList.replace('text-white', 'text-slate-700');
+                    document.getElementById('flashcard-view').classList.remove('hidden');
+                    document.getElementById('quiz-view').classList.add('hidden');
+                });
+                document.getElementById('btn-mode-quiz').addEventListener('click', (e) => {
+                    e.target.classList.replace('bg-white', 'bg-fuchsia-700');
+                    e.target.classList.replace('text-slate-700', 'text-white');
+                    document.getElementById('btn-mode-flashcard').classList.replace('bg-fuchsia-700', 'bg-white');
+                    document.getElementById('btn-mode-flashcard').classList.replace('text-white', 'text-slate-700');
+                    document.getElementById('quiz-view').classList.remove('hidden');
+                    document.getElementById('flashcard-view').classList.add('hidden');
+                });
+
+                window.addEventListener('resize', () => this.drawConnections());
+            },
+
+            renderPassage() {
+                const container = document.getElementById('passage-container');
+                let html = `
+                    <h2 class="text-2xl font-black text-slate-900 mb-2 text-center leading-tight tracking-tight">FAVORITE TIME FOR GIVING BIRTH</h2>
+                    <p class="text-xs text-center text-slate-500 italic mb-6">Uncovering the evolutionary, environmental, and social drivers of birth seasonality.</p>
+                `;
+
+                passageData.forEach(p => {
+                    if (this.currentLang === 'en') {
+                        html += `<p><span class="paragraph-num">${p.pNum}</span>${p.en}</p>`;
+                    } else if (this.currentLang === 'vi') {
+                        html += `<p><span class="paragraph-num">${p.pNum}</span>${p.vi}</p>`;
+                    } else if (this.currentLang === 'dual') {
+                        html += `
+                            <div class="mb-6 p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                                <div class="text-slate-800 text-sm leading-relaxed border-b border-slate-200 pb-3">
+                                    <strong class="text-xs font-bold text-fuchsia-700 uppercase tracking-wider block mb-1">ENGLISH [Paragraph ${p.pNum}]</strong>
+                                    ${p.en}
+                                </div>
+                                <div class="text-slate-600 text-sm leading-relaxed pt-1">
+                                    <strong class="text-xs font-bold text-purple-700 uppercase tracking-wider block mb-1">TIẾNG VIỆT</strong>
+                                    ${p.vi}
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+
+                container.innerHTML = html;
+            },
+
+            renderExplanations() {
+                const container = document.getElementById('explanations-list');
+                let html = `
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+                        <div class="flex items-center space-x-2 text-fuchsia-700 font-bold text-xs uppercase tracking-wide mb-1">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span>Comprehensive Rationale & Evidence Guide</span>
+                        </div>
+                        <h2 class="text-xl font-extrabold text-slate-900">Favorite time for giving birth — Phân Tích Đáp Án</h2>
+                        <p class="text-xs text-slate-500 mt-1">Click "Locate Text" or hover over any card below to scroll to and highlight the exact text sentence in the reading passage.</p>
+                    </div>
+
+                    <!-- Full Summary Completion Passage Block -->
+                    <div class="bg-amber-50/70 p-6 rounded-2xl border border-amber-200/80 shadow-xs space-y-4">
+                        <div class="flex items-center justify-between border-b border-amber-200/60 pb-3">
+                            <span class="font-extrabold text-xs text-amber-900 uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-file-pen text-amber-700"></i> Questions 1–4 Summary Completion
+                            </span>
+                            <span class="text-[11px] font-bold text-amber-800 bg-amber-100/90 px-2.5 py-1 rounded-md border border-amber-200">
+                                Choose NO MORE THAN ONE WORD
+                            </span>
+                        </div>
+
+                        <div class="text-xs sm:text-sm leading-relaxed text-slate-800 space-y-3 font-normal">
+                            <p>
+                                Evolution is seen as the main cause of birth seasonality. Geographically, there are four seasons in regions far from the 
+                                <span class="jump-btn bg-yellow-200 border border-yellow-400 font-bold px-2 py-0.5 rounded cursor-pointer text-yellow-900 hover:bg-yellow-300 transition-all inline-flex items-center gap-1" data-q="q1">
+                                    <strong>1</strong> <span class="underline decoration-dashed">equator</span>
+                                </span>
+                                or two seasons in those near it; animals have to choose the optimal season to give birth for higher chances of survival.
+                            </p>
+
+                            <p>
+                                Although some people believe more children are born in spring than other seasons possibly because the 
+                                <span class="jump-btn bg-sky-200 border border-sky-400 font-bold px-2 py-0.5 rounded cursor-pointer text-sky-900 hover:bg-sky-300 transition-all inline-flex items-center gap-1" data-q="q2">
+                                    <strong>2</strong> <span class="underline decoration-dashed">wedding</span>
+                                </span>
+                                of their parents is traditionally and religiously held in the summer, the 
+                                <span class="jump-btn bg-emerald-200 border border-emerald-400 font-bold px-2 py-0.5 rounded cursor-pointer text-emerald-900 hover:bg-emerald-300 transition-all inline-flex items-center gap-1" data-q="q3">
+                                    <strong>3</strong> <span class="underline decoration-dashed">correlation</span>
+                                </span>
+                                between such an event and later birth is not strong enough to account for this phenomenon.
+                            </p>
+
+                            <p>
+                                Additionally, changes in temperature and day length can also be a cause of birth seasonality to which urban residents are believed to be less susceptible because they are less affected by such changes than their 
+                                <span class="jump-btn bg-pink-200 border border-pink-400 font-bold px-2 py-0.5 rounded cursor-pointer text-pink-900 hover:bg-pink-300 transition-all inline-flex items-center gap-1" data-q="q4">
+                                    <strong>4</strong> <span class="underline decoration-dashed">country</span>
+                                </span>
+                                counterparts. There are other suggested factors possibly influencing breeding patterns of species, but it is sure that we are losing this evolutionary feature.
+                            </p>
+                        </div>
+                    </div>
+                `;
+
+                questionsData.forEach(q => {
+                    html += `
+                        <div class="q-card bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4 transition-all hover:border-fuchsia-400" id="q-card-${q.id}">
+                            <div class="flex items-start justify-between">
+                                <span class="bg-slate-100 text-slate-800 font-extrabold text-xs px-3 py-1 rounded-md border border-slate-200">
+                                    Question ${q.num} <span class="text-[10px] font-semibold text-slate-500">(${q.type})</span>
+                                </span>
+                                <div class="flex items-center space-x-2">
+                                    <button class="jump-btn bg-fuchsia-50 hover:bg-fuchsia-100 text-fuchsia-700 font-bold text-xs px-2.5 py-1 rounded-md border border-fuchsia-200 transition-colors flex items-center gap-1 cursor-pointer" data-q="${q.id}">
+                                        <i class="fa-solid fa-location-dot"></i> Locate Text
+                                    </button>
+                                    <span class="${q.badgeColor} text-white font-black text-xs px-3 py-1 rounded-full uppercase tracking-wider shadow-xs">
+                                        Answer: ${q.ansKey}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p class="text-sm font-bold text-slate-800 leading-relaxed">${q.prompt}</p>
+                            </div>
+
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-700 space-y-2">
+                                <div class="flex items-center text-fuchsia-700 font-bold text-xs uppercase tracking-wider">
+                                    <i class="fa-solid fa-circle-check mr-1.5"></i>
+                                    <span>Detailed Rationale / Giải Thích:</span>
+                                </div>
+                                <p class="leading-relaxed font-medium text-slate-800">${this.currentLang === 'vi' ? q.explVi : q.explEn}</p>
+                            </div>
+
+                            ${q.synonyms ? `
+                                <div class="pt-2 border-t border-slate-100">
+                                    <h5 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center">
+                                        <i class="fa-solid fa-arrows-rotate mr-1.5 text-fuchsia-600"></i> Paraphrase Keywords Table
+                                    </h5>
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full text-xs text-left border-collapse">
+                                            <thead>
+                                                <tr class="bg-fuchsia-50/70 text-fuchsia-900 font-semibold border-b border-fuchsia-100">
+                                                    <th class="p-2">Question Keyword</th>
+                                                    <th class="p-2">Passage Equivalent</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-slate-100 text-slate-600">
+                                                ${q.synonyms.map(s => `
+                                                    <tr>
+                                                        <td class="p-2 font-medium text-slate-700">${s.q}</td>
+                                                        <td class="p-2 font-semibold text-fuchsia-700">${s.p}</td>
+                                                    </tr>
+                                                `).join('')}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+            },
+
+            bindTargetEvents() {
+                const targets = document.querySelectorAll('.ans-target');
+                const qCards = document.querySelectorAll('.q-card');
+                const jumpBtns = document.querySelectorAll('.jump-btn');
+
+                const activatePair = (targetEl, cardEl, scrollLeft = false, scrollRight = false) => {
+                    document.querySelectorAll('.ans-target').forEach(t => t.classList.remove('active-target'));
+                    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('ring-2', 'ring-fuchsia-600', 'bg-fuchsia-50/40', 'border-fuchsia-400'));
+
+                    if (targetEl) {
+                        targetEl.classList.add('active-target');
+                        if (scrollLeft) {
+                            targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }
+
+                    if (cardEl) {
+                        cardEl.classList.add('ring-2', 'ring-fuchsia-600', 'bg-fuchsia-50/40', 'border-fuchsia-400');
+                        if (scrollRight) {
+                            cardEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }
+                    }
+
+                    this.startSmoothTracking();
+                };
+
+                const deactivateAll = () => {
+                    document.querySelectorAll('.ans-target').forEach(t => t.classList.remove('active-target'));
+                    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('ring-2', 'ring-fuchsia-600', 'bg-fuchsia-50/40', 'border-fuchsia-400'));
+                    this.clearCanvas();
+                };
+
+                targets.forEach(target => {
+                    const qId = target.dataset.q;
+                    const qCard = document.getElementById(`q-card-${qId}`);
+
+                    target.addEventListener('mouseenter', () => activatePair(target, qCard, false, false));
+                    target.addEventListener('mouseleave', deactivateAll);
+                    target.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        activatePair(target, qCard, false, true);
+                    });
+                });
+
+                qCards.forEach(qCard => {
+                    const qId = qCard.id.replace('q-card-', '');
+                    const target = document.querySelector(`.ans-target[data-q="${qId}"]`);
+
+                    qCard.addEventListener('mouseenter', () => activatePair(target, qCard, false, false));
+                    qCard.addEventListener('mouseleave', deactivateAll);
+                    qCard.addEventListener('click', (e) => {
+                        if (e.target.closest('.jump-btn')) return;
+                        activatePair(target, qCard, true, false);
+                    });
+                });
+
+                jumpBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        const qId = btn.dataset.q;
+                        const target = document.querySelector(`.ans-target[data-q="${qId}"]`);
+                        const qCard = document.getElementById(`q-card-${qId}`);
+                        activatePair(target, qCard, true, false);
+                    });
+                });
+            },
+
+            startSmoothTracking() {
+                if (this.arrowAnimFrame) cancelAnimationFrame(this.arrowAnimFrame);
+                const startTime = performance.now();
+                const duration = 800;
+
+                const step = (now) => {
+                    this.drawConnections();
+                    if (now - startTime < duration) {
+                        this.arrowAnimFrame = requestAnimationFrame(step);
+                    }
+                };
+                this.arrowAnimFrame = requestAnimationFrame(step);
+            },
+
+            drawConnections() {
+                const activeTarget = document.querySelector('.ans-target.active-target');
+                if (activeTarget && this.showArrows) {
+                    const qId = activeTarget.dataset.q;
+                    const qCard = document.getElementById(`q-card-${qId}`);
+                    if (qCard) {
+                        this.drawArrow(activeTarget, qCard);
+                        return;
+                    }
+                }
+                this.clearCanvas();
+            },
+
+            drawArrow(fromEl, toEl) {
+                if (!fromEl || !toEl || window.innerWidth < 1024 || !this.showArrows) {
+                    this.clearCanvas();
+                    return;
+                }
+                
+                const svg = document.getElementById('svg-canvas');
+                const wrapper = document.getElementById('main-wrapper');
+                const leftPane = document.getElementById('left-pane');
+                const rightPane = document.getElementById('right-pane');
+
+                if (!svg || !wrapper || !leftPane || !rightPane) return;
+
+                const wrapperRect = wrapper.getBoundingClientRect();
+                const leftPaneRect = leftPane.getBoundingClientRect();
+                const rightPaneRect = rightPane.getBoundingClientRect();
+
+                const clientRects = fromEl.getClientRects();
+                let fromRect = fromEl.getBoundingClientRect();
+                if (clientRects.length > 0) {
+                    fromRect = clientRects[clientRects.length - 1];
+                }
+                const toRect = toEl.getBoundingClientRect();
+
+                const isFromVisible = (fromRect.bottom >= leftPaneRect.top && fromRect.top <= leftPaneRect.bottom);
+                const isToVisible = (toRect.bottom >= rightPaneRect.top && toRect.top <= rightPaneRect.bottom);
+
+                if (!isFromVisible || !isToVisible) {
+                    this.clearCanvas();
+                    return;
+                }
+
+                const x1 = Math.min(fromRect.right - wrapperRect.left, leftPaneRect.right - wrapperRect.left - 8);
+                const y1 = fromRect.top + (fromRect.height / 2) - wrapperRect.top;
+                
+                const x2 = toRect.left - wrapperRect.left;
+                const y2 = toRect.top + Math.min(36, toRect.height / 2) - wrapperRect.top;
+
+                const dx = Math.max(30, (x2 - x1) * 0.45);
+                const pathData = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
+
+                svg.innerHTML = `
+                    <defs>
+                        <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#c026d3" />
+                            <stop offset="100%" stop-color="#a21caf" />
+                        </linearGradient>
+                        <filter id="arrowGlowFilter" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#c026d3" flood-opacity="0.4"/>
+                        </filter>
+                        <marker id="arrowhead" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                            <polygon points="0 0, 9 3.5, 0 7" fill="#a21caf" />
+                        </marker>
+                    </defs>
+                    <path d="${pathData}" fill="none" stroke="url(#arrowGrad)" stroke-width="3" stroke-dasharray="7,4" class="animated-arrow-line" marker-end="url(#arrowhead)" filter="url(#arrowGlowFilter)"/>
+                    <circle cx="${x1}" cy="${y1}" r="4" fill="#c026d3" />
+                    <circle cx="${x2}" cy="${y2}" r="4" fill="#a21caf" />
+                `;
+            },
+
+            clearCanvas() {
+                const svg = document.getElementById('svg-canvas');
+                if (svg) svg.innerHTML = '';
+            },
+
+            renderVocabGrid() {
+                this.filterVocab();
+            },
+
+            filterVocab() {
+                const search = document.getElementById('vocab-search').value.toLowerCase();
+                const filter = document.getElementById('vocab-filter').value;
+                const grid = document.getElementById('vocab-cards-grid');
+
+                const filtered = vocabList.filter(item => {
+                    const matchSearch = item.word.toLowerCase().includes(search) || item.vi.toLowerCase().includes(search);
+                    const matchFilter = filter === 'all' || item.category === filter || item.type === filter;
+                    return matchSearch && matchFilter;
+                });
+
+                let html = '';
+                filtered.forEach(item => {
+                    html += `
+                        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col justify-between hover:border-fuchsia-400 transition-all space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-[10px] font-black uppercase tracking-wider text-fuchsia-700 bg-fuchsia-50 px-2.5 py-1 rounded-md border border-fuchsia-200">${item.type}</span>
+                                    <button onclick="app.speakWord('${item.word}')" class="text-slate-400 hover:text-fuchsia-700 transition-colors" title="Listen pronunciation">
+                                        <i class="fa-solid fa-volume-high text-sm"></i>
+                                    </button>
+                                </div>
+                                <h3 class="text-xl font-extrabold text-slate-900 capitalize">${item.word}</h3>
+                                <p class="text-xs font-mono text-slate-500 mb-2">${item.phonetic}</p>
+                                <p class="text-sm font-bold text-fuchsia-700 bg-fuchsia-50/50 p-2 rounded-lg border border-fuchsia-100 mb-3">${item.vi}</p>
+                                <p class="text-xs text-slate-600 leading-relaxed mb-3">${item.enDef}</p>
+                            </div>
+
+                            <div class="pt-3 border-t border-slate-100 space-y-2 text-xs">
+                                <div>
+                                    <span class="font-bold text-slate-700 block text-[10px] uppercase tracking-wider text-slate-400">Context in Passage:</span>
+                                    <p class="text-slate-600 italic">"${item.context}"</p>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-slate-700 block text-[10px] uppercase tracking-wider text-fuchsia-700">Common Collocation:</span>
+                                    <p class="font-semibold text-fuchsia-900">${item.collocation}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                grid.innerHTML = html || `<p class="text-sm text-slate-500 col-span-full text-center py-8">No vocabulary words match your search filters.</p>`;
+            },
+
+            speakWord(word) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const u = new SpeechSynthesisUtterance(word);
+                    u.lang = 'en-GB';
+                    u.rate = 0.9;
+                    window.speechSynthesis.speak(u);
+                }
+            },
+
+            setupFlashcard() {
+                this.updateFlashcard();
+            },
+
+            updateFlashcard() {
+                const item = vocabList[this.fcIndex];
+                this.fcFlipped = false;
+                document.getElementById('flashcard-inner').classList.remove('rotate-y-180');
+
+                document.getElementById('fc-category').textContent = `${item.type.toUpperCase()} • ${item.category.toUpperCase()}`;
+                document.getElementById('fc-word').textContent = item.word;
+                document.getElementById('fc-phonetic').textContent = item.phonetic;
+                document.getElementById('fc-meaning').textContent = item.vi;
+                document.getElementById('fc-context').textContent = `"${item.context}"`;
+                document.getElementById('fc-counter').textContent = `${this.fcIndex + 1} / ${vocabList.length}`;
+            },
+
+            setupQuiz() {
+                const quizBox = document.getElementById('quiz-box');
+                const sampleQuestions = [
+                    {
+                        q: "Which term refers to 'the quality of occurring at specific times of the year'?",
+                        options: ["Conception", "Seasonality", "Prerequisite", "Correlation"],
+                        ans: 1,
+                        expl: "Seasonality (danh từ) = Tính mùa vụ / sự diễn ra theo mùa."
+                    },
+                    {
+                        q: "What does 'susceptible' mean in the context of environmental changes?",
+                        options: ["Completely immune", "Likely or liable to be influenced/harmed by something", "Extremely resistant", "Randomly distributed"],
+                        ans: 1,
+                        expl: "Susceptible (tính từ) = Dễ bị ảnh hưởng, nhạy cảm với tác động bên ngoài."
+                    },
+                    {
+                        q: "Which word means 'having an internal cause or origin within an organism'?",
+                        options: ["Endogenous", "Equatorial", "Nuptial", "Obscure"],
+                        ans: 0,
+                        expl: "Endogenous (tính từ) = Nội sinh, phát sinh từ bên trong cơ thể."
+                    }
+                ];
+
+                let html = `<h3 class="text-xl font-extrabold text-slate-900 border-b pb-3 border-slate-100 flex items-center gap-2"><i class="fa-solid fa-vial text-fuchsia-700"></i> IELTS Vocab Challenge — Birth Seasonality</h3>`;
+                sampleQuestions.forEach((q, idx) => {
+                    html += `
+                        <div class="space-y-3 pt-2" id="quiz-q-${idx}">
+                            <p class="text-sm font-bold text-slate-800">${idx + 1}. ${q.q}</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                ${q.options.map((opt, oIdx) => `
+                                    <button onclick="app.checkQuiz(${idx}, ${oIdx}, ${q.ans})" class="quiz-opt-btn text-left p-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-all">
+                                        ${String.fromCharCode(65 + oIdx)}. ${opt}
+                                    </button>
+                                `).join('')}
+                            </div>
+                            <div class="quiz-feedback hidden text-xs p-3 rounded-xl"></div>
+                        </div>
+                    `;
+                });
+
+                quizBox.innerHTML = html;
+            },
+
+            checkQuiz(qIdx, selected, correct) {
+                const qDiv = document.getElementById(`quiz-q-${qIdx}`);
+                const btns = qDiv.querySelectorAll('.quiz-opt-btn');
+                const feedback = qDiv.querySelector('.quiz-feedback');
+
+                btns.forEach((btn, idx) => {
+                    btn.disabled = true;
+                    if (idx === correct) {
+                        btn.className = "quiz-opt-btn text-left p-3 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-900 font-bold text-xs";
+                    } else if (idx === selected) {
+                        btn.className = "quiz-opt-btn text-left p-3 rounded-xl border-2 border-red-400 bg-red-50 text-red-900 font-bold text-xs";
+                    }
+                });
+
+                feedback.classList.remove('hidden');
+                if (selected === correct) {
+                    feedback.className = "quiz-feedback text-xs p-3 rounded-xl bg-emerald-100 text-emerald-900 font-bold border border-emerald-200";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Correct! Excellent job.`;
+                } else {
+                    feedback.className = "quiz-feedback text-xs p-3 rounded-xl bg-red-100 text-red-900 font-bold border border-red-200";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-xmark mr-1"></i> Incorrect. Option ${String.fromCharCode(65 + correct)} is the right answer.`;
+                }
+            }
+        };
+
+        window.onload = () => app.init();
+    </script>
+</body>
+</html>

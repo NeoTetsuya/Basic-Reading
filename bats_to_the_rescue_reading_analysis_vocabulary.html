@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bats to the rescue — IELTS Reading Analysis, Translation & Vocabulary</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --app-font-size: 16px;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-size: var(--app-font-size);
+            overflow-x: hidden;
+        }
+        .reading-text {
+            font-family: 'Merriweather', serif;
+            line-height: 2.15;
+            color: #334155;
+        }
+        .reading-text p {
+            margin-bottom: 1.5rem;
+            text-indent: 1.25rem;
+        }
+        .reading-text p:first-of-type {
+            text-indent: 0;
+        }
+
+        .paragraph-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 0.85rem;
+            margin-right: 0.4rem;
+            color: #1e40af;
+            background-color: #dbeafe;
+            border: 1px solid #bfdbfe;
+            text-indent: 0;
+            vertical-align: middle;
+        }
+
+        /* Highlight Targets & Interactive States */
+        .ans-target {
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            position: relative;
+            display: inline;
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+            text-indent: 0;
+        }
+
+        /* Question target color themes */
+        .ans-target-q1 { background-color: #fef08a; border-bottom: 2px solid #eab308; color: #854d0e; }
+        .ans-target-q2 { background-color: #bae6fd; border-bottom: 2px solid #0284c7; color: #075985; }
+        .ans-target-q3 { background-color: #bbf7d0; border-bottom: 2px solid #16a34a; color: #166534; }
+        .ans-target-q4 { background-color: #fbcfe8; border-bottom: 2px solid #db2777; color: #9d174d; }
+        .ans-target-q5 { background-color: #ddd6fe; border-bottom: 2px solid #7c3aed; color: #5b21b6; }
+        .ans-target-q6 { background-color: #fed7aa; border-bottom: 2px solid #ea580c; color: #9a3412; }
+        .ans-target-q7 { background-color: #ccfbf1; border-bottom: 2px solid #0d9488; color: #115e59; }
+        .ans-target-q8 { background-color: #fef3c7; border-bottom: 2px solid #d97706; color: #92400e; }
+        .ans-target-q9 { background-color: #e0e7ff; border-bottom: 2px solid #4f46e5; color: #3730a3; }
+        .ans-target-q10 { background-color: #fae8ff; border-bottom: 2px solid #c026d3; color: #86198f; }
+        .ans-target-q11 { background-color: #dcfce7; border-bottom: 2px solid #22c55e; color: #14532d; }
+        .ans-target-q12 { background-color: #ffe4e6; border-bottom: 2px solid #f43f5e; color: #881337; }
+        .ans-target-q13 { background-color: #e0f2fe; border-bottom: 2px solid #0369a1; color: #0c4a6e; }
+
+        .q-badge {
+            display: inline-block;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72em;
+            font-weight: 800;
+            padding: 1px 6px;
+            border-radius: 4px;
+            margin-right: 4px;
+            vertical-align: baseline;
+            line-height: 1.2;
+            color: #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            text-indent: 0;
+            user-select: none;
+        }
+
+        .ans-target:hover, .ans-target.active-target {
+            outline: 3px solid #2563eb;
+            box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
+            filter: brightness(0.96);
+            z-index: 20;
+        }
+
+        /* Floating Evidence Popover */
+        .explanation-popover {
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            opacity: 0;
+            visibility: hidden;
+            width: 310px;
+            background-color: #0f172a;
+            color: #f8fafc;
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 0.82rem;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.3);
+            z-index: 50;
+            transition: all 0.25s ease;
+            pointer-events: none;
+            line-height: 1.45;
+            font-weight: normal;
+        }
+        .explanation-popover::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: #0f172a transparent transparent transparent;
+        }
+        .ans-target:hover .explanation-popover, .ans-target.active-target .explanation-popover {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Flashcard Animation */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* SVG Connections */
+        #svg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 30;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .tab-btn.active {
+            background-color: #1e40af;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(30, 64, 175, 0.3);
+        }
+
+        @keyframes arrowFlow {
+            from { stroke-dashoffset: 26; }
+            to { stroke-dashoffset: 0; }
+        }
+        .animated-arrow-line {
+            animation: arrowFlow 1s linear infinite;
+        }
+
+        .lang-btn.active {
+            background-color: #0f172a;
+            color: white;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col bg-slate-100">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-white border-b border-slate-200 px-4 sm:px-6 py-3 flex flex-col md:flex-row justify-between items-center shadow-xs shrink-0 gap-3 z-40">
+        <div class="flex items-center space-x-3">
+            <div class="bg-blue-800 text-white p-2.5 rounded-xl shadow-sm">
+                <i class="fa-solid fa-bat text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold text-slate-800">Bats to the rescue — Reading Analysis, Translation & Vocabulary</h1>
+                <p class="text-xs text-slate-500 font-medium">IELTS Academic Reading Master Companion — Cambridge Style</p>
+            </div>
+        </div>
+
+        <!-- Controls: Language Switcher, Font Resize & Arrows Toggle -->
+        <div class="flex items-center space-x-3 flex-wrap gap-y-2">
+            <!-- Language Switcher -->
+            <div class="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200" id="lang-switcher">
+                <button class="lang-btn active px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="en">EN</button>
+                <button class="lang-btn px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="vi">VIE</button>
+                <button class="lang-btn px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="dual">Parallel (EN/VIE)</button>
+            </div>
+
+            <!-- Font Resizer -->
+            <div class="flex items-center space-x-1 bg-slate-100 p-1 rounded-lg border border-slate-200">
+                <button id="btn-dec-font" class="w-7 h-7 flex items-center justify-center rounded bg-white shadow-xs hover:bg-slate-50 font-bold text-xs text-slate-700" title="Decrease Font">A-</button>
+                <button id="btn-inc-font" class="w-7 h-7 flex items-center justify-center rounded bg-white shadow-xs hover:bg-slate-50 font-bold text-xs text-slate-700" title="Increase Font">A+</button>
+            </div>
+
+            <!-- Toggle Arrow Canvas -->
+            <button id="btn-toggle-arrows" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-blue-800 text-white border border-blue-800 font-medium text-xs hover:bg-blue-900 transition-colors shadow-xs">
+                <i class="fa-solid fa-route"></i>
+                <span class="hidden sm:inline">Arrows</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-white border-b border-slate-200 px-6 py-2 overflow-x-auto shrink-0 shadow-xs">
+        <div class="flex space-x-2 min-w-max" id="nav-tabs">
+            <button class="tab-btn active px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="analysis">
+                <i class="fa-solid fa-book-open mr-1.5"></i> 1. Passage & Question Analysis (Q1–Q13)
+            </button>
+            <button class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="vocabulary">
+                <i class="fa-solid fa-spell-check mr-1.5"></i> 2. IELTS Vocabulary Suite (Band 7.0–9.0)
+            </button>
+            <button class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="flashcards">
+                <i class="fa-solid fa-brain mr-1.5"></i> 3. Vocab Flashcards & Practice Quiz
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="flex-1 overflow-hidden relative" id="main-wrapper">
+        <svg id="svg-canvas"></svg>
+
+        <!-- TAB 1: Passage & Question Analysis -->
+        <div id="tab-analysis-content" class="h-full grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden">
+            <!-- Left Pane: Passage View -->
+            <section id="left-pane" class="lg:col-span-6 bg-white overflow-y-auto p-6 lg:p-10 border-r border-slate-200 relative">
+                <div class="max-w-3xl mx-auto">
+                    <div class="flex items-center justify-between mb-6 pb-3 border-b border-slate-100">
+                        <span class="text-xs font-bold uppercase tracking-wider text-blue-800 bg-blue-50 px-3 py-1 rounded-md border border-blue-200">
+                            <i class="fa-solid fa-crow mr-1.5"></i> Reading Passage — Bats to the rescue
+                        </span>
+                        <span class="text-xs text-slate-400 font-medium"><i class="fa-solid fa-mouse-pointer mr-1"></i> Hover/Click highlighted evidence</span>
+                    </div>
+
+                    <div id="passage-container" class="reading-text text-base leading-relaxed text-slate-700 space-y-4">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Pane: Questions & Detailed Explanations -->
+            <section id="right-pane" class="lg:col-span-6 bg-slate-50 overflow-y-auto p-6 lg:p-10">
+                <div class="max-w-2xl mx-auto space-y-6" id="explanations-list">
+                    <!-- Rendered dynamically -->
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB 2: Vocabulary Suite -->
+        <div id="tab-vocabulary-content" class="h-full bg-slate-50 overflow-y-auto p-6 lg:p-10 hidden">
+            <div class="max-w-6xl mx-auto space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-book-bookmark text-blue-800"></i> Essential IELTS Reading Vocabulary — Bats to the rescue
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">High-yield academic terms, ecological collocations, and contextual examples from the passage.</p>
+                    </div>
+
+                    <div class="flex items-center space-x-3 w-full md:w-auto">
+                        <div class="relative flex-1 md:w-64">
+                            <i class="fa-solid fa-search absolute left-3 top-3 text-slate-400 text-xs"></i>
+                            <input type="text" id="vocab-search" placeholder="Search word or translation..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-600">
+                        </div>
+                        <select id="vocab-filter" class="bg-slate-50 border border-slate-200 text-xs font-semibold rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                            <option value="all">All Categories</option>
+                            <option value="noun">Nouns</option>
+                            <option value="verb">Verbs</option>
+                            <option value="adjective">Adjectives</option>
+                            <option value="ecology">Ecology & Conservation</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="vocab-cards-grid">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: Vocab Flashcards & Practice Quiz -->
+        <div id="tab-flashcards-content" class="h-full bg-slate-50 overflow-y-auto p-6 lg:p-10 hidden">
+            <div class="max-w-3xl mx-auto space-y-8">
+                <div class="flex justify-center space-x-3">
+                    <button id="btn-mode-flashcard" class="px-5 py-2.5 rounded-xl text-xs font-extrabold bg-blue-800 text-white shadow-sm transition-all">
+                        <i class="fa-solid fa-clone mr-2"></i> Interactive Flashcards
+                    </button>
+                    <button id="btn-mode-quiz" class="px-5 py-2.5 rounded-xl text-xs font-extrabold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all">
+                        <i class="fa-solid fa-circle-question mr-2"></i> Quick Quiz Mode
+                    </button>
+                </div>
+
+                <!-- Flashcard Display Box -->
+                <div id="flashcard-view" class="flex flex-col items-center space-y-6">
+                    <p class="text-xs text-slate-500 font-semibold">Click the card to flip between Word and Vietnamese Definition</p>
+                    
+                    <div class="w-full max-w-md h-72 perspective-1000 cursor-pointer" id="flashcard-wrapper">
+                        <div id="flashcard-inner" class="relative w-full h-full duration-500 transform-style-3d transition-transform">
+                            <!-- Front -->
+                            <div class="absolute w-full h-full bg-white rounded-3xl border border-slate-200 shadow-md p-8 flex flex-col justify-between items-center text-center backface-hidden">
+                                <span id="fc-category" class="text-[10px] uppercase font-extrabold tracking-widest text-blue-800 bg-blue-50 px-3 py-1 rounded-full border border-blue-200">Category</span>
+                                <div>
+                                    <h3 id="fc-word" class="text-3xl font-black text-slate-900 mb-2">Word</h3>
+                                    <p id="fc-phonetic" class="text-sm font-mono text-slate-500">/phonetic/</p>
+                                </div>
+                                <span class="text-xs font-bold text-blue-800 flex items-center gap-1"><i class="fa-solid fa-rotate mr-1"></i> Flip for meaning</span>
+                            </div>
+                            <!-- Back -->
+                            <div class="absolute w-full h-full bg-slate-900 text-white rounded-3xl shadow-md p-8 flex flex-col justify-between items-center text-center backface-hidden rotate-y-180">
+                                <span class="text-[10px] uppercase font-extrabold tracking-widest text-blue-400 bg-slate-800 px-3 py-1 rounded-full">Vietnamese Meaning</span>
+                                <div>
+                                    <h4 id="fc-meaning" class="text-2xl font-bold text-blue-400 mb-3">Nghĩa tiếng Việt</h4>
+                                    <p id="fc-context" class="text-xs text-slate-300 italic leading-relaxed">"Context sentence..."</p>
+                                </div>
+                                <span class="text-xs font-bold text-slate-400 flex items-center gap-1"><i class="fa-solid fa-rotate mr-1"></i> Flip back</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <button id="btn-fc-prev" class="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 flex items-center justify-center font-bold text-base shadow-xs transition-all">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <span id="fc-counter" class="text-xs font-bold text-slate-600 px-4 py-2 bg-white rounded-xl border border-slate-200">1 / 10</span>
+                        <button id="btn-fc-next" class="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 flex items-center justify-center font-bold text-base shadow-xs transition-all">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Display Box -->
+                <div id="quiz-view" class="hidden space-y-6">
+                    <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6" id="quiz-box">
+                        <!-- Quiz populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const passageData = [
+            {
+                pNum: 'A',
+                en: `There are few places in the world where relations between agriculture and conservation are more strained. Madagascar’s forests are being converted to agricultural land at a rate of one percent every year. Much of this destruction is fuelled by the cultivation of the country’s main staple crop: rice. And <span class="ans-target ans-target-q1" data-q="q1"><span class="q-badge bg-yellow-600">Q1</span>a key reason for this destruction is that insect pests are destroying vast quantities of what is grown by local subsistence farmers, leading them to clear forest to create new paddy fields<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q1 Target Evidence</strong>Insect pests destroy crops, which prompts farmers to clear forest. Insects do NOT attack or destroy the forest directly -> FALSE.</span></span>. The result is devastating habitat and biodiversity loss on the island, but not all species are suffering. In fact, <span class="ans-target ans-target-q2" data-q="q2"><span class="q-badge bg-sky-600">Q2</span>some of the island’s insectivorous bats are currently thriving<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q2 Target Evidence</strong>Insectivorous bats are currently thriving, contradicting 'badly affected' -> FALSE.</span></span> and this has important implications for farmers and conservationists alike.`,
+                vi: `Hiếm có nơi nào trên thế giới mà mối quan hệ giữa nông nghiệp và bảo tồn lại trở nên căng thẳng hơn thế. Rừng của Madagascar đang bị chuyển đổi thành đất nông nghiệp với tốc độ 1% mỗi năm. Phần lớn sự tàn phá này bắt nguồn từ việc canh tác cây lương thực chính của quốc gia này: lúa gạo. Và <span class="ans-target ans-target-q1" data-q="q1"><span class="q-badge bg-yellow-600">Q1</span>một lý do chính dẫn đến sự tàn phá này là do côn trùng sâu bệnh đang phá hủy một lượng lớn những gì nông dân tự cung tự cấp địa phương trồng trọt, khiến họ phải phát quang rừng để tạo ra những thửa ruộng lúa mới<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q1</strong>Côn trùng sâu bệnh phá hoại mùa màng, thúc đẩy nông dân phát quang rừng. Côn trùng KHÔNG trực tiếp tấn công hay tàn phá rừng -> SAI (FALSE).</span></span>. Hậu quả là sự mất mát sinh cảnh và đa dạng sinh học mang tính tàn khốc trên hòn đảo, nhưng không phải tất cả các loài đều chịu tổn hại. Trên thực tế, <span class="ans-target ans-target-q2" data-q="q2"><span class="q-badge bg-sky-600">Q2</span>một số loài dơi ăn côn trùng trên đảo hiện đang phát triển rất mạnh mẽ (thriving)<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q2</strong>Dơi ăn côn trùng hiện đang phát triển mạnh mẽ (thriving), trái ngược với nhận định 'bị ảnh hưởng nặng nề' -> SAI (FALSE).</span></span> và điều này mang lại những ý nghĩa quan trọng cho cả nông dân lẫn các nhà bảo tồn.`
+            },
+            {
+                pNum: 'B',
+                en: `<span class="ans-target ans-target-q3" data-q="q3"><span class="q-badge bg-emerald-600">Q3</span>Enter University of Cambridge zoologist Ricardo Rocha. He’s passionate about conservation, and bats. More specifically, he’s interested in how bats are responding to human activity and deforestation in particular. Rocha’s new study shows that several species of bats are giving Madagascar’s rice farmers a vital pest control service<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q3 Target Evidence</strong>Text mentions Rocha's study in Madagascar, but does NOT mention if he carried out studies in other parts of the world -> NOT GIVEN.</span></span> by feasting on plagues of insects. And this, he believes, can ease the financial pressure on farmers to turn forest into fields.`,
+                vi: `<span class="ans-target ans-target-q3" data-q="q3"><span class="q-badge bg-emerald-600">Q3</span>Sự xuất hiện của nhà động vật học Ricardo Rocha đến từ Đại học Cambridge. Ông rất đam mê công tác bảo tồn, đặc biệt là loài dơi. Cụ thể hơn, ông quan tâm đến cách loài dơi phản ứng trước hoạt động của con người, nhất là nạn phá rừng. Nghiên cứu mới của Rocha chỉ ra rằng một số loài dơi đang cung cấp cho những nông dân trồng lúa ở Madagascar một dịch vụ kiểm soát sâu bệnh thiết yếu<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q3</strong>Bài đọc nhắc đến nghiên cứu của Rocha ở Madagascar, nhưng KHÔNG hề đề cập liệu ông có thực hiện nghiên cứu ở các nơi khác trên thế giới hay không -> NOT GIVEN.</span></span> bằng cách ăn ngấu nghiến các đợt dịch hại côn trùng. Và điều này, theo ông tin tưởng, có thể làm giảm bớt áp lực tài chính đối với người nông dân trong việc biến rừng thành ruộng đồng.`
+            },
+            {
+                pNum: 'C',
+                en: `Bats comprise roughly one-fifth of all mammal species in Madagascar and thirty-six recorded bat species are native to the island, making it one of the most important regions for conservation of this animal group anywhere in the world.`,
+                vi: `Loài dơi chiếm khoảng 1/5 tổng số loài động vật có vú ở Madagascar và 36 loài dơi được ghi nhận là loài bản địa của hòn đảo này, khiến nơi đây trở thành một trong những khu vực quan trọng nhất trên thế giới đối với việc bảo tồn nhóm động vật này.`
+            },
+            {
+                pNum: 'D',
+                en: `Co-leading an international team of scientists, <span class="ans-target ans-target-q4" data-q="q4"><span class="q-badge bg-pink-600">Q4</span>Rocha found that several species of indigenous bats are taking advantage of habitat modification to hunt insects swarming above the country’s rice fields<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q4 Target Evidence</strong>Indigenous bats take advantage of habitat modification to hunt rice pests, providing pest control to farmers -> TRUE.</span></span>. <span class="ans-target ans-target-q5" data-q="q5"><span class="q-badge bg-purple-600">Q5</span>They include the Malagasy mouse-eared bat, Major’s long-fingered bat, the Malagasy white-bellied free-tailed bat and Peters’ wrinkle-lipped bat<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q5 Target Evidence</strong>It lists the Malagasy mouse-eared bat alongside other species, but does NOT state it is 'more common' than others -> NOT GIVEN.</span></span>.`,
+                vi: `Đồng dẫn dắt một nhóm các nhà khoa học quốc tế, <span class="ans-target ans-target-q4" data-q="q4"><span class="q-badge bg-pink-600">Q4</span>Rocha phát hiện ra rằng một số loài dơi bản địa đang tận dụng sự biến đổi môi trường sống để săn lùng côn trùng bay rợp trời trên các cánh đồng lúa của quốc gia này<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q4</strong>Sự biến đổi môi trường sống đã giúp dơi bản địa trở nên hữu ích cho người nông dân trong việc kiểm soát sâu bệnh -> ĐÚNG (TRUE).</span></span>. <span class="ans-target ans-target-q5" data-q="q5"><span class="q-badge bg-purple-600">Q5</span>Chúng bao gồm loài dơi tai chuột Malagasy, dơi ngón dài Major, dơi đuôi tự do bụng trắng Malagasy và dơi môi nhăn Peters<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q5</strong>Bài đọc liệt kê tên dơi tai chuột Malagasy cùng các loài khác, nhưng KHÔNG khẳng định nó 'phổ biến hơn' các loài khác -> NOT GIVEN.</span></span>.`
+            },
+            {
+                pNum: 'E',
+                en: `‘These winner species are providing a valuable free service to Madagascar as biological pest suppressors,’ says Rocha. ‘<span class="ans-target ans-target-q6" data-q="q6"><span class="q-badge bg-orange-600">Q6</span>We found that six species of bat are preying on rice pests, including the paddy swarming caterpillar and grass webworm<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q6 Target Evidence</strong>Bats prey on rice pests including paddy swarming caterpillars and grass webworms -> TRUE.</span></span>. The damage which these insects cause puts the island’s farmers under huge financial pressure and that encourages deforestation.’`,
+                vi: `‘Những loài chiến thắng này đang cung cấp một dịch vụ miễn phí đầy giá trị cho Madagascar như những kẻ ức chế sâu bệnh sinh học,’ Rocha chia sẻ. ‘<span class="ans-target ans-target-q6" data-q="q6"><span class="q-badge bg-orange-600">Q6</span>Chúng tôi nhận thấy có 6 loài dơi đang săn bắt các loài sâu hại lúa, bao gồm cả sâu đàn ruộng lúa (paddy swarming caterpillar) và sâu cuốn lá cỏ (grass webworm)<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q6</strong>Dơi săn bắt các loài sâu hại lúa bao gồm sâu đàn ruộng lúa và sâu cuốn lá cỏ -> ĐÚNG (TRUE).</span></span>. Thiệt hại do những loài côn trùng này gây ra đặt người nông dân trên đảo dưới áp lực tài chính khổng lồ, và điều đó thúc đẩy nạn phá rừng.’`
+            },
+            {
+                pNum: 'F',
+                en: `The study, now published in the journal Agriculture, Ecosystems and Environment, set out to investigate the feeding activity of insectivorous bats in the farmland bordering the Ranomafana National Park in the southeast of the country.`,
+                vi: `Nghiên cứu, hiện được công bố trên tạp chí Nông nghiệp, Hệ sinh thái và Môi trường (Agriculture, Ecosystems and Environment), được tiến hành nhằm điều tra hoạt động kiếm ăn của các loài dơi ăn côn trùng tại vùng đất nông nghiệp tiếp giáp với Vườn quốc gia Ranomafana ở phía đông nam của đất nước này.`
+            },
+            {
+                pNum: 'G',
+                en: `Rocha and his team used state-of-the-art ultrasonic recorders to record over a thousand bat ‘feeding buzzes’ (echolocation sequences used by bats to target their prey) at 54 sites, in order to identify the favourite feeding spots of the bats. The team then used DNA barcoding techniques to analyse <span class="ans-target ans-target-q7" data-q="q7"><span class="q-badge bg-teal-600">Q7</span>droppings<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q7 Target Evidence</strong>DNA barcoding techniques were used to analyse droppings collected from bats.</span></span> collected from bats at the different sites.`,
+                vi: `Rocha và nhóm của ông đã sử dụng các thiết bị ghi âm siêu âm tối tân để ghi lại hơn 1.000 ‘tiếng vo ve kiếm ăn’ của dơi (chuỗi định vị bằng tiếng vang được dơi sử dụng để nhắm vào con mồi) tại 54 địa điểm, nhằm xác định những địa điểm kiếm ăn ưa thích của dơi. Nhóm sau đó đã sử dụng kỹ thuật mã vạch DNA để phân tích <span class="ans-target ans-target-q7" data-q="q7"><span class="q-badge bg-teal-600">Q7</span>phân (droppings)<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q7</strong>Kỹ thuật mã vạch DNA được sử dụng để phân tích mẫu phân thu thập từ dơi.</span></span> thu thập từ dơi tại các địa điểm khác nhau.`
+            },
+            {
+                pNum: 'H',
+                en: `The recordings revealed that bat activity over rice fields was much higher than it was in continuous forest – seven times higher over rice fields which were on flat ground, and sixteen times higher over fields on the sides of hills – leaving no doubt that the animals are preferentially foraging in these man-made ecosystems. The researchers suggest that the bats favour these fields because lack of water and nutrient run-off make these crops more susceptible to insect pest infestations. DNA analysis showed that all six species of bat had fed on economically important insect pests. While the findings indicated that rice farming benefits most from the bats, the scientists also found indications that the bats were consuming pests of other crops, including the black twig borer (which infests <span class="ans-target ans-target-q8" data-q="q8"><span class="q-badge bg-amber-600">Q8</span>coffee<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q8 Target Evidence</strong>Black twig borer infests coffee plants.</span></span> plants), the sugarcane cicada, the macadamia nut-borer, and the sober tabby (a pest of citrus fruits).`,
+                vi: `Các bản ghi âm tiết lộ rằng hoạt động của dơi trên các cánh đồng lúa cao hơn nhiều so với trong rừng rậm rạp – cao gấp 7 lần trên các ruộng lúa ở vùng đất bằng phẳng, và gấp 16 lần trên các thửa ruộng trên sườn đồi – chứng tỏ chắc chắn rằng loài động vật này ưu tiên kiếm ăn trong các hệ sinh thái nhân tạo này. Các nhà nghiên cứu gợi ý rằng dơi ưa chuộng những cánh đồng này vì sự thiếu hụt nước và dòng chảy rửa trôi chất dinh dưỡng làm cho cây trồng dễ bị sâu hại tấn công hơn. Phân tích DNA cho thấy cả 6 loài dơi đều đã ăn các loài côn trùng sâu bệnh có ý nghĩa kinh tế quan trọng. Trong khi các phát hiện chỉ ra rằng việc canh tác lúa hưởng lợi nhiều nhất từ loài dơi, các nhà khoa học cũng tìm thấy dấu hiệu cho thấy dơi tiêu thụ cả sâu hại của các loại cây trồng khác, bao gồm loài mọt cành đen (loài phá hoại cây <span class="ans-target ans-target-q8" data-q="q8"><span class="q-badge bg-amber-600">Q8</span>cà phê (coffee)<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q8</strong>Mọt cành đen phá hoại cây cà phê (coffee plants).</span></span>), ve sầu hại mía, sâu đục quả mắc-ca, và bướm đêm sober tabby (loài sâu hại cây ăn quả có múi).`
+            },
+            {
+                pNum: 'I',
+                en: `‘The effectiveness of bats as pest controllers has already been proven in the USA and Catalonia,’ said co-author James Kemp, from the University of Lisbon. ‘But our study is the first to show this happening in Madagascar, where the stakes for both farmers and conservationists are so high.’`,
+                vi: `‘Hiệu quả của loài dơi với tư cách là những kẻ kiểm soát sâu bệnh đã được chứng minh tại Hoa Kỳ và Catalonia,’ đồng tác giả James Kemp từ Đại học Lisbon cho biết. ‘Nhưng nghiên cứu của chúng tôi là nghiên cứu đầu tiên cho thấy điều này đang diễn ra ở Madagascar, nơi mà những rủi ro và lợi ích đối với cả nông dân lẫn các nhà bảo tồn đều vô cùng to lớn.’`
+            },
+            {
+                pNum: 'J',
+                en: `Local people may have a further reason to be grateful to their bats. While the animal is often associated with spreading disease, Rocha and his team found evidence that Malagasy bats feed not just on crop pests but also on <span class="ans-target ans-target-q9" data-q="q9"><span class="q-badge bg-indigo-600">Q9</span>mosquitoes<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q9 Target Evidence</strong>Malagasy bats feed on mosquitoes and blackflies, preventing disease spread.</span></span> – carriers of malaria, Rift Valley fever virus and elephantiasis – as well as blackflies, which spread river blindness.`,
+                vi: `Người dân địa phương có thêm một lý do nữa để cảm thấy biết ơn những con dơi của mình. Mặc dù loài động vật này thường bị gắn liền với việc lây lan dịch bệnh, Rocha và nhóm của ông đã tìm thấy bằng chứng cho thấy loài dơi Malagasy không chỉ ăn sâu hại cây trồng mà còn ăn cả <span class="ans-target ans-target-q9" data-q="q9"><span class="q-badge bg-indigo-600">Q9</span>muỗi (mosquitoes)<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q9</strong>Dơi ăn muỗi và ruồi đen, giúp ngăn chặn sự lây lan của bệnh truyền nhiễm.</span></span> – vật trung gian truyền bệnh sốt rét, virus sốt Thung lũng Rift và bệnh giun chỉ bạch huyết (bệnh chân voi) – cũng như ruồi đen, loài làm lây lan bệnh mù sông.`
+            },
+            {
+                pNum: 'K',
+                en: `Rocha points out that the relationship is complicated. When food is scarce, bats become a crucial source of <span class="ans-target ans-target-q10" data-q="q10"><span class="q-badge bg-fuchsia-600">Q10</span>protein<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q10 Target Evidence</strong>Bats become a crucial source of protein when food is scarce.</span></span> for local people. Even the children will hunt them. And as well as roosting in trees, the bats sometimes roost in buildings, but are not welcomed there because they make them <span class="ans-target ans-target-q11" data-q="q11"><span class="q-badge bg-green-600">Q11</span>unclean<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q11 Target Evidence</strong>Roost in buildings but make them unclean.</span></span>. At the same time, however, they are associated with sacred caves and the ancestors, so they can be viewed as beings between worlds, which makes them very significant in the <span class="ans-target ans-target-q12" data-q="q12"><span class="q-badge bg-rose-600">Q12</span>culture<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q12 Target Evidence</strong>Very significant in the culture of the local people.</span></span> of the people. And one potential problem is that while these bats are benefiting from farming, at the same time deforestation is reducing the places where they can roost, which could have long-term effects on their numbers. Rocha says, ‘With the right help, we hope that farmers can promote this mutually beneficial relationship by installing bat <span class="ans-target ans-target-q13" data-q="q13"><span class="q-badge bg-sky-800">Q13</span>houses<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q13 Target Evidence</strong>Farmers can promote the relationship by installing bat houses.</span></span>.’`,
+                vi: `Rocha chỉ ra rằng mối quan hệ này khá phức tạp. Khi thức ăn khan hiếm, dơi trở thành nguồn cung cấp <span class="ans-target ans-target-q10" data-q="q10"><span class="q-badge bg-fuchsia-600">Q10</span>chất đạm / protein (protein)<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q10</strong>Khi thiếu lương thực, dơi là nguồn protein quan trọng cho người dân địa phương.</span></span> thiết yếu cho người dân địa phương. Ngay cả trẻ em cũng sẽ săn bắt chúng. Và bên cạnh việc đậu trên cây, dơi đôi khi còn trú ngụ trong các tòa nhà, nhưng không được hoan nghênh ở đó vì chúng làm các tòa nhà bị <span class="ans-target ans-target-q11" data-q="q11"><span class="q-badge bg-green-600">Q11</span>mất vệ sinh / ô uế (unclean)<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q11</strong>Trú ngụ trong các tòa nhà nhưng làm cho các công trình bị mất vệ sinh/bẩn.</span></span>. Tuy nhiên, đồng thời, chúng cũng gắn liền với các hang động thiêng liêng và tổ tiên, vì vậy chúng có thể được xem như những thực thể giao thoa giữa các thế giới, điều này khiến chúng có ý nghĩa rất lớn trong <span class="ans-target ans-target-q12" data-q="q12"><span class="q-badge bg-rose-600">Q12</span>văn hóa (culture)<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q12</strong>Có ý nghĩa rất sâu sắc trong nền văn hóa của người dân.</span></span> của người dân nơi đây. Và một vấn đề tiềm ẩn là trong khi những con dơi này đang hưởng lợi từ hoạt động nông nghiệp, thì đồng thời nạn phá rừng đang làm thu hẹp những nơi chúng có thể làm tổ trú ẩn, điều này có thể gây ra những tác động lâu dài đến số lượng của chúng. Rocha nói: ‘Với sự trợ giúp đúng đắn, chúng tôi hy vọng rằng nông dân có thể thúc đẩy mối quan hệ cùng có lợi này bằng cách lắp đặt những chiếc <span class="ans-target ans-target-q13" data-q="q13"><span class="q-badge bg-sky-800">Q13</span>nhà cho dơi (bat houses / houses)<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q13</strong>Nông dân có thể thúc đẩy mối quan hệ này bằng cách lắp đặt chuồng/nhà cho dơi (bat houses).</span></span>.’`
+            },
+            {
+                pNum: 'L',
+                en: `Rocha and his colleagues believe that maximising bat populations can help to boost crop yields and promote sustainable livelihoods. The team is now calling for further research to quantify this contribution. ‘I’m very optimistic,’ says Rocha. ‘If we give nature a hand, we can speed up the process of regeneration.’`,
+                vi: `Rocha và các đồng nghiệp tin rằng việc tối đa hóa quần thể dơi có thể giúp tăng năng suất cây trồng và thúc đẩy sinh kế bền vững. Nhóm nghiên cứu hiện đang kêu gọi các nghiên cứu tiếp theo để định lượng sự đóng góp này. ‘Tôi rất lạc quan,’ Rocha chia sẻ. ‘Nếu chúng ta chung tay giúp đỡ tự nhiên, chúng ta có thể đẩy nhanh quá trình tái sinh.’`
+            }
+        ];
+
+        const questionsData = [
+            {
+                id: 'q1',
+                num: '1',
+                type: 'True/False/Not Given',
+                ansKey: 'FALSE',
+                badgeColor: 'bg-yellow-600',
+                prompt: 'Many Madagascan forests are being destroyed by attacks from insects.',
+                explEn: 'Paragraph A explains that insect pests destroy agricultural crops, which causes local subsistence farmers to clear forests for new rice fields. The insects do not destroy the forests directly.',
+                explVi: 'Đoạn A giải thích rằng sâu bệnh côn trùng phá hoại cây trồng, khiến nông dân phải phát quang rừng để làm ruộng mới. Côn trùng không trực tiếp tấn công hay phá hủy rừng -> FALSE.',
+                synonyms: [
+                    { q: 'forests destroyed by attacks from insects', p: 'insect pests destroy crops -> farmers clear forest' }
+                ]
+            },
+            {
+                id: 'q2',
+                num: '2',
+                type: 'True/False/Not Given',
+                ansKey: 'FALSE',
+                badgeColor: 'bg-sky-600',
+                prompt: 'Loss of habitat has badly affected insectivorous bats in Madagascar.',
+                explEn: 'Paragraph A states: "...not all species are suffering. In fact, some of the island’s insectivorous bats are currently thriving..."',
+                explVi: 'Đoạn A khẳng định: "...không phải tất cả các loài đều chịu tổn thất. Thực tế, một số loài dơi ăn côn trùng hiện đang phát triển rất tốt (thriving)..." -> FALSE.',
+                synonyms: [
+                    { q: 'badly affected', p: 'currently thriving' }
+                ]
+            },
+            {
+                id: 'q3',
+                num: '3',
+                type: 'True/False/Not Given',
+                ansKey: 'NOT GIVEN',
+                badgeColor: 'bg-emerald-600',
+                prompt: 'Ricardo Rocha has carried out studies of bats in different parts of the world.',
+                explEn: 'Paragraph B mentions Ricardo Rocha\'s study in Madagascar, but the text contains no information about whether he conducted studies in other parts of the world.',
+                explVi: 'Đoạn B nhắc đến nghiên cứu của Ricardo Rocha ở Madagascar, nhưng bài không hề đưa ra thông tin xem ông đã nghiên cứu ở các nơi khác trên thế giới hay chưa -> NOT GIVEN.',
+                synonyms: [
+                    { q: 'studies in different parts of the world', p: 'No information in text' }
+                ]
+            },
+            {
+                id: 'q4',
+                num: '4',
+                type: 'True/False/Not Given',
+                ansKey: 'TRUE',
+                badgeColor: 'bg-pink-600',
+                prompt: 'Habitat modification has resulted in indigenous bats in Madagascar becoming useful to farmers.',
+                explEn: 'Paragraph D states that indigenous bats "are taking advantage of habitat modification to hunt insects swarming above the country’s rice fields", providing pest control.',
+                explVi: 'Đoạn D xác nhận dơi bản địa lợi dụng việc môi trường sống bị biến đổi để săn sâu bệnh trên ruộng lúa, cung cấp dịch vụ diệt sâu bệnh cho nông dân -> TRUE.',
+                synonyms: [
+                    { q: 'habitat modification resulted in becoming useful', p: 'take advantage of habitat modification to hunt rice pests' }
+                ]
+            },
+            {
+                id: 'q5',
+                num: '5',
+                type: 'True/False/Not Given',
+                ansKey: 'NOT GIVEN',
+                badgeColor: 'bg-purple-600',
+                prompt: 'The Malagasy mouse-eared bat is more common than other indigenous bat species in Madagascar.',
+                explEn: 'Paragraph D lists the Malagasy mouse-eared bat alongside other bat species, but does not compare their relative abundance or state if it is more common.',
+                explVi: 'Đoạn D liệt kê tên loài dơi tai chuột Malagasy cùng các loài khác, nhưng không hề so sánh mức độ phổ biến của loài này so với các loài khác -> NOT GIVEN.',
+                synonyms: [
+                    { q: 'more common than other species', p: 'No comparison in text' }
+                ]
+            },
+            {
+                id: 'q6',
+                num: '6',
+                type: 'True/False/Not Given',
+                ansKey: 'TRUE',
+                badgeColor: 'bg-orange-600',
+                prompt: 'Bats may feed on paddy swarming caterpillars and grass webworms.',
+                explEn: 'Paragraph E directly confirms: "...six species of bat are preying on rice pests, including the paddy swarming caterpillar and grass webworm."',
+                explVi: 'Đoạn E xác nhận trực tiếp: 6 loài dơi săn tìm sâu hại lúa bao gồm sâu đàn ruộng lúa (paddy swarming caterpillar) và sâu cuốn lá cỏ (grass webworm) -> TRUE.',
+                synonyms: [
+                    { q: 'feed on', p: 'preying on' }
+                ]
+            },
+            {
+                id: 'q7',
+                num: '7',
+                type: 'Table Completion',
+                ansKey: 'droppings / dropping',
+                badgeColor: 'bg-teal-600',
+                prompt: 'DNA analysis of bat 7 _________________.',
+                explEn: 'Paragraph G states: "DNA barcoding techniques to analyse droppings collected from bats at the different sites."',
+                explVi: 'Đoạn G ghi rõ: Kỹ thuật mã vạch DNA được dùng để phân tích phân dơi (droppings) thu thập tại các địa điểm.',
+                synonyms: [
+                    { q: 'DNA analysis of bat ...', p: 'analyse droppings collected from bats' }
+                ]
+            },
+            {
+                id: 'q8',
+                num: '8',
+                type: 'Table Completion',
+                ansKey: 'coffee',
+                badgeColor: 'bg-amber-600',
+                prompt: 'ate pests of rice, 8 _________________, sugarcane, nuts and fruit',
+                explEn: 'Paragraph H states: "...consuming pests of other crops, including the black twig borer (which infests coffee plants)..."',
+                explVi: 'Đoạn H nêu dơi ăn sâu bệnh hại cây cà phê (coffee), mía, hạt macca và quả có múi.',
+                synonyms: [
+                    { q: 'pests of ...', p: 'infests coffee plants' }
+                ]
+            },
+            {
+                id: 'q9',
+                num: '9',
+                type: 'Table Completion',
+                ansKey: 'mosquitoes / mosquito',
+                badgeColor: 'bg-indigo-600',
+                prompt: 'prevent the spread of disease by eating 9 _________________ and blackflies',
+                explEn: 'Paragraph J states: "...feed not just on crop pests but also on mosquitoes... as well as blackflies..."',
+                explVi: 'Đoạn J chỉ ra dơi ăn muỗi (mosquitoes) và ruồi đen giúp ngăn ngừa dịch bệnh.',
+                synonyms: [
+                    { q: 'prevent spread of disease by eating', p: 'feed on mosquitoes ... carriers of malaria' }
+                ]
+            },
+            {
+                id: 'q10',
+                num: '10',
+                type: 'Table Completion',
+                ansKey: 'protein',
+                badgeColor: 'bg-fuchsia-600',
+                prompt: 'they provide food rich in 10 _________________',
+                explEn: 'Paragraph K states: "When food is scarce, bats become a crucial source of protein for local people."',
+                explVi: 'Đoạn K ghi nhận dơi trở thành nguồn cung cấp chất đạm (protein) quan trọng cho người dân địa phương.',
+                synonyms: [
+                    { q: 'food rich in', p: 'crucial source of protein' }
+                ]
+            },
+            {
+                id: 'q11',
+                num: '11',
+                type: 'Table Completion',
+                ansKey: 'unclean',
+                badgeColor: 'bg-green-600',
+                prompt: 'the buildings where they roost become 11 _________________',
+                explEn: 'Paragraph K states: "...roost in buildings, but are not welcomed there because they make them unclean."',
+                explVi: 'Đoạn K nêu dơi đậu ở các tòa nhà làm cho các tòa nhà bị mất vệ sinh (unclean).',
+                synonyms: [
+                    { q: 'become', p: 'make them' }
+                ]
+            },
+            {
+                id: 'q12',
+                num: '12',
+                type: 'Table Completion',
+                ansKey: 'culture',
+                badgeColor: 'bg-rose-600',
+                prompt: 'they play an important role in local 12 _________________',
+                explEn: 'Paragraph K states: "...viewed as beings between worlds, which makes them very significant in the culture of the people."',
+                explVi: 'Đoạn K khẳng định dơi đóng vai trò ý nghĩa lớn trong nền văn hóa (culture) địa phương.',
+                synonyms: [
+                    { q: 'play an important role in', p: 'very significant in the culture' }
+                ]
+            },
+            {
+                id: 'q13',
+                num: '13',
+                type: 'Table Completion',
+                ansKey: 'houses / house',
+                badgeColor: 'bg-sky-800',
+                prompt: 'farmers should provide special 13 _________________ to support the bat population',
+                explEn: 'Paragraph K states: "...hope that farmers can promote this mutually beneficial relationship by installing bat houses."',
+                explVi: 'Đoạn K đề xuất nông dân hỗ trợ quần thể dơi bằng cách lắp đặt nhà cho dơi (bat houses).',
+                synonyms: [
+                    { q: 'provide special ...', p: 'installing bat houses' }
+                ]
+            }
+        ];
+
+        const vocabList = [
+            {
+                word: 'subsistence',
+                phonetic: '/səbˈsɪs.təns/',
+                vi: 'Tự cung tự cấp / Đủ sống qua ngày',
+                enDef: 'The action or fact of maintaining or supporting oneself at a minimum level.',
+                type: 'noun',
+                category: 'ecology',
+                context: 'Grown by local subsistence farmers, leading them to clear forest.',
+                collocation: 'subsistence farming / subsistence agriculture'
+            },
+            {
+                word: 'insectivorous',
+                phonetic: '/ˌɪn.sekˈtɪv.ər.əs/',
+                vi: 'Ăn côn trùng',
+                enDef: '(Of an animal or plant) feeding on insects.',
+                type: 'adjective',
+                category: 'ecology',
+                context: 'Some of the island’s insectivorous bats are currently thriving.',
+                collocation: 'insectivorous bats / insectivorous birds'
+            },
+            {
+                word: 'indigenous',
+                phonetic: '/ɪnˈdɪdʒ.ɪ.nəs/',
+                vi: 'Bản địa / Bản xứ',
+                enDef: 'Originating or occurring naturally in a particular place; native.',
+                type: 'adjective',
+                category: 'ecology',
+                context: 'Several species of indigenous bats are taking advantage of habitat modification.',
+                collocation: 'indigenous species / indigenous population'
+            },
+            {
+                word: 'echolocation',
+                phonetic: '/ˌek.əʊ.ləʊˈkeɪ.ʃən/',
+                vi: 'Định vị bằng tiếng vang',
+                enDef: 'The location of objects by reflected sound, used by animals like bats and dolphins.',
+                type: 'noun',
+                category: 'ecology',
+                context: 'Echolocation sequences used by bats to target their prey.',
+                collocation: 'use echolocation / echolocation calls'
+            },
+            {
+                word: 'foraging',
+                phonetic: '/ˈfɒr.ɪdʒ.ɪŋ/',
+                vi: 'Tìm kiếm thức ăn',
+                enDef: 'Searching widely for food or provisions.',
+                type: 'noun',
+                category: 'ecology',
+                context: 'Leaving no doubt that the animals are preferentially foraging in these ecosystems.',
+                collocation: 'foraging behaviour / foraging grounds'
+            },
+            {
+                word: 'susceptible',
+                phonetic: '/səˈsep.tə.bəl/',
+                vi: 'Dễ bị ảnh hưởng / Nhạy cảm với',
+                enDef: 'Likely or liable to be influenced or harmed by a particular thing.',
+                type: 'adjective',
+                category: 'adjective',
+                context: 'Make these crops more susceptible to insect pest infestations.',
+                collocation: 'susceptible to disease / highly susceptible'
+            },
+            {
+                word: 'roosting',
+                phonetic: '/ˈruː.stɪŋ/',
+                vi: 'Đậu / Trú ẩn (loài chim/dơi)',
+                enDef: '(Of a bird or bat) settling or congregating for rest or sleep.',
+                type: 'noun',
+                category: 'ecology',
+                context: 'And as well as roosting in trees, the bats sometimes roost in buildings.',
+                collocation: 'roosting site / roosting habit'
+            },
+            {
+                word: 'regeneration',
+                phonetic: '/rɪˌdʒen.əˈreɪ.ʃən/',
+                vi: 'Sự tái tạo / Phục hồi thiên nhiên',
+                enDef: 'The action or process of regenerating or being regenerated; renewal or restoration.',
+                type: 'noun',
+                category: 'ecology',
+                context: 'If we give nature a hand, we can speed up the process of regeneration.',
+                collocation: 'forest regeneration / natural regeneration'
+            }
+        ];
+    </script>
+
+    <script>
+        const app = {
+            currentLang: 'en',
+            fontSize: 16,
+            showArrows: true,
+            activeTab: 'analysis',
+            fcIndex: 0,
+            fcFlipped: false,
+            arrowAnimFrame: null,
+
+            init() {
+                this.bindEvents();
+                this.renderPassage();
+                this.renderExplanations();
+                this.bindTargetEvents();
+                this.renderVocabGrid();
+                this.setupFlashcard();
+                this.setupQuiz();
+            },
+
+            bindEvents() {
+                // Language Switcher Buttons
+                document.querySelectorAll('#lang-switcher .lang-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('#lang-switcher .lang-btn').forEach(b => b.classList.remove('active'));
+                        e.currentTarget.classList.add('active');
+                        this.currentLang = e.currentTarget.dataset.lang;
+                        this.renderPassage();
+                        this.renderExplanations();
+                        this.bindTargetEvents();
+                        setTimeout(() => this.drawConnections(), 60);
+                    });
+                });
+
+                // Font Resizing
+                document.getElementById('btn-inc-font').addEventListener('click', () => {
+                    if (this.fontSize < 24) {
+                        this.fontSize += 1;
+                        document.documentElement.style.setProperty('--app-font-size', `${this.fontSize}px`);
+                        this.drawConnections();
+                    }
+                });
+                document.getElementById('btn-dec-font').addEventListener('click', () => {
+                    if (this.fontSize > 13) {
+                        this.fontSize -= 1;
+                        document.documentElement.style.setProperty('--app-font-size', `${this.fontSize}px`);
+                        this.drawConnections();
+                    }
+                });
+
+                // Toggle Arrows
+                document.getElementById('btn-toggle-arrows').addEventListener('click', (e) => {
+                    this.showArrows = !this.showArrows;
+                    e.currentTarget.classList.toggle('bg-blue-800');
+                    e.currentTarget.classList.toggle('bg-slate-300');
+                    e.currentTarget.classList.toggle('text-slate-700');
+                    if (!this.showArrows) {
+                        this.clearCanvas();
+                    } else {
+                        this.drawConnections();
+                    }
+                });
+
+                // Live scroll listeners for real-time tracking
+                const leftPane = document.getElementById('left-pane');
+                const rightPane = document.getElementById('right-pane');
+                if (leftPane) leftPane.addEventListener('scroll', () => this.drawConnections());
+                if (rightPane) rightPane.addEventListener('scroll', () => this.drawConnections());
+
+                // Navigation Tabs
+                document.querySelectorAll('#nav-tabs .tab-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('#nav-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+                        e.currentTarget.classList.add('active');
+                        const tab = e.currentTarget.dataset.tab;
+                        this.activeTab = tab;
+
+                        document.getElementById('tab-analysis-content').classList.toggle('hidden', tab !== 'analysis');
+                        document.getElementById('tab-vocabulary-content').classList.toggle('hidden', tab !== 'vocabulary');
+                        document.getElementById('tab-flashcards-content').classList.toggle('hidden', tab !== 'flashcards');
+
+                        if (tab !== 'analysis') this.clearCanvas();
+                        else setTimeout(() => this.drawConnections(), 100);
+                    });
+                });
+
+                // Search & Filter Vocab
+                document.getElementById('vocab-search').addEventListener('input', () => this.filterVocab());
+                document.getElementById('vocab-filter').addEventListener('change', () => this.filterVocab());
+
+                // Flashcard Controls
+                document.getElementById('flashcard-wrapper').addEventListener('click', () => {
+                    this.fcFlipped = !this.fcFlipped;
+                    document.getElementById('flashcard-inner').classList.toggle('rotate-y-180', this.fcFlipped);
+                });
+                document.getElementById('btn-fc-prev').addEventListener('click', () => {
+                    if (this.fcIndex > 0) {
+                        this.fcIndex--;
+                        this.updateFlashcard();
+                    }
+                });
+                document.getElementById('btn-fc-next').addEventListener('click', () => {
+                    if (this.fcIndex < vocabList.length - 1) {
+                        this.fcIndex++;
+                        this.updateFlashcard();
+                    }
+                });
+
+                // Mode switcher in Flashcards tab
+                document.getElementById('btn-mode-flashcard').addEventListener('click', (e) => {
+                    e.target.classList.replace('bg-white', 'bg-blue-800');
+                    e.target.classList.replace('text-slate-700', 'text-white');
+                    document.getElementById('btn-mode-quiz').classList.replace('bg-blue-800', 'bg-white');
+                    document.getElementById('btn-mode-quiz').classList.replace('text-white', 'text-slate-700');
+                    document.getElementById('flashcard-view').classList.remove('hidden');
+                    document.getElementById('quiz-view').classList.add('hidden');
+                });
+                document.getElementById('btn-mode-quiz').addEventListener('click', (e) => {
+                    e.target.classList.replace('bg-white', 'bg-blue-800');
+                    e.target.classList.replace('text-slate-700', 'text-white');
+                    document.getElementById('btn-mode-flashcard').classList.replace('bg-blue-800', 'bg-white');
+                    document.getElementById('btn-mode-flashcard').classList.replace('text-white', 'text-slate-700');
+                    document.getElementById('quiz-view').classList.remove('hidden');
+                    document.getElementById('flashcard-view').classList.add('hidden');
+                });
+
+                window.addEventListener('resize', () => this.drawConnections());
+            },
+
+            renderPassage() {
+                const container = document.getElementById('passage-container');
+                let html = `
+                    <h2 class="text-2xl font-black text-slate-900 mb-2 text-center leading-tight tracking-tight">Bats to the rescue</h2>
+                    <p class="text-xs text-center text-slate-500 italic mb-6">How Madagascar’s bats are helping to save the rainforest.</p>
+                `;
+
+                passageData.forEach(p => {
+                    if (this.currentLang === 'en') {
+                        html += `<p><span class="paragraph-num">${p.pNum}</span>${p.en}</p>`;
+                    } else if (this.currentLang === 'vi') {
+                        html += `<p><span class="paragraph-num">${p.pNum}</span>${p.vi}</p>`;
+                    } else if (this.currentLang === 'dual') {
+                        html += `
+                            <div class="mb-6 p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                                <div class="text-slate-800 text-sm leading-relaxed border-b border-slate-200 pb-3">
+                                    <strong class="text-xs font-bold text-blue-800 uppercase tracking-wider block mb-1">ENGLISH [Paragraph ${p.pNum}]</strong>
+                                    ${p.en}
+                                </div>
+                                <div class="text-slate-600 text-sm leading-relaxed pt-1">
+                                    <strong class="text-xs font-bold text-sky-700 uppercase tracking-wider block mb-1">TIẾNG VIỆT</strong>
+                                    ${p.vi}
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+
+                container.innerHTML = html;
+            },
+
+            renderExplanations() {
+                const container = document.getElementById('explanations-list');
+                let html = `
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+                        <div class="flex items-center space-x-2 text-blue-800 font-bold text-xs uppercase tracking-wide mb-1">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span>Comprehensive Rationale & Evidence Guide</span>
+                        </div>
+                        <h2 class="text-xl font-extrabold text-slate-900">Bats to the rescue — Phân Tích Đáp Án</h2>
+                        <p class="text-xs text-slate-500 mt-1">Click "Locate Text" or hover over any card below to scroll to and highlight the exact text sentence in the reading passage.</p>
+                    </div>
+                `;
+
+                questionsData.forEach(q => {
+                    html += `
+                        <div class="q-card bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4 transition-all hover:border-blue-400" id="q-card-${q.id}">
+                            <div class="flex items-start justify-between">
+                                <span class="bg-slate-100 text-slate-800 font-extrabold text-xs px-3 py-1 rounded-md border border-slate-200">
+                                    Question ${q.num} <span class="text-[10px] font-semibold text-slate-500">(${q.type})</span>
+                                </span>
+                                <div class="flex items-center space-x-2">
+                                    <button class="jump-btn bg-blue-50 hover:bg-blue-100 text-blue-800 font-bold text-xs px-2.5 py-1 rounded-md border border-blue-200 transition-colors flex items-center gap-1 cursor-pointer" data-q="${q.id}">
+                                        <i class="fa-solid fa-location-dot"></i> Locate Text
+                                    </button>
+                                    <span class="${q.badgeColor} text-white font-black text-xs px-3 py-1 rounded-full uppercase tracking-wider shadow-xs">
+                                        Answer: ${q.ansKey}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p class="text-sm font-bold text-slate-800 leading-relaxed">${q.prompt}</p>
+                            </div>
+
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-700 space-y-2">
+                                <div class="flex items-center text-blue-800 font-bold text-xs uppercase tracking-wider">
+                                    <i class="fa-solid fa-circle-check mr-1.5"></i>
+                                    <span>Detailed Rationale / Giải Thích:</span>
+                                </div>
+                                <p class="leading-relaxed font-medium text-slate-800">${this.currentLang === 'vi' ? q.explVi : q.explEn}</p>
+                            </div>
+
+                            ${q.synonyms ? `
+                                <div class="pt-2 border-t border-slate-100">
+                                    <h5 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center">
+                                        <i class="fa-solid fa-arrows-rotate mr-1.5 text-blue-700"></i> Paraphrase Keywords Table
+                                    </h5>
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full text-xs text-left border-collapse">
+                                            <thead>
+                                                <tr class="bg-blue-50/70 text-blue-900 font-semibold border-b border-blue-100">
+                                                    <th class="p-2">Question Keyword</th>
+                                                    <th class="p-2">Passage Equivalent</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-slate-100 text-slate-600">
+                                                ${q.synonyms.map(s => `
+                                                    <tr>
+                                                        <td class="p-2 font-medium text-slate-700">${s.q}</td>
+                                                        <td class="p-2 font-semibold text-blue-800">${s.p}</td>
+                                                    </tr>
+                                                `).join('')}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+            },
+
+            bindTargetEvents() {
+                const targets = document.querySelectorAll('.ans-target');
+                const qCards = document.querySelectorAll('.q-card');
+                const jumpBtns = document.querySelectorAll('.jump-btn');
+
+                const activatePair = (targetEl, cardEl, scrollLeft = false, scrollRight = false) => {
+                    document.querySelectorAll('.ans-target').forEach(t => t.classList.remove('active-target'));
+                    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('ring-2', 'ring-blue-600', 'bg-blue-50/40', 'border-blue-400'));
+
+                    if (targetEl) {
+                        targetEl.classList.add('active-target');
+                        if (scrollLeft) {
+                            targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }
+
+                    if (cardEl) {
+                        cardEl.classList.add('ring-2', 'ring-blue-600', 'bg-blue-50/40', 'border-blue-400');
+                        if (scrollRight) {
+                            cardEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }
+                    }
+
+                    this.startSmoothTracking();
+                };
+
+                const deactivateAll = () => {
+                    document.querySelectorAll('.ans-target').forEach(t => t.classList.remove('active-target'));
+                    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('ring-2', 'ring-blue-600', 'bg-blue-50/40', 'border-blue-400'));
+                    this.clearCanvas();
+                };
+
+                targets.forEach(target => {
+                    const qId = target.dataset.q;
+                    const qCard = document.getElementById(`q-card-${qId}`);
+
+                    target.addEventListener('mouseenter', () => activatePair(target, qCard, false, false));
+                    target.addEventListener('mouseleave', deactivateAll);
+                    target.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        activatePair(target, qCard, false, true);
+                    });
+                });
+
+                qCards.forEach(qCard => {
+                    const qId = qCard.id.replace('q-card-', '');
+                    const target = document.querySelector(`.ans-target[data-q="${qId}"]`);
+
+                    qCard.addEventListener('mouseenter', () => activatePair(target, qCard, false, false));
+                    qCard.addEventListener('mouseleave', deactivateAll);
+                    qCard.addEventListener('click', (e) => {
+                        if (e.target.closest('.jump-btn')) return;
+                        activatePair(target, qCard, true, false);
+                    });
+                });
+
+                jumpBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        const qId = btn.dataset.q;
+                        const target = document.querySelector(`.ans-target[data-q="${qId}"]`);
+                        const qCard = document.getElementById(`q-card-${qId}`);
+                        activatePair(target, qCard, true, false);
+                    });
+                });
+            },
+
+            startSmoothTracking() {
+                if (this.arrowAnimFrame) cancelAnimationFrame(this.arrowAnimFrame);
+                const startTime = performance.now();
+                const duration = 800;
+
+                const step = (now) => {
+                    this.drawConnections();
+                    if (now - startTime < duration) {
+                        this.arrowAnimFrame = requestAnimationFrame(step);
+                    }
+                };
+                this.arrowAnimFrame = requestAnimationFrame(step);
+            },
+
+            drawConnections() {
+                const activeTarget = document.querySelector('.ans-target.active-target');
+                if (activeTarget && this.showArrows) {
+                    const qId = activeTarget.dataset.q;
+                    const qCard = document.getElementById(`q-card-${qId}`);
+                    if (qCard) {
+                        this.drawArrow(activeTarget, qCard);
+                        return;
+                    }
+                }
+                this.clearCanvas();
+            },
+
+            drawArrow(fromEl, toEl) {
+                if (!fromEl || !toEl || window.innerWidth < 1024 || !this.showArrows) {
+                    this.clearCanvas();
+                    return;
+                }
+                
+                const svg = document.getElementById('svg-canvas');
+                const wrapper = document.getElementById('main-wrapper');
+                const leftPane = document.getElementById('left-pane');
+                const rightPane = document.getElementById('right-pane');
+
+                if (!svg || !wrapper || !leftPane || !rightPane) return;
+
+                const wrapperRect = wrapper.getBoundingClientRect();
+                const leftPaneRect = leftPane.getBoundingClientRect();
+                const rightPaneRect = rightPane.getBoundingClientRect();
+
+                const clientRects = fromEl.getClientRects();
+                let fromRect = fromEl.getBoundingClientRect();
+                if (clientRects.length > 0) {
+                    fromRect = clientRects[clientRects.length - 1];
+                }
+                const toRect = toEl.getBoundingClientRect();
+
+                const isFromVisible = (fromRect.bottom >= leftPaneRect.top && fromRect.top <= leftPaneRect.bottom);
+                const isToVisible = (toRect.bottom >= rightPaneRect.top && toRect.top <= rightPaneRect.bottom);
+
+                if (!isFromVisible || !isToVisible) {
+                    this.clearCanvas();
+                    return;
+                }
+
+                const x1 = Math.min(fromRect.right - wrapperRect.left, leftPaneRect.right - wrapperRect.left - 8);
+                const y1 = fromRect.top + (fromRect.height / 2) - wrapperRect.top;
+                
+                const x2 = toRect.left - wrapperRect.left;
+                const y2 = toRect.top + Math.min(36, toRect.height / 2) - wrapperRect.top;
+
+                const dx = Math.max(30, (x2 - x1) * 0.45);
+                const pathData = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
+
+                svg.innerHTML = `
+                    <defs>
+                        <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#1e40af" />
+                            <stop offset="100%" stop-color="#1d4ed8" />
+                        </linearGradient>
+                        <filter id="arrowGlowFilter" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#1e40af" flood-opacity="0.4"/>
+                        </filter>
+                        <marker id="arrowhead" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                            <polygon points="0 0, 9 3.5, 0 7" fill="#1d4ed8" />
+                        </marker>
+                    </defs>
+                    <path d="${pathData}" fill="none" stroke="url(#arrowGrad)" stroke-width="3" stroke-dasharray="7,4" class="animated-arrow-line" marker-end="url(#arrowhead)" filter="url(#arrowGlowFilter)"/>
+                    <circle cx="${x1}" cy="${y1}" r="4" fill="#1e40af" />
+                    <circle cx="${x2}" cy="${y2}" r="4" fill="#1d4ed8" />
+                `;
+            },
+
+            clearCanvas() {
+                const svg = document.getElementById('svg-canvas');
+                if (svg) svg.innerHTML = '';
+            },
+
+            renderVocabGrid() {
+                this.filterVocab();
+            },
+
+            filterVocab() {
+                const search = document.getElementById('vocab-search').value.toLowerCase();
+                const filter = document.getElementById('vocab-filter').value;
+                const grid = document.getElementById('vocab-cards-grid');
+
+                const filtered = vocabList.filter(item => {
+                    const matchSearch = item.word.toLowerCase().includes(search) || item.vi.toLowerCase().includes(search);
+                    const matchFilter = filter === 'all' || item.category === filter || item.type === filter;
+                    return matchSearch && matchFilter;
+                });
+
+                let html = '';
+                filtered.forEach(item => {
+                    html += `
+                        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col justify-between hover:border-blue-400 transition-all space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-[10px] font-black uppercase tracking-wider text-blue-800 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-200">${item.type}</span>
+                                    <button onclick="app.speakWord('${item.word}')" class="text-slate-400 hover:text-blue-800 transition-colors" title="Listen pronunciation">
+                                        <i class="fa-solid fa-volume-high text-sm"></i>
+                                    </button>
+                                </div>
+                                <h3 class="text-xl font-extrabold text-slate-900 capitalize">${item.word}</h3>
+                                <p class="text-xs font-mono text-slate-500 mb-2">${item.phonetic}</p>
+                                <p class="text-sm font-bold text-blue-800 bg-blue-50/50 p-2 rounded-lg border border-blue-100 mb-3">${item.vi}</p>
+                                <p class="text-xs text-slate-600 leading-relaxed mb-3">${item.enDef}</p>
+                            </div>
+
+                            <div class="pt-3 border-t border-slate-100 space-y-2 text-xs">
+                                <div>
+                                    <span class="font-bold text-slate-700 block text-[10px] uppercase tracking-wider text-slate-400">Context in Passage:</span>
+                                    <p class="text-slate-600 italic">"${item.context}"</p>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-slate-700 block text-[10px] uppercase tracking-wider text-blue-800">Common Collocation:</span>
+                                    <p class="font-semibold text-blue-900">${item.collocation}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                grid.innerHTML = html || `<p class="text-sm text-slate-500 col-span-full text-center py-8">No vocabulary words match your search filters.</p>`;
+            },
+
+            speakWord(word) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const u = new SpeechSynthesisUtterance(word);
+                    u.lang = 'en-GB';
+                    u.rate = 0.9;
+                    window.speechSynthesis.speak(u);
+                }
+            },
+
+            setupFlashcard() {
+                this.updateFlashcard();
+            },
+
+            updateFlashcard() {
+                const item = vocabList[this.fcIndex];
+                this.fcFlipped = false;
+                document.getElementById('flashcard-inner').classList.remove('rotate-y-180');
+
+                document.getElementById('fc-category').textContent = `${item.type.toUpperCase()} • ${item.category.toUpperCase()}`;
+                document.getElementById('fc-word').textContent = item.word;
+                document.getElementById('fc-phonetic').textContent = item.phonetic;
+                document.getElementById('fc-meaning').textContent = item.vi;
+                document.getElementById('fc-context').textContent = `"${item.context}"`;
+                document.getElementById('fc-counter').textContent = `${this.fcIndex + 1} / ${vocabList.length}`;
+            },
+
+            setupQuiz() {
+                const quizBox = document.getElementById('quiz-box');
+                const sampleQuestions = [
+                    {
+                        q: "Which word refers to 'maintaining or supporting oneself at a minimum level' in agriculture?",
+                        options: ["Subsistence", "Indigenous", "Echolocation", "Regeneration"],
+                        ans: 0,
+                        expl: "Subsistence (danh từ/tính từ) = Tự cung tự cấp, vừa đủ nuôi sống gia đình."
+                    },
+                    {
+                        q: "What does 'insectivorous' mean?",
+                        options: ["Plant-eating", "Feeding on insects", "Fruit-eating", "Living in water"],
+                        ans: 1,
+                        expl: "Insectivorous (tính từ) = Động vật/sinh vật ăn côn trùng."
+                    },
+                    {
+                        q: "Which term describes 'searching widely for food or provisions'?",
+                        options: ["Roosting", "Susceptible", "Foraging", "Regeneration"],
+                        ans: 2,
+                        expl: "Foraging (danh từ/động từ) = Hành vi săn lùng, kiếm ăn."
+                    }
+                ];
+
+                let html = `<h3 class="text-xl font-extrabold text-slate-900 border-b pb-3 border-slate-100 flex items-center gap-2"><i class="fa-solid fa-vial text-blue-800"></i> IELTS Vocab Challenge — Bats to the rescue</h3>`;
+                sampleQuestions.forEach((q, idx) => {
+                    html += `
+                        <div class="space-y-3 pt-2" id="quiz-q-${idx}">
+                            <p class="text-sm font-bold text-slate-800">${idx + 1}. ${q.q}</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                ${q.options.map((opt, oIdx) => `
+                                    <button onclick="app.checkQuiz(${idx}, ${oIdx}, ${q.ans})" class="quiz-opt-btn text-left p-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-all">
+                                        ${String.fromCharCode(65 + oIdx)}. ${opt}
+                                    </button>
+                                `).join('')}
+                            </div>
+                            <div class="quiz-feedback hidden text-xs p-3 rounded-xl"></div>
+                        </div>
+                    `;
+                });
+
+                quizBox.innerHTML = html;
+            },
+
+            checkQuiz(qIdx, selected, correct) {
+                const qDiv = document.getElementById(`quiz-q-${qIdx}`);
+                const btns = qDiv.querySelectorAll('.quiz-opt-btn');
+                const feedback = qDiv.querySelector('.quiz-feedback');
+
+                btns.forEach((btn, idx) => {
+                    btn.disabled = true;
+                    if (idx === correct) {
+                        btn.className = "quiz-opt-btn text-left p-3 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-900 font-bold text-xs";
+                    } else if (idx === selected) {
+                        btn.className = "quiz-opt-btn text-left p-3 rounded-xl border-2 border-red-400 bg-red-50 text-red-900 font-bold text-xs";
+                    }
+                });
+
+                feedback.classList.remove('hidden');
+                if (selected === correct) {
+                    feedback.className = "quiz-feedback text-xs p-3 rounded-xl bg-emerald-100 text-emerald-900 font-bold border border-emerald-200";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Correct! Excellent job.`;
+                } else {
+                    feedback.className = "quiz-feedback text-xs p-3 rounded-xl bg-red-100 text-red-900 font-bold border border-red-200";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-xmark mr-1"></i> Incorrect. Option ${String.fromCharCode(65 + correct)} is the right answer.`;
+                }
+            }
+        };
+
+        window.onload = () => app.init();
+    </script>
+</body>
+</html>

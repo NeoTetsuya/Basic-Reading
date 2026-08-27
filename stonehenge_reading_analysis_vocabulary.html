@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stonehenge — IELTS Reading Analysis, Translation & Vocabulary</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --app-font-size: 16px;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-size: var(--app-font-size);
+            overflow-x: hidden;
+        }
+        .reading-text {
+            font-family: 'Merriweather', serif;
+            line-height: 2.15;
+            color: #334155;
+        }
+        .reading-text p {
+            margin-bottom: 1.5rem;
+            text-indent: 1.25rem;
+        }
+        .reading-text p:first-of-type {
+            text-indent: 0;
+        }
+
+        .paragraph-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 0.85rem;
+            margin-right: 0.4rem;
+            color: #1e40af;
+            background-color: #dbeafe;
+            border: 1px solid #bfdbfe;
+            text-indent: 0;
+            vertical-align: middle;
+        }
+
+        /* Highlight Targets & Interactive States */
+        .ans-target {
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            position: relative;
+            display: inline;
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+            text-indent: 0;
+        }
+
+        /* Question target color themes */
+        .ans-target-q1 { background-color: #fef08a; border-bottom: 2px solid #eab308; color: #854d0e; }
+        .ans-target-q2 { background-color: #bae6fd; border-bottom: 2px solid #0284c7; color: #075985; }
+        .ans-target-q3 { background-color: #bbf7d0; border-bottom: 2px solid #16a34a; color: #166534; }
+        .ans-target-q4 { background-color: #fbcfe8; border-bottom: 2px solid #db2777; color: #9d174d; }
+        .ans-target-q5 { background-color: #ddd6fe; border-bottom: 2px solid #7c3aed; color: #5b21b6; }
+        .ans-target-q6 { background-color: #fed7aa; border-bottom: 2px solid #ea580c; color: #9a3412; }
+        .ans-target-q7 { background-color: #ccfbf1; border-bottom: 2px solid #0d9488; color: #115e59; }
+        .ans-target-q8 { background-color: #fef3c7; border-bottom: 2px solid #d97706; color: #92400e; }
+        .ans-target-q9 { background-color: #e0e7ff; border-bottom: 2px solid #4f46e5; color: #3730a3; }
+        .ans-target-q10 { background-color: #fae8ff; border-bottom: 2px solid #c026d3; color: #86198f; }
+        .ans-target-q11 { background-color: #dcfce7; border-bottom: 2px solid #22c55e; color: #14532d; }
+        .ans-target-q12 { background-color: #ffe4e6; border-bottom: 2px solid #f43f5e; color: #881337; }
+        .ans-target-q13 { background-color: #e0f2fe; border-bottom: 2px solid #0369a1; color: #0c4a6e; }
+
+        .q-badge {
+            display: inline-block;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72em;
+            font-weight: 800;
+            padding: 1px 6px;
+            border-radius: 4px;
+            margin-right: 4px;
+            vertical-align: baseline;
+            line-height: 1.2;
+            color: #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            text-indent: 0;
+            user-select: none;
+        }
+
+        .ans-target:hover, .ans-target.active-target {
+            outline: 3px solid #2563eb;
+            box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
+            filter: brightness(0.96);
+            z-index: 20;
+        }
+
+        /* Floating Evidence Popover */
+        .explanation-popover {
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            opacity: 0;
+            visibility: hidden;
+            width: 310px;
+            background-color: #0f172a;
+            color: #f8fafc;
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 0.82rem;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.3);
+            z-index: 50;
+            transition: all 0.25s ease;
+            pointer-events: none;
+            line-height: 1.45;
+            font-weight: normal;
+        }
+        .explanation-popover::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: #0f172a transparent transparent transparent;
+        }
+        .ans-target:hover .explanation-popover, .ans-target.active-target .explanation-popover {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Flashcard Animation */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* SVG Connections */
+        #svg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 30;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .tab-btn.active {
+            background-color: #1e40af;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(30, 64, 175, 0.3);
+        }
+
+        @keyframes arrowFlow {
+            from { stroke-dashoffset: 26; }
+            to { stroke-dashoffset: 0; }
+        }
+        .animated-arrow-line {
+            animation: arrowFlow 1s linear infinite;
+        }
+
+        .lang-btn.active {
+            background-color: #0f172a;
+            color: white;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col bg-slate-100">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-white border-b border-slate-200 px-4 sm:px-6 py-3 flex flex-col md:flex-row justify-between items-center shadow-xs shrink-0 gap-3 z-40">
+        <div class="flex items-center space-x-3">
+            <div class="bg-blue-800 text-white p-2.5 rounded-xl shadow-sm">
+                <i class="fa-solid fa-landmark-dome text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold text-slate-800">Stonehenge — Reading Analysis, Translation & Vocabulary</h1>
+                <p class="text-xs text-slate-500 font-medium">IELTS Academic Reading Master Companion — Cambridge Style</p>
+            </div>
+        </div>
+
+        <!-- Controls: Language Switcher, Font Resize & Arrows Toggle -->
+        <div class="flex items-center space-x-3 flex-wrap gap-y-2">
+            <!-- Language Switcher -->
+            <div class="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200" id="lang-switcher">
+                <button class="lang-btn active px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="en">EN</button>
+                <button class="lang-btn px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="vi">VIE</button>
+                <button class="lang-btn px-3 py-1 rounded-md text-xs font-bold transition-all" data-lang="dual">Parallel (EN/VIE)</button>
+            </div>
+
+            <!-- Font Resizer -->
+            <div class="flex items-center space-x-1 bg-slate-100 p-1 rounded-lg border border-slate-200">
+                <button id="btn-dec-font" class="w-7 h-7 flex items-center justify-center rounded bg-white shadow-xs hover:bg-slate-50 font-bold text-xs text-slate-700" title="Decrease Font">A-</button>
+                <button id="btn-inc-font" class="w-7 h-7 flex items-center justify-center rounded bg-white shadow-xs hover:bg-slate-50 font-bold text-xs text-slate-700" title="Increase Font">A+</button>
+            </div>
+
+            <!-- Toggle Arrow Canvas -->
+            <button id="btn-toggle-arrows" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-blue-800 text-white border border-blue-800 font-medium text-xs hover:bg-blue-900 transition-colors shadow-xs">
+                <i class="fa-solid fa-route"></i>
+                <span class="hidden sm:inline">Arrows</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-white border-b border-slate-200 px-6 py-2 overflow-x-auto shrink-0 shadow-xs">
+        <div class="flex space-x-2 min-w-max" id="nav-tabs">
+            <button class="tab-btn active px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="analysis">
+                <i class="fa-solid fa-book-open mr-1.5"></i> 1. Passage & Question Analysis (Q1–Q13)
+            </button>
+            <button class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="vocabulary">
+                <i class="fa-solid fa-spell-check mr-1.5"></i> 2. IELTS Vocabulary Suite (Band 7.0–9.0)
+            </button>
+            <button class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-all" data-tab="flashcards">
+                <i class="fa-solid fa-brain mr-1.5"></i> 3. Vocab Flashcards & Practice Quiz
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="flex-1 overflow-hidden relative" id="main-wrapper">
+        <svg id="svg-canvas"></svg>
+
+        <!-- TAB 1: Passage & Question Analysis -->
+        <div id="tab-analysis-content" class="h-full grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden">
+            <!-- Left Pane: Passage View -->
+            <section id="left-pane" class="lg:col-span-6 bg-white overflow-y-auto p-6 lg:p-10 border-r border-slate-200 relative">
+                <div class="max-w-3xl mx-auto">
+                    <div class="flex items-center justify-between mb-6 pb-3 border-b border-slate-100">
+                        <span class="text-xs font-bold uppercase tracking-wider text-blue-800 bg-blue-50 px-3 py-1 rounded-md border border-blue-200">
+                            <i class="fa-solid fa-archway mr-1.5"></i> Reading Passage — Stonehenge
+                        </span>
+                        <span class="text-xs text-slate-400 font-medium"><i class="fa-solid fa-mouse-pointer mr-1"></i> Hover/Click highlighted evidence</span>
+                    </div>
+
+                    <div id="passage-container" class="reading-text text-base leading-relaxed text-slate-700 space-y-4">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Pane: Questions & Detailed Explanations -->
+            <section id="right-pane" class="lg:col-span-6 bg-slate-50 overflow-y-auto p-6 lg:p-10">
+                <div class="max-w-2xl mx-auto space-y-6" id="explanations-list">
+                    <!-- Rendered dynamically -->
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB 2: Vocabulary Suite -->
+        <div id="tab-vocabulary-content" class="h-full bg-slate-50 overflow-y-auto p-6 lg:p-10 hidden">
+            <div class="max-w-6xl mx-auto space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-book-bookmark text-blue-800"></i> Essential IELTS Reading Vocabulary — Stonehenge
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">High-yield academic terms, history/archaeology collocations, and contextual examples from the passage.</p>
+                    </div>
+
+                    <div class="flex items-center space-x-3 w-full md:w-auto">
+                        <div class="relative flex-1 md:w-64">
+                            <i class="fa-solid fa-search absolute left-3 top-3 text-slate-400 text-xs"></i>
+                            <input type="text" id="vocab-search" placeholder="Search word or translation..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-600">
+                        </div>
+                        <select id="vocab-filter" class="bg-slate-50 border border-slate-200 text-xs font-semibold rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                            <option value="all">All Categories</option>
+                            <option value="noun">Nouns</option>
+                            <option value="verb">Verbs</option>
+                            <option value="adjective">Adjectives</option>
+                            <option value="archaeology">Archaeology & History</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="vocab-cards-grid">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: Vocab Flashcards & Practice Quiz -->
+        <div id="tab-flashcards-content" class="h-full bg-slate-50 overflow-y-auto p-6 lg:p-10 hidden">
+            <div class="max-w-3xl mx-auto space-y-8">
+                <div class="flex justify-center space-x-3">
+                    <button id="btn-mode-flashcard" class="px-5 py-2.5 rounded-xl text-xs font-extrabold bg-blue-800 text-white shadow-sm transition-all">
+                        <i class="fa-solid fa-clone mr-2"></i> Interactive Flashcards
+                    </button>
+                    <button id="btn-mode-quiz" class="px-5 py-2.5 rounded-xl text-xs font-extrabold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all">
+                        <i class="fa-solid fa-circle-question mr-2"></i> Quick Quiz Mode
+                    </button>
+                </div>
+
+                <!-- Flashcard Display Box -->
+                <div id="flashcard-view" class="flex flex-col items-center space-y-6">
+                    <p class="text-xs text-slate-500 font-semibold">Click the card to flip between Word and Vietnamese Definition</p>
+                    
+                    <div class="w-full max-w-md h-72 perspective-1000 cursor-pointer" id="flashcard-wrapper">
+                        <div id="flashcard-inner" class="relative w-full h-full duration-500 transform-style-3d transition-transform">
+                            <!-- Front -->
+                            <div class="absolute w-full h-full bg-white rounded-3xl border border-slate-200 shadow-md p-8 flex flex-col justify-between items-center text-center backface-hidden">
+                                <span id="fc-category" class="text-[10px] uppercase font-extrabold tracking-widest text-blue-800 bg-blue-50 px-3 py-1 rounded-full border border-blue-200">Category</span>
+                                <div>
+                                    <h3 id="fc-word" class="text-3xl font-black text-slate-900 mb-2">Word</h3>
+                                    <p id="fc-phonetic" class="text-sm font-mono text-slate-500">/phonetic/</p>
+                                </div>
+                                <span class="text-xs font-bold text-blue-800 flex items-center gap-1"><i class="fa-solid fa-rotate mr-1"></i> Flip for meaning</span>
+                            </div>
+                            <!-- Back -->
+                            <div class="absolute w-full h-full bg-slate-900 text-white rounded-3xl shadow-md p-8 flex flex-col justify-between items-center text-center backface-hidden rotate-y-180">
+                                <span class="text-[10px] uppercase font-extrabold tracking-widest text-blue-400 bg-slate-800 px-3 py-1 rounded-full">Vietnamese Meaning</span>
+                                <div>
+                                    <h4 id="fc-meaning" class="text-2xl font-bold text-blue-400 mb-3">Nghĩa tiếng Việt</h4>
+                                    <p id="fc-context" class="text-xs text-slate-300 italic leading-relaxed">"Context sentence..."</p>
+                                </div>
+                                <span class="text-xs font-bold text-slate-400 flex items-center gap-1"><i class="fa-solid fa-rotate mr-1"></i> Flip back</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <button id="btn-fc-prev" class="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 flex items-center justify-center font-bold text-base shadow-xs transition-all">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <span id="fc-counter" class="text-xs font-bold text-slate-600 px-4 py-2 bg-white rounded-xl border border-slate-200">1 / 13</span>
+                        <button id="btn-fc-next" class="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 flex items-center justify-center font-bold text-base shadow-xs transition-all">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Display Box -->
+                <div id="quiz-view" class="hidden space-y-6">
+                    <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6" id="quiz-box">
+                        <!-- Quiz populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const passageData = [
+            {
+                pNum: 'A',
+                en: `For centuries, historians and archaeologists have puzzled over the many mysteries of Stonehenge, a prehistoric monument that took an estimated 1,500 years to erect. Located on Salisbury Plain in southern England, it is comprised of roughly 100 massive upright stones placed in a circular layout.`,
+                vi: `Trong nhiều thế kỷ, các nhà sử học và các nhà khảo cổ học đã trăn trở và đau đầu trước vô vàn bí ẩn của Stonehenge – một đài tưởng niệm thời tiền sử ước tính phải mất tới 1.500 năm để dựng nên. Tọa lạc trên Đồng bằng Salisbury ở miền nam nước Anh, công trình này bao gồm khoảng 100 tảng đá khổng lồ dựng thẳng đứng được sắp xếp theo một bố cục hình tròn.`
+            },
+            {
+                pNum: 'B',
+                en: `Archaeologists believe England’s most iconic prehistoric ruin was built in several stages with the earliest constructed 5,000 or more years ago. First, Neolithic Britons used primitive tools, which may have been fashioned out of <span class="ans-target ans-target-q1" data-q="q1"><span class="q-badge bg-yellow-600">Q1</span>deer antlers<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q1 Target Evidence</strong>Tools may have been fashioned out of deer antlers to dig the ditch.</span></span>, to dig a massive circular ditch and bank, or henge. Deep pits dating back to that era and located within the circle may have once held a ring of <span class="ans-target ans-target-q2" data-q="q2"><span class="q-badge bg-sky-600">Q2</span>timber posts<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q2 Target Evidence</strong>Deep pits inside the circle may have held a ring of timber posts.</span></span>, according to some scholars.`,
+                vi: `Các nhà khảo cổ tin rằng tàn tích thời tiền sử mang tính biểu tượng nhất của nước Anh này được xây dựng qua nhiều giai đoạn khác nhau, với giai đoạn sớm nhất được khởi công từ cách đây 5.000 năm hoặc lâu hơn. Đầu tiên, người Anh thời Đồ đá mới đã sử dụng các công cụ nguyên thủy thô sơ, vốn có thể được chế tác từ <span class="ans-target ans-target-q1" data-q="q1"><span class="q-badge bg-yellow-600">Q1</span>gạc hươu (deer antlers)<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q1</strong>Các công cụ thô sơ có thể được chế tác từ gạc hươu (deer antlers) để đào hào.</span></span>, để đào một con hào và bờ đê hình tròn khổng lồ (gọi là henge). Theo một số học giả, các hố sâu có niên đại từ kỷ nguyên đó nằm bên trong vòng tròn có thể đã từng là nơi chôn một vòng các <span class="ans-target ans-target-q2" data-q="q2"><span class="q-badge bg-sky-600">Q2</span>cột gỗ (timber posts)<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q2</strong>Các hố sâu bên trong vòng tròn có thể từng chứa một vòng các cột gỗ (timber posts).</span></span>.`
+            },
+            {
+                pNum: 'C',
+                en: `Several hundred years later, it is thought, Stonehenge’s builders hoisted an estimated 80 bluestones, 43 of which remain today, into standing positions and placed them in either a horseshoe or circular formation. These stones have been traced all the way to the Preseli Hills in Wales, some 300 kilometres from Stonehenge. How, then, did prehistoric builders without sophisticated tools or engineering haul these boulders, which weigh up to four tons, over such a great distance?`,
+                vi: `Vài trăm năm sau đó, người ta cho rằng những người thợ xây Stonehenge đã nâng khoảng 80 tảng đá xanh (bluestones) – 43 tảng trong số đó vẫn còn tồn tại đến ngày nay – lên vị trí dựng đứng và xếp chúng theo hình móng ngựa hoặc hình tròn. Nguồn gốc của những tảng đá này đã được lần theo dấu vết đến tận Đồi Preseli ở xứ Wales, cách Stonehenge khoảng 300 km. Vậy thì làm thế nào mà những người thợ xây thời tiền sử, không có công cụ hay kỹ thuật tinh xảo, lại có thể vận chuyển những tảng đá khổng lồ nặng tới 4 tấn qua một quãng đường xa xôi đến như vậy?`
+            },
+            {
+                pNum: 'D',
+                en: `According to one long-standing theory among archaeologists, Stonehenge’s builders fashioned sledges and rollers out of <span class="ans-target ans-target-q3" data-q="q3"><span class="q-badge bg-emerald-600">Q3</span>tree trunks<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q3 Target Evidence</strong>Fashioned sledges and rollers out of tree trunks.</span></span> to lug the bluestones from the Preseli Hills. They then transferred the boulders onto rafts and floated them first along the Welsh coast and then up the River Avon toward Salisbury Plain; alternatively, they may have towed each stone with a fleet of vessels. More recent archaeological hypotheses have them transporting the bluestones with supersized wicker baskets on a combination of ball bearings and long grooved planks, hauled by <span class="ans-target ans-target-q4" data-q="q4"><span class="q-badge bg-pink-600">Q4</span>oxen<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q4 Target Evidence</strong>Supersized baskets hauled / pulled by oxen.</span></span>.`,
+                vi: `Theo một giả thuyết tồn tại từ lâu giữa các nhà khảo cổ, những người thợ xây Stonehenge đã chế tạo xe trượt và con lăn từ <span class="ans-target ans-target-q3" data-q="q3"><span class="q-badge bg-emerald-600">Q3</span>thân cây (tree trunks)<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q3</strong>Chế tạo xe trượt và con lăn từ thân cây (tree trunks) để kéo đá.</span></span> để kéo những tảng đá xanh từ Đồi Preseli. Sau đó, họ chuyển các tảng đá lên bè và thả trôi chúng trước tiên dọc theo bờ biển xứ Wales rồi ngược dòng Sông Avon hướng về phía Đồng bằng Salisbury; hoặc theo một cách khác, họ có thể đã kéo từng tảng đá bằng một đoàn thuyền. Các giả thuyết khảo cổ gần đây hơn lại cho rằng họ đã vận chuyển các tảng đá xanh bằng những chiếc giỏ đan bằng liễu gai ngoại cỡ đặt trên sự kết hợp giữa các ổ bi tròn và những tấm ván dài có rãnh, được kéo bởi <span class="ans-target ans-target-q4" data-q="q4"><span class="q-badge bg-pink-600">Q4</span>đàn bò kéo (oxen)<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q4</strong>Những chiếc giỏ đan ngoại cỡ được kéo bởi đàn bò đực (oxen).</span></span>.`
+            },
+            {
+                pNum: 'E',
+                en: `As early as the 1970s, geologists have been adding their voices to the debate over how Stonehenge came into being. Challenging the classic image of industrious builders pushing, carting, rolling or hauling giant stones from faraway Wales, some scientists have suggested that it was <span class="ans-target ans-target-q5" data-q="q5"><span class="q-badge bg-purple-600">Q5</span>glaciers<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q5 Target Evidence</strong>Suggested that it was glaciers, not humans, that carried the bluestones.</span></span>, not humans, that carried the bluestones to Salisbury Plain. Most archaeologists have remained sceptical about this theory, however, wondering how the forces of nature could possibly have delivered the exact number of stones needed to complete the circle.`,
+                vi: `Ngay từ những năm 1970, các nhà địa chất học đã tham gia vào cuộc tranh luận về việc Stonehenge đã hình thành như thế nào. Thách thức hình ảnh kinh điển về những người thợ xây cần cù đẩy, kéo xe, lăn hoặc kéo những tảng đá khổng lồ từ xứ Wales xa xôi, một số nhà khoa học đã gợi ý rằng chính các <span class="ans-target ans-target-q5" data-q="q5"><span class="q-badge bg-purple-600">Q5</span>sông băng (glaciers)<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q5</strong>Giả thuyết cho rằng chính các con sông băng (glaciers) chứ không phải con người đã vận chuyển đá.</span></span>, chứ không phải con người, đã mang các tảng đá xanh tới Đồng bằng Salisbury. Tuy nhiên, hầu hết các nhà khảo cổ vẫn tỏ ra hoài nghi về giả thuyết này, và tự hỏi làm thế nào mà các thế lực tự nhiên lại có thể mang đến chính xác số lượng đá cần thiết để hoàn thành vòng tròn.`
+            },
+            {
+                pNum: 'F',
+                en: `The third phase of construction took place around 2000 BCE. At this point, <span class="ans-target ans-target-q9" data-q="q9"><span class="q-badge bg-indigo-600">Q9</span>sandstone slabs - known as ‘sarsens’ - were arranged into an outer crescent or ring; some were assembled into the iconic three-pieced structures called trilithons that stand tall in the centre of Stonehenge<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q9 Target Evidence</strong>Sandstone slabs placed in outer crescent/ring AND in the centre -> TRUE.</span></span>. Some 50 of these stones are now visible on the site, which may once have contained many more. Radiocarbon dating has revealed that work continued at Stonehenge until roughly 1600 BCE, <span class="ans-target ans-target-q10" data-q="q10"><span class="q-badge bg-fuchsia-600">Q10</span>with the bluestones in particular being repositioned multiple times<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q10 Target Evidence</strong>Text says bluestones were repositioned multiple times, contradicting 'stood in the same spot' -> FALSE.</span></span>.`,
+                vi: `Giai đoạn xây dựng thứ ba diễn ra vào khoảng năm 2000 trước Công nguyên. Tại thời điểm này, <span class="ans-target ans-target-q9" data-q="q9"><span class="q-badge bg-indigo-600">Q9</span>các phiến đá sa thạch – được gọi là 'sarsens' – đã được sắp xếp thành một hình trăng khuyết hoặc một vòng tròn bên ngoài; một số phiến đá được ghép nối thành các cấu trúc ba phiến đá biểu tượng (gọi là trilithons) đứng sừng sững ở ngay trung tâm của Stonehenge<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q9</strong>Đá sa thạch được đặt ở cả vòng ngoài lẫn ở trung tâm công trình -> ĐÚNG (TRUE).</span></span>. Hiện tại có khoảng 50 phiến đá này có thể nhìn thấy trên khu di tích, nơi trước đây có thể từng chứa nhiều hơn thế. Phương pháp định tuổi bằng đồng vị carbon phóng xạ đã tiết lộ rằng công việc xây dựng tại Stonehenge vẫn tiếp tục diễn ra cho đến khoảng năm 1600 TCN, <span class="ans-target ans-target-q10" data-q="q10"><span class="q-badge bg-fuchsia-600">Q10</span>với việc các tảng đá xanh nói riêng đã được thay đổi vị trí sắp đặt nhiều lần<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q10</strong>Bài đọc khẳng định đá xanh được tái định vị nhiều lần, mâu thuẫn với nhận định 'đứng yên một vị trí' -> SAI (FALSE).</span></span>.`
+            },
+            {
+                pNum: 'G',
+                en: `But who were the builders of Stonehenge? In the 17th century, archaeologist John Aubrey made the claim that Stonehenge was the work of <span class="ans-target ans-target-q6" data-q="q6"><span class="q-badge bg-orange-600">Q6</span>druids<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q6 Target Evidence</strong>John Aubrey claimed Stonehenge was the work of druids.</span></span>, who had important religious, judicial and political roles in Celtic society. This theory was widely popularized by the antiquarian William Stukeley... <span class="ans-target ans-target-q11" data-q="q11"><span class="q-badge bg-green-600">Q11</span>However, in the mid-20th century, radiocarbon dating demonstrated that Stonehenge stood more than 1,000 years before the Celts inhabited the region<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q11 Target Evidence</strong>20th-century radiocarbon dating proved site existed 1,000 yrs before Celts, disproving Aubrey's theory -> FALSE.</span></span>.`,
+                vi: `Nhưng ai thực sự là những người thợ xây nên Stonehenge? Vào thế kỷ 17, nhà khảo cổ học John Aubrey đã đưa ra tuyên bố rằng Stonehenge là công trình của các <span class="ans-target ans-target-q6" data-q="q6"><span class="q-badge bg-orange-600">Q6</span>tu sĩ Celtic (druids)<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q6</strong>John Aubrey cho rằng Stonehenge là tác phẩm của các tu sĩ Druids.</span></span>, những người có các vai trò tôn giáo, tư pháp và chính trị vô cùng quan trọng trong xã hội người Celt. Giả thuyết này đã được phổ biến rộng rãi bởi nhà nghiên cứu cổ vật William Stukeley... <span class="ans-target ans-target-q11" data-q="q11"><span class="q-badge bg-green-600">Q11</span>Tuy nhiên, vào giữa thế kỷ 20, phương pháp định tuổi bằng carbon phóng xạ đã chứng minh rằng Stonehenge đã tồn tại hơn 1.000 năm trước khi người Celt đến sinh sống tại khu vực này<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q11</strong>Định tuổi carbon phóng xạ thế kỷ 20 đã bác bỏ giả thuyết của Aubrey chứ không ủng hộ -> SAI (FALSE).</span></span>.`
+            },
+            {
+                pNum: 'H',
+                en: `<span class="ans-target ans-target-q12" data-q="q12"><span class="q-badge bg-rose-600">Q12</span>Many modern historians and archaeologists now agree that several distinct tribes of people contributed to Stonehenge, each undertaking a different phase of its construction. Bones, tools and other artefacts found on the site seem to support this hypothesis<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q12 Target Evidence</strong>Bones, tools, artefacts (objects) support hypothesis of several distinct tribes contributing -> TRUE.</span></span>. The first stage was achieved by Neolithic agrarians who were likely to have been indigenous to the British Isles.`,
+                vi: `<span class="ans-target ans-target-q12" data-q="q12"><span class="q-badge bg-rose-600">Q12</span>Nhiều nhà sử học và khảo cổ học hiện đại ngày nay đều đồng ý rằng một số bộ tộc người khác nhau đã cùng đóng góp xây dựng nên Stonehenge, mỗi bộ tộc đảm nhận một giai đoạn thi công riêng biệt. Xương, công cụ và các hiện vật khác được khai quật tại địa điểm này dường như ủng hộ mạnh mẽ cho giả thuyết đó<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q12</strong>Các hiện vật (xương, công cụ...) chứng minh có nhiều nhóm bộ tộc riêng biệt đóng góp vào việc xây dựng -> ĐÚNG (TRUE).</span></span>. Giai đoạn đầu tiên được thực hiện bởi những người làm nông nghiệp thời Đồ đá mới, những người nhiều khả năng là cư dân bản địa của Quần đảo Anh.`
+            },
+            {
+                pNum: 'I',
+                en: `If the facts surrounding the architects and construction of Stonehenge remain shadowy at best, the purpose of the striking monument is even more of a mystery. While there is <span class="ans-target ans-target-q7" data-q="q7"><span class="q-badge bg-teal-600">Q7</span>consensus among the majority of modern scholars that Stonehenge once served the function of burial ground<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q7 Target Evidence</strong>Consensus that it served the function of burial ground.</span></span>, they have yet to determine what other purposes it had.`,
+                vi: `Nếu những sự thật xung quanh các kiến trúc sư và quá trình xây dựng Stonehenge vẫn còn nhiều uẩn khúc và mơ hồ, thì mục đích thực sự của di tích ấn tượng này thậm chí còn là một bí ẩn lớn hơn. Trong khi có <span class="ans-target ans-target-q7" data-q="q7"><span class="q-badge bg-teal-600">Q7</span>sự đồng thuận giữa phần lớn các học giả hiện đại rằng Stonehenge từng phục vụ chức năng như một khu đất chôn cất / nghĩa địa (burial ground)<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q7</strong>Sự đồng thuận của đa số học giả về chức năng làm địa điểm chôn cất (burial ground).</span></span>, họ vẫn chưa thể xác định được công trình này còn phục vụ những mục đích nào khác nữa.`
+            },
+            {
+                pNum: 'J',
+                en: `In the 1960s, the astronomer Gerald Hawkins suggested that the cluster of megalithic stones operated as a form of <span class="ans-target ans-target-q8" data-q="q8"><span class="q-badge bg-amber-600">Q8</span>calendar<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q8 Target Evidence</strong>Operated as a form of calendar corresponding to solstices.</span></span>, with different points corresponding to astrological phenomena such as solstices, equinoxes and eclipses occurring at different times of the year. <span class="ans-target ans-target-q13" data-q="q13"><span class="q-badge bg-sky-800">Q13</span>While his theory has received a considerable amount of attention over the decades, critics maintain that Stonehenge’s builders probably lacked the knowledge necessary to predict such events or that England’s dense cloud cover would have obscured their view of the skies<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Q13 Target Evidence</strong>Text mentions critics maintained builders lacked knowledge, but does NOT specify critics were 'mainly astronomers' -> NOT GIVEN.</span></span>.`,
+                vi: `Vào những năm 1960, nhà thiên văn học Gerald Hawkins đã gợi ý rằng cụm đá cự thạch này hoạt động như một hình thức <span class="ans-target ans-target-q8" data-q="q8"><span class="q-badge bg-amber-600">Q8</span>lịch thiên văn (calendar)<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q8</strong>Được cho là hoạt động như một loại lịch thiên văn (calendar).</span></span>, với các điểm bố trí khác nhau tương ứng với các hiện tượng chiêm tinh học như ngày hạ chí/đông chí, điểm phân (xuân phân/thu phân) và các đợt nhật thực/nguyệt thực xảy ra vào những thời điểm khác nhau trong năm. <span class="ans-target ans-target-q13" data-q="q13"><span class="q-badge bg-sky-800">Q13</span>Mặc dù giả thuyết của ông đã nhận được sự quan tâm đáng kể trong nhiều thập kỷ, các nhà phê bình vẫn cho rằng những người thợ xây Stonehenge có thể đã thiếu kiến thức cần thiết để dự đoán những sự kiện như vậy hoặc lớp mây mù dày đặc của nước Anh sẽ che khuất tầm nhìn lên bầu trời của họ<span class="explanation-popover"><strong class="text-blue-300 block mb-1"><i class="fa-solid fa-circle-check"></i> Vị trí Q13</strong>Bài đọc đề cập đến việc các nhà phê bình đưa ra lập luận phản bác, nhưng KHÔNG hề nêu rằng các nhà phê bình chủ yếu là các nhà thiên văn học khác -> NOT GIVEN.</span></span>.`
+            },
+            {
+                pNum: 'K',
+                en: `More recently, signs of illness and injury in the human remains unearthed at Stonehenge led a group of British archaeologists to speculate that it was considered a place of healing, perhaps because bluestones were thought to have curative powers.`,
+                vi: `Gần đây hơn, các dấu hiệu của bệnh tật và thương tật trên những bộ hài cốt người được khai quật tại Stonehenge đã khiến một nhóm các nhà khảo cổ học người Anh suy đoán rằng nơi đây từng được coi là một thánh địa chữa bệnh, có lẽ là do các tảng đá xanh được tin là sở hữu nguồn năng lực chữa bệnh màu nhiệm.`
+            }
+        ];
+
+        const questionsData = [
+            {
+                id: 'q1',
+                num: '1',
+                type: 'Note Completion',
+                ansKey: 'deer antlers / antlers',
+                badgeColor: 'bg-yellow-600',
+                prompt: 'The ditch and henge were dug, possibly using tools made from ____________.',
+                explEn: 'Paragraph B states: "...Neolithic Britons used primitive tools, which may have been fashioned out of deer antlers, to dig a massive circular ditch..."',
+                explVi: 'Đoạn B ghi rõ: người thời Đồ đá mới dùng công cụ được làm từ gạc hươu (deer antlers) để đào hào.',
+                synonyms: [
+                    { q: 'tools made from', p: 'tools fashioned out of' }
+                ]
+            },
+            {
+                id: 'q2',
+                num: '2',
+                type: 'Note Completion',
+                ansKey: 'timber posts',
+                badgeColor: 'bg-sky-600',
+                prompt: '____________ may have been arranged in deep pits inside the circle.',
+                explEn: 'Paragraph B states: "Deep pits dating back to that era and located within the circle may have once held a ring of timber posts..."',
+                explVi: 'Đoạn B nêu: Các hố sâu bên trong vòng tròn có thể từng chứa một dải cột gỗ (timber posts).',
+                synonyms: [
+                    { q: 'inside the circle', p: 'located within the circle' },
+                    { q: 'arranged in deep pits', p: 'pits held a ring of' }
+                ]
+            },
+            {
+                id: 'q3',
+                num: '3',
+                type: 'Note Completion',
+                ansKey: 'tree trunks',
+                badgeColor: 'bg-emerald-600',
+                prompt: 'Builders used ____________ to make sledges and rollers.',
+                explEn: 'Paragraph D states: "...Stonehenge’s builders fashioned sledges and rollers out of tree trunks..."',
+                explVi: 'Đoạn D cho biết thợ xây chế tạo xe trượt và con lăn từ thân cây (tree trunks).',
+                synonyms: [
+                    { q: 'used ... to make', p: 'fashioned ... out of' }
+                ]
+            },
+            {
+                id: 'q4',
+                num: '4',
+                type: 'Note Completion',
+                ansKey: 'oxen',
+                badgeColor: 'bg-pink-600',
+                prompt: '____________ pulled them on giant baskets.',
+                explEn: 'Paragraph D states: "...transporting the bluestones with supersized wicker baskets... hauled by oxen."',
+                explVi: 'Đoạn D ghi nhận giỏ đan khổng lồ được kéo (hauled / pulled) bởi bò mộng (oxen).',
+                synonyms: [
+                    { q: 'pulled', p: 'hauled' },
+                    { q: 'giant baskets', p: 'supersized wicker baskets' }
+                ]
+            },
+            {
+                id: 'q5',
+                num: '5',
+                type: 'Note Completion',
+                ansKey: 'glaciers',
+                badgeColor: 'bg-purple-600',
+                prompt: 'They were brought from Wales by ____________.',
+                explEn: 'Paragraph E states: "...some scientists have suggested that it was glaciers, not humans, that carried the bluestones to Salisbury Plain."',
+                explVi: 'Đoạn E đưa ra giả thuyết địa chất rằng chính các sông băng (glaciers) đã mang đá xanh đến.',
+                synonyms: [
+                    { q: 'brought from Wales by', p: 'carried the bluestones to Salisbury Plain' }
+                ]
+            },
+            {
+                id: 'q6',
+                num: '6',
+                type: 'Note Completion',
+                ansKey: 'druids',
+                badgeColor: 'bg-orange-600',
+                prompt: 'A theory arose in the 17th century that its builders were Celtic ____________.',
+                explEn: 'Paragraph G states: "In the 17th century, archaeologist John Aubrey made the claim that Stonehenge was the work of druids..."',
+                explVi: 'Đoạn G nêu: Vào thế kỷ 17, John Aubrey khẳng định công trình do các tu sĩ Druids tạo nên.',
+                synonyms: [
+                    { q: 'builders were', p: 'was the work of' }
+                ]
+            },
+            {
+                id: 'q7',
+                num: '7',
+                type: 'Note Completion',
+                ansKey: 'burial ground',
+                badgeColor: 'bg-teal-600',
+                prompt: 'Many experts agree it has been used as a ____________ site.',
+                explEn: 'Paragraph I states: "...consensus among the majority of modern scholars that Stonehenge once served the function of burial ground..."',
+                explVi: 'Đoạn I nêu rõ sự đồng thuận rằng Stonehenge từng đóng vai trò như một địa điểm chôn cất (burial ground).',
+                synonyms: [
+                    { q: 'many experts agree', p: 'consensus among majority of modern scholars' },
+                    { q: 'used as a ... site', p: 'served the function of' }
+                ]
+            },
+            {
+                id: 'q8',
+                num: '8',
+                type: 'Note Completion',
+                ansKey: 'calendar',
+                badgeColor: 'bg-amber-600',
+                prompt: 'In the 1960s, it was suggested that it worked as a kind of ____________.',
+                explEn: 'Paragraph J states: "In the 1960s, the astronomer Gerald Hawkins suggested that the cluster... operated as a form of calendar..."',
+                explVi: 'Đoạn J cho biết Gerald Hawkins gợi ý cụm đá hoạt động như một loại lịch (calendar).',
+                synonyms: [
+                    { q: 'worked as a kind of', p: 'operated as a form of' }
+                ]
+            },
+            {
+                id: 'q9',
+                num: '9',
+                type: 'True/False/Not Given',
+                ansKey: 'TRUE',
+                badgeColor: 'bg-indigo-600',
+                prompt: 'During the third phase of construction, sandstone slabs were placed in both the outer areas and the middle of the Stonehenge site.',
+                explEn: 'Paragraph F confirms sandstone slabs were arranged into "an outer crescent or ring" (outer areas) and assembled into trilithons in "the centre of Stonehenge" (middle).',
+                explVi: 'Đoạn F xác nhận các phiến đá sa thạch được xếp ở cả vòng ngoài (outer crescent/ring) và khu vực trung tâm (centre of Stonehenge) -> TRUE.',
+                synonyms: [
+                    { q: 'outer areas and middle', p: 'outer crescent or ring... centre of Stonehenge' }
+                ]
+            },
+            {
+                id: 'q10',
+                num: '10',
+                type: 'True/False/Not Given',
+                ansKey: 'FALSE',
+                badgeColor: 'bg-fuchsia-600',
+                prompt: 'There is scientific proof that the bluestones stood in the same spot until approximately 1600 BCE.',
+                explEn: 'Paragraph F contradicts this: "...with the bluestones in particular being repositioned multiple times." They were repositioned, NOT kept in the same spot.',
+                explVi: 'Đoạn F trái ngược hoàn toàn: các hòn đá xanh đặc biệt đã được di chuyển vị trí nhiều lần (repositioned multiple times), không phải đứng yên một chỗ -> FALSE.',
+                synonyms: [
+                    { q: 'stood in the same spot', p: 'repositioned multiple times' }
+                ]
+            },
+            {
+                id: 'q11',
+                num: '11',
+                type: 'True/False/Not Given',
+                ansKey: 'FALSE',
+                badgeColor: 'bg-green-600',
+                prompt: 'John Aubrey’s claim about Stonehenge was supported by 20th-century findings.',
+                explEn: 'Paragraph G states that 20th-century radiocarbon dating proved Stonehenge stood >1,000 years BEFORE Celts arrived, disproving (rather than supporting) Aubrey\'s theory.',
+                explVi: 'Đoạn G cho biết định tuổi carbon thế kỷ 20 chứng minh Stonehenge có trước người Celts 1.000 năm, bác bỏ giả thuyết của Aubrey chứ không phải ủng hộ -> FALSE.',
+                synonyms: [
+                    { q: 'supported by 20th-century findings', p: 'radiocarbon dating demonstrated it stood 1,000 yrs before Celts' }
+                ]
+            },
+            {
+                id: 'q12',
+                num: '12',
+                type: 'True/False/Not Given',
+                ansKey: 'TRUE',
+                badgeColor: 'bg-rose-600',
+                prompt: 'Objects discovered at Stonehenge seem to indicate that it was constructed by a number of different groups of people.',
+                explEn: 'Paragraph H confirms: "several distinct tribes of people contributed to Stonehenge... Bones, tools and other artefacts found on the site seem to support this hypothesis."',
+                explVi: 'Đoạn H xác nhận các hiện vật (xương, công cụ, cổ vật) tìm thấy ủng hộ giả thuyết có nhiều bộ tộc/nhóm người khác nhau xây dựng -> TRUE.',
+                synonyms: [
+                    { q: 'objects discovered', p: 'bones, tools and other artefacts found' },
+                    { q: 'number of different groups', p: 'several distinct tribes' }
+                ]
+            },
+            {
+                id: 'q13',
+                num: '13',
+                type: 'True/False/Not Given',
+                ansKey: 'NOT GIVEN',
+                badgeColor: 'bg-sky-800',
+                prompt: 'Criticism of Gerald Hawkins’ theory about Stonehenge has come mainly from other astronomers.',
+                explEn: 'Paragraph J mentions that "critics maintain that Stonehenge’s builders probably lacked the knowledge...", but does NOT specify who these critics were or if they were astronomers.',
+                explVi: 'Đoạn J nhắc đến ý kiến của các nhà chỉ trích (critics), nhưng không đề cập xem họ có phải chủ yếu là các nhà thiên văn học khác hay không -> NOT GIVEN.',
+                synonyms: [
+                    { q: 'mainly from other astronomers', p: 'No information in text' }
+                ]
+            }
+        ];
+
+        const vocabList = [
+            {
+                word: 'erect',
+                phonetic: '/ɪˈrekt/',
+                vi: 'Xây dựng / Dựng lên',
+                enDef: 'To construct or build a structure or monument.',
+                type: 'verb',
+                category: 'archaeology',
+                context: 'A prehistoric monument that took an estimated 1,500 years to erect.',
+                collocation: 'erect a monument / erect a building'
+            },
+            {
+                word: 'primitive',
+                phonetic: '/ˈprɪm.ɪ.tɪv/',
+                vi: 'Thô sơ / Cổ xưa',
+                enDef: 'Relating to, denoting, or preserving the character of an early stage in evolutionary or historical development.',
+                type: 'adjective',
+                category: 'archaeology',
+                context: 'Neolithic Britons used primitive tools to dig a massive circular ditch.',
+                collocation: 'primitive tools / primitive society'
+            },
+            {
+                word: 'hoist',
+                phonetic: '/hɔɪst/',
+                vi: 'Nâng lên / Kéo lên',
+                enDef: 'To raise or lift something heavy, often using ropes or pulleys.',
+                type: 'verb',
+                category: 'verb',
+                context: 'Stonehenge’s builders hoisted an estimated 80 bluestones into standing positions.',
+                collocation: 'hoist heavy stones / hoist a flag'
+            },
+            {
+                word: 'haul',
+                phonetic: '/hɔːl/',
+                vi: 'Kéo / Vận chuyển vất vả',
+                enDef: 'To pull or drag something heavy with effort or force.',
+                type: 'verb',
+                category: 'verb',
+                context: 'How did prehistoric builders haul these boulders over such a great distance?',
+                collocation: 'haul heavy loads / haul timber'
+            },
+            {
+                word: 'theory',
+                phonetic: '/ˈθɪə.ri/',
+                vi: 'Giả thuyết / Lý thuyết',
+                enDef: 'A formal idea or system of ideas intended to explain something.',
+                type: 'noun',
+                category: 'archaeology',
+                context: 'According to one long-standing theory among archaeologists...',
+                collocation: 'long-standing theory / support a theory'
+            },
+            {
+                word: 'sceptical',
+                phonetic: '/ˈskep.tɪ.kəl/',
+                vi: 'Nghi ngờ / Hoài nghi',
+                enDef: 'Not easily convinced; having doubts or reservations.',
+                type: 'adjective',
+                category: 'adjective',
+                context: 'Most archaeologists have remained sceptical about this glacier theory.',
+                collocation: 'remain sceptical / highly sceptical'
+            },
+            {
+                word: 'indigenous',
+                phonetic: '/ɪnˈdɪdʒ.ɪ.nəs/',
+                vi: 'Bản địa / Bản xứ',
+                enDef: 'Originating or occurring naturally in a particular place; native.',
+                type: 'adjective',
+                category: 'archaeology',
+                context: 'Neolithic agrarians who were likely to have been indigenous to the British Isles.',
+                collocation: 'indigenous people / indigenous population'
+            },
+            {
+                word: 'shadowy',
+                phonetic: '/ˈʃæd.əʊ.i/',
+                vi: 'Mơ hồ / Bí ẩn',
+                enDef: 'Mysterious, vague, or not well known.',
+                type: 'adjective',
+                category: 'adjective',
+                context: 'If the facts surrounding the architects remain shadowy at best...',
+                collocation: 'remain shadowy / shadowy figures'
+            },
+            {
+                word: 'consensus',
+                phonetic: '/kənˈsen.səs/',
+                vi: 'Sự đồng thuận / Nhất trí',
+                enDef: 'General agreement among a group of people.',
+                type: 'noun',
+                category: 'noun',
+                context: 'There is consensus among the majority of modern scholars that Stonehenge was a burial ground.',
+                collocation: 'reach a consensus / general consensus'
+            },
+            {
+                word: 'speculate',
+                phonetic: '/ˈspek.jə.leɪt/',
+                vi: 'Suy đoán / Dự đoán',
+                enDef: 'To form a theory or conjecture about a subject without firm evidence.',
+                type: 'verb',
+                category: 'verb',
+                context: 'Archaeologists led to speculate that it was considered a place of healing.',
+                collocation: 'speculate about origin / widely speculate'
+            },
+            {
+                word: 'curative',
+                phonetic: '/ˈkjʊə.rə.tɪv/',
+                vi: 'Có khả năng chữa bệnh',
+                enDef: 'Able to cure disease or healing in nature.',
+                type: 'adjective',
+                category: 'adjective',
+                context: 'Because bluestones were thought to have curative powers.',
+                collocation: 'curative powers / curative properties'
+            },
+            {
+                word: 'artefact',
+                phonetic: '/ˈɑː.tə.fækt/',
+                vi: 'Cổ vật / Hiện vật',
+                enDef: 'An object made by a human being, typically one of cultural or historical interest.',
+                type: 'noun',
+                category: 'archaeology',
+                context: 'Bones, tools and other artefacts found on the site seem to support this hypothesis.',
+                collocation: 'ancient artefact / archaeological artefact'
+            },
+            {
+                word: 'agrarian',
+                phonetic: '/əˈɡreə.ri.ən/',
+                vi: 'Nông nghiệp / Làm nông',
+                enDef: 'Relating to cultivated land or the cultivation of land.',
+                type: 'adjective',
+                category: 'archaeology',
+                context: 'The first stage was achieved by Neolithic agrarians who lived off farming.',
+                collocation: 'agrarian society / agrarian community'
+            }
+        ];
+    </script>
+
+    <script>
+        const app = {
+            currentLang: 'en',
+            fontSize: 16,
+            showArrows: true,
+            activeTab: 'analysis',
+            fcIndex: 0,
+            fcFlipped: false,
+            arrowAnimFrame: null,
+
+            init() {
+                this.bindEvents();
+                this.renderPassage();
+                this.renderExplanations();
+                this.bindTargetEvents();
+                this.renderVocabGrid();
+                this.setupFlashcard();
+                this.setupQuiz();
+            },
+
+            bindEvents() {
+                // Language Switcher Buttons
+                document.querySelectorAll('#lang-switcher .lang-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('#lang-switcher .lang-btn').forEach(b => b.classList.remove('active'));
+                        e.currentTarget.classList.add('active');
+                        this.currentLang = e.currentTarget.dataset.lang;
+                        this.renderPassage();
+                        this.renderExplanations();
+                        this.bindTargetEvents();
+                        setTimeout(() => this.drawConnections(), 60);
+                    });
+                });
+
+                // Font Resizing
+                document.getElementById('btn-inc-font').addEventListener('click', () => {
+                    if (this.fontSize < 24) {
+                        this.fontSize += 1;
+                        document.documentElement.style.setProperty('--app-font-size', `${this.fontSize}px`);
+                        this.drawConnections();
+                    }
+                });
+                document.getElementById('btn-dec-font').addEventListener('click', () => {
+                    if (this.fontSize > 13) {
+                        this.fontSize -= 1;
+                        document.documentElement.style.setProperty('--app-font-size', `${this.fontSize}px`);
+                        this.drawConnections();
+                    }
+                });
+
+                // Toggle Arrows
+                document.getElementById('btn-toggle-arrows').addEventListener('click', (e) => {
+                    this.showArrows = !this.showArrows;
+                    e.currentTarget.classList.toggle('bg-blue-800');
+                    e.currentTarget.classList.toggle('bg-slate-300');
+                    e.currentTarget.classList.toggle('text-slate-700');
+                    if (!this.showArrows) {
+                        this.clearCanvas();
+                    } else {
+                        this.drawConnections();
+                    }
+                });
+
+                // Live scroll listeners for real-time tracking
+                const leftPane = document.getElementById('left-pane');
+                const rightPane = document.getElementById('right-pane');
+                if (leftPane) leftPane.addEventListener('scroll', () => this.drawConnections());
+                if (rightPane) rightPane.addEventListener('scroll', () => this.drawConnections());
+
+                // Navigation Tabs
+                document.querySelectorAll('#nav-tabs .tab-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('#nav-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+                        e.currentTarget.classList.add('active');
+                        const tab = e.currentTarget.dataset.tab;
+                        this.activeTab = tab;
+
+                        document.getElementById('tab-analysis-content').classList.toggle('hidden', tab !== 'analysis');
+                        document.getElementById('tab-vocabulary-content').classList.toggle('hidden', tab !== 'vocabulary');
+                        document.getElementById('tab-flashcards-content').classList.toggle('hidden', tab !== 'flashcards');
+
+                        if (tab !== 'analysis') this.clearCanvas();
+                        else setTimeout(() => this.drawConnections(), 100);
+                    });
+                });
+
+                // Search & Filter Vocab
+                document.getElementById('vocab-search').addEventListener('input', () => this.filterVocab());
+                document.getElementById('vocab-filter').addEventListener('change', () => this.filterVocab());
+
+                // Flashcard Controls
+                document.getElementById('flashcard-wrapper').addEventListener('click', () => {
+                    this.fcFlipped = !this.fcFlipped;
+                    document.getElementById('flashcard-inner').classList.toggle('rotate-y-180', this.fcFlipped);
+                });
+                document.getElementById('btn-fc-prev').addEventListener('click', () => {
+                    if (this.fcIndex > 0) {
+                        this.fcIndex--;
+                        this.updateFlashcard();
+                    }
+                });
+                document.getElementById('btn-fc-next').addEventListener('click', () => {
+                    if (this.fcIndex < vocabList.length - 1) {
+                        this.fcIndex++;
+                        this.updateFlashcard();
+                    }
+                });
+
+                // Mode switcher in Flashcards tab
+                document.getElementById('btn-mode-flashcard').addEventListener('click', (e) => {
+                    e.target.classList.replace('bg-white', 'bg-blue-800');
+                    e.target.classList.replace('text-slate-700', 'text-white');
+                    document.getElementById('btn-mode-quiz').classList.replace('bg-blue-800', 'bg-white');
+                    document.getElementById('btn-mode-quiz').classList.replace('text-white', 'text-slate-700');
+                    document.getElementById('flashcard-view').classList.remove('hidden');
+                    document.getElementById('quiz-view').classList.add('hidden');
+                });
+                document.getElementById('btn-mode-quiz').addEventListener('click', (e) => {
+                    e.target.classList.replace('bg-white', 'bg-blue-800');
+                    e.target.classList.replace('text-slate-700', 'text-white');
+                    document.getElementById('btn-mode-flashcard').classList.replace('bg-blue-800', 'bg-white');
+                    document.getElementById('btn-mode-flashcard').classList.replace('text-white', 'text-slate-700');
+                    document.getElementById('quiz-view').classList.remove('hidden');
+                    document.getElementById('flashcard-view').classList.add('hidden');
+                });
+
+                window.addEventListener('resize', () => this.drawConnections());
+            },
+
+            renderPassage() {
+                const container = document.getElementById('passage-container');
+                let html = `
+                    <h2 class="text-2xl font-black text-slate-900 mb-2 text-center leading-tight tracking-tight">Stonehenge</h2>
+                    <p class="text-xs text-center text-slate-500 italic mb-6">Unraveling the mysteries behind England’s most famous prehistoric stone monument.</p>
+                `;
+
+                passageData.forEach(p => {
+                    if (this.currentLang === 'en') {
+                        html += `<p><span class="paragraph-num">${p.pNum}</span>${p.en}</p>`;
+                    } else if (this.currentLang === 'vi') {
+                        html += `<p><span class="paragraph-num">${p.pNum}</span>${p.vi}</p>`;
+                    } else if (this.currentLang === 'dual') {
+                        html += `
+                            <div class="mb-6 p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                                <div class="text-slate-800 text-sm leading-relaxed border-b border-slate-200 pb-3">
+                                    <strong class="text-xs font-bold text-blue-800 uppercase tracking-wider block mb-1">ENGLISH [Paragraph ${p.pNum}]</strong>
+                                    ${p.en}
+                                </div>
+                                <div class="text-slate-600 text-sm leading-relaxed pt-1">
+                                    <strong class="text-xs font-bold text-sky-700 uppercase tracking-wider block mb-1">TIẾNG VIỆT</strong>
+                                    ${p.vi}
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+
+                container.innerHTML = html;
+            },
+
+            renderExplanations() {
+                const container = document.getElementById('explanations-list');
+                let html = `
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+                        <div class="flex items-center space-x-2 text-blue-800 font-bold text-xs uppercase tracking-wide mb-1">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span>Comprehensive Rationale & Evidence Guide</span>
+                        </div>
+                        <h2 class="text-xl font-extrabold text-slate-900">Stonehenge — Phân Tích Đáp Án</h2>
+                        <p class="text-xs text-slate-500 mt-1">Click "Locate Text" or hover over any card below to scroll to and highlight the exact text sentence in the reading passage.</p>
+                    </div>
+                `;
+
+                questionsData.forEach(q => {
+                    html += `
+                        <div class="q-card bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4 transition-all hover:border-blue-400" id="q-card-${q.id}">
+                            <div class="flex items-start justify-between">
+                                <span class="bg-slate-100 text-slate-800 font-extrabold text-xs px-3 py-1 rounded-md border border-slate-200">
+                                    Question ${q.num} <span class="text-[10px] font-semibold text-slate-500">(${q.type})</span>
+                                </span>
+                                <div class="flex items-center space-x-2">
+                                    <button class="jump-btn bg-blue-50 hover:bg-blue-100 text-blue-800 font-bold text-xs px-2.5 py-1 rounded-md border border-blue-200 transition-colors flex items-center gap-1 cursor-pointer" data-q="${q.id}">
+                                        <i class="fa-solid fa-location-dot"></i> Locate Text
+                                    </button>
+                                    <span class="${q.badgeColor} text-white font-black text-xs px-3 py-1 rounded-full uppercase tracking-wider shadow-xs">
+                                        Answer: ${q.ansKey}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p class="text-sm font-bold text-slate-800 leading-relaxed">${q.prompt}</p>
+                            </div>
+
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-700 space-y-2">
+                                <div class="flex items-center text-blue-800 font-bold text-xs uppercase tracking-wider">
+                                    <i class="fa-solid fa-circle-check mr-1.5"></i>
+                                    <span>Detailed Rationale / Giải Thích:</span>
+                                </div>
+                                <p class="leading-relaxed font-medium text-slate-800">${this.currentLang === 'vi' ? q.explVi : q.explEn}</p>
+                            </div>
+
+                            ${q.synonyms ? `
+                                <div class="pt-2 border-t border-slate-100">
+                                    <h5 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center">
+                                        <i class="fa-solid fa-arrows-rotate mr-1.5 text-blue-700"></i> Paraphrase Keywords Table
+                                    </h5>
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full text-xs text-left border-collapse">
+                                            <thead>
+                                                <tr class="bg-blue-50/70 text-blue-900 font-semibold border-b border-blue-100">
+                                                    <th class="p-2">Question Keyword</th>
+                                                    <th class="p-2">Passage Equivalent</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-slate-100 text-slate-600">
+                                                ${q.synonyms.map(s => `
+                                                    <tr>
+                                                        <td class="p-2 font-medium text-slate-700">${s.q}</td>
+                                                        <td class="p-2 font-semibold text-blue-800">${s.p}</td>
+                                                    </tr>
+                                                `).join('')}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+            },
+
+            bindTargetEvents() {
+                const targets = document.querySelectorAll('.ans-target');
+                const qCards = document.querySelectorAll('.q-card');
+                const jumpBtns = document.querySelectorAll('.jump-btn');
+
+                const activatePair = (targetEl, cardEl, scrollLeft = false, scrollRight = false) => {
+                    document.querySelectorAll('.ans-target').forEach(t => t.classList.remove('active-target'));
+                    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('ring-2', 'ring-blue-600', 'bg-blue-50/40', 'border-blue-400'));
+
+                    if (targetEl) {
+                        targetEl.classList.add('active-target');
+                        if (scrollLeft) {
+                            targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }
+
+                    if (cardEl) {
+                        cardEl.classList.add('ring-2', 'ring-blue-600', 'bg-blue-50/40', 'border-blue-400');
+                        if (scrollRight) {
+                            cardEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }
+                    }
+
+                    this.startSmoothTracking();
+                };
+
+                const deactivateAll = () => {
+                    document.querySelectorAll('.ans-target').forEach(t => t.classList.remove('active-target'));
+                    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('ring-2', 'ring-blue-600', 'bg-blue-50/40', 'border-blue-400'));
+                    this.clearCanvas();
+                };
+
+                targets.forEach(target => {
+                    const qId = target.dataset.q;
+                    const qCard = document.getElementById(`q-card-${qId}`);
+
+                    target.addEventListener('mouseenter', () => activatePair(target, qCard, false, false));
+                    target.addEventListener('mouseleave', deactivateAll);
+                    target.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        activatePair(target, qCard, false, true);
+                    });
+                });
+
+                qCards.forEach(qCard => {
+                    const qId = qCard.id.replace('q-card-', '');
+                    const target = document.querySelector(`.ans-target[data-q="${qId}"]`);
+
+                    qCard.addEventListener('mouseenter', () => activatePair(target, qCard, false, false));
+                    qCard.addEventListener('mouseleave', deactivateAll);
+                    qCard.addEventListener('click', (e) => {
+                        if (e.target.closest('.jump-btn')) return;
+                        activatePair(target, qCard, true, false);
+                    });
+                });
+
+                jumpBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        const qId = btn.dataset.q;
+                        const target = document.querySelector(`.ans-target[data-q="${qId}"]`);
+                        const qCard = document.getElementById(`q-card-${qId}`);
+                        activatePair(target, qCard, true, false);
+                    });
+                });
+            },
+
+            startSmoothTracking() {
+                if (this.arrowAnimFrame) cancelAnimationFrame(this.arrowAnimFrame);
+                const startTime = performance.now();
+                const duration = 800;
+
+                const step = (now) => {
+                    this.drawConnections();
+                    if (now - startTime < duration) {
+                        this.arrowAnimFrame = requestAnimationFrame(step);
+                    }
+                };
+                this.arrowAnimFrame = requestAnimationFrame(step);
+            },
+
+            drawConnections() {
+                const activeTarget = document.querySelector('.ans-target.active-target');
+                if (activeTarget && this.showArrows) {
+                    const qId = activeTarget.dataset.q;
+                    const qCard = document.getElementById(`q-card-${qId}`);
+                    if (qCard) {
+                        this.drawArrow(activeTarget, qCard);
+                        return;
+                    }
+                }
+                this.clearCanvas();
+            },
+
+            drawArrow(fromEl, toEl) {
+                if (!fromEl || !toEl || window.innerWidth < 1024 || !this.showArrows) {
+                    this.clearCanvas();
+                    return;
+                }
+                
+                const svg = document.getElementById('svg-canvas');
+                const wrapper = document.getElementById('main-wrapper');
+                const leftPane = document.getElementById('left-pane');
+                const rightPane = document.getElementById('right-pane');
+
+                if (!svg || !wrapper || !leftPane || !rightPane) return;
+
+                const wrapperRect = wrapper.getBoundingClientRect();
+                const leftPaneRect = leftPane.getBoundingClientRect();
+                const rightPaneRect = rightPane.getBoundingClientRect();
+
+                const clientRects = fromEl.getClientRects();
+                let fromRect = fromEl.getBoundingClientRect();
+                if (clientRects.length > 0) {
+                    fromRect = clientRects[clientRects.length - 1];
+                }
+                const toRect = toEl.getBoundingClientRect();
+
+                const isFromVisible = (fromRect.bottom >= leftPaneRect.top && fromRect.top <= leftPaneRect.bottom);
+                const isToVisible = (toRect.bottom >= rightPaneRect.top && toRect.top <= rightPaneRect.bottom);
+
+                if (!isFromVisible || !isToVisible) {
+                    this.clearCanvas();
+                    return;
+                }
+
+                const x1 = Math.min(fromRect.right - wrapperRect.left, leftPaneRect.right - wrapperRect.left - 8);
+                const y1 = fromRect.top + (fromRect.height / 2) - wrapperRect.top;
+                
+                const x2 = toRect.left - wrapperRect.left;
+                const y2 = toRect.top + Math.min(36, toRect.height / 2) - wrapperRect.top;
+
+                const dx = Math.max(30, (x2 - x1) * 0.45);
+                const pathData = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
+
+                svg.innerHTML = `
+                    <defs>
+                        <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#1e40af" />
+                            <stop offset="100%" stop-color="#1d4ed8" />
+                        </linearGradient>
+                        <filter id="arrowGlowFilter" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#1e40af" flood-opacity="0.4"/>
+                        </filter>
+                        <marker id="arrowhead" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                            <polygon points="0 0, 9 3.5, 0 7" fill="#1d4ed8" />
+                        </marker>
+                    </defs>
+                    <path d="${pathData}" fill="none" stroke="url(#arrowGrad)" stroke-width="3" stroke-dasharray="7,4" class="animated-arrow-line" marker-end="url(#arrowhead)" filter="url(#arrowGlowFilter)"/>
+                    <circle cx="${x1}" cy="${y1}" r="4" fill="#1e40af" />
+                    <circle cx="${x2}" cy="${y2}" r="4" fill="#1d4ed8" />
+                `;
+            },
+
+            clearCanvas() {
+                const svg = document.getElementById('svg-canvas');
+                if (svg) svg.innerHTML = '';
+            },
+
+            renderVocabGrid() {
+                this.filterVocab();
+            },
+
+            filterVocab() {
+                const search = document.getElementById('vocab-search').value.toLowerCase();
+                const filter = document.getElementById('vocab-filter').value;
+                const grid = document.getElementById('vocab-cards-grid');
+
+                const filtered = vocabList.filter(item => {
+                    const matchSearch = item.word.toLowerCase().includes(search) || item.vi.toLowerCase().includes(search);
+                    const matchFilter = filter === 'all' || item.category === filter || item.type === filter;
+                    return matchSearch && matchFilter;
+                });
+
+                let html = '';
+                filtered.forEach(item => {
+                    html += `
+                        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col justify-between hover:border-blue-400 transition-all space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-[10px] font-black uppercase tracking-wider text-blue-800 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-200">${item.type}</span>
+                                    <button onclick="app.speakWord('${item.word}')" class="text-slate-400 hover:text-blue-800 transition-colors" title="Listen pronunciation">
+                                        <i class="fa-solid fa-volume-high text-sm"></i>
+                                    </button>
+                                </div>
+                                <h3 class="text-xl font-extrabold text-slate-900 capitalize">${item.word}</h3>
+                                <p class="text-xs font-mono text-slate-500 mb-2">${item.phonetic}</p>
+                                <p class="text-sm font-bold text-blue-800 bg-blue-50/50 p-2 rounded-lg border border-blue-100 mb-3">${item.vi}</p>
+                                <p class="text-xs text-slate-600 leading-relaxed mb-3">${item.enDef}</p>
+                            </div>
+
+                            <div class="pt-3 border-t border-slate-100 space-y-2 text-xs">
+                                <div>
+                                    <span class="font-bold text-slate-700 block text-[10px] uppercase tracking-wider text-slate-400">Context in Passage:</span>
+                                    <p class="text-slate-600 italic">"${item.context}"</p>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-slate-700 block text-[10px] uppercase tracking-wider text-blue-800">Common Collocation:</span>
+                                    <p class="font-semibold text-blue-900">${item.collocation}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                grid.innerHTML = html || `<p class="text-sm text-slate-500 col-span-full text-center py-8">No vocabulary words match your search filters.</p>`;
+            },
+
+            speakWord(word) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const u = new SpeechSynthesisUtterance(word);
+                    u.lang = 'en-GB';
+                    u.rate = 0.9;
+                    window.speechSynthesis.speak(u);
+                }
+            },
+
+            setupFlashcard() {
+                this.updateFlashcard();
+            },
+
+            updateFlashcard() {
+                const item = vocabList[this.fcIndex];
+                this.fcFlipped = false;
+                document.getElementById('flashcard-inner').classList.remove('rotate-y-180');
+
+                document.getElementById('fc-category').textContent = `${item.type.toUpperCase()} • ${item.category.toUpperCase()}`;
+                document.getElementById('fc-word').textContent = item.word;
+                document.getElementById('fc-phonetic').textContent = item.phonetic;
+                document.getElementById('fc-meaning').textContent = item.vi;
+                document.getElementById('fc-context').textContent = `"${item.context}"`;
+                document.getElementById('fc-counter').textContent = `${this.fcIndex + 1} / ${vocabList.length}`;
+            },
+
+            setupQuiz() {
+                const quizBox = document.getElementById('quiz-box');
+                const sampleQuestions = [
+                    {
+                        q: "Which word means 'to construct or build a structure or monument'?",
+                        options: ["Haul", "Erect", "Hoist", "Speculate"],
+                        ans: 1,
+                        expl: "Erect (động từ) = Xây dựng / Dựng lên một công trình."
+                    },
+                    {
+                        q: "What does 'consensus' mean in academic research?",
+                        options: ["A disagreement among scholars", "General agreement among a group of people", "A primitive tool", "A secret hypothesis"],
+                        ans: 1,
+                        expl: "Consensus (danh từ) = Sự đồng thuận / nhất trí chung."
+                    },
+                    {
+                        q: "Which term is used to describe objects made by humans that are of historical interest?",
+                        options: ["Agrarian", "Curative", "Artefacts", "Glaciers"],
+                        ans: 2,
+                        expl: "Artefact (cổ vật / hiện vật) là đồ vật do con người thời xưa làm ra."
+                    }
+                ];
+
+                let html = `<h3 class="text-xl font-extrabold text-slate-900 border-b pb-3 border-slate-100 flex items-center gap-2"><i class="fa-solid fa-vial text-blue-800"></i> IELTS Vocab Challenge — Stonehenge</h3>`;
+                sampleQuestions.forEach((q, idx) => {
+                    html += `
+                        <div class="space-y-3 pt-2" id="quiz-q-${idx}">
+                            <p class="text-sm font-bold text-slate-800">${idx + 1}. ${q.q}</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                ${q.options.map((opt, oIdx) => `
+                                    <button onclick="app.checkQuiz(${idx}, ${oIdx}, ${q.ans})" class="quiz-opt-btn text-left p-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-all">
+                                        ${String.fromCharCode(65 + oIdx)}. ${opt}
+                                    </button>
+                                `).join('')}
+                            </div>
+                            <div class="quiz-feedback hidden text-xs p-3 rounded-xl"></div>
+                        </div>
+                    `;
+                });
+
+                quizBox.innerHTML = html;
+            },
+
+            checkQuiz(qIdx, selected, correct) {
+                const qDiv = document.getElementById(`quiz-q-${qIdx}`);
+                const btns = qDiv.querySelectorAll('.quiz-opt-btn');
+                const feedback = qDiv.querySelector('.quiz-feedback');
+
+                btns.forEach((btn, idx) => {
+                    btn.disabled = true;
+                    if (idx === correct) {
+                        btn.className = "quiz-opt-btn text-left p-3 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-900 font-bold text-xs";
+                    } else if (idx === selected) {
+                        btn.className = "quiz-opt-btn text-left p-3 rounded-xl border-2 border-red-400 bg-red-50 text-red-900 font-bold text-xs";
+                    }
+                });
+
+                feedback.classList.remove('hidden');
+                if (selected === correct) {
+                    feedback.className = "quiz-feedback text-xs p-3 rounded-xl bg-emerald-100 text-emerald-900 font-bold border border-emerald-200";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Correct! Excellent job.`;
+                } else {
+                    feedback.className = "quiz-feedback text-xs p-3 rounded-xl bg-red-100 text-red-900 font-bold border border-red-200";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-xmark mr-1"></i> Incorrect. Option ${String.fromCharCode(65 + correct)} is the right answer.`;
+                }
+            }
+        };
+
+        window.onload = () => app.init();
+    </script>
+</body>
+</html>
