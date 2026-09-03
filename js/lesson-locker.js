@@ -243,21 +243,6 @@
             }));
         },
 
-        getTeacherCheatSheet() {
-            const isTeacher = this.isTeacherActive();
-            const map = this.getUnlockedMap();
-            return Object.entries(LESSON_CONFIG).map(([fn, cfg]) => {
-                return {
-                    filename: fn,
-                    id: cfg.id,
-                    title: cfg.title,
-                    category: cfg.category,
-                    password: cfg.password,
-                    isUnlocked: isTeacher || !!map[fn]
-                };
-            });
-        },
-
         /**
          * Initialize Lock Screen Protection for an Individual Lesson Page
          */
@@ -410,7 +395,7 @@
                             <input 
                                 type="password" 
                                 id="locker-password-input" 
-                                placeholder="Enter password (e.g. BAT2026)..." 
+                                placeholder="Enter password..." 
                                 autocomplete="current-password"
                                 class="w-full pl-11 pr-11 py-3 bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 rounded-2xl text-sm font-semibold text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                                 autofocus
@@ -443,7 +428,6 @@
                             <i class="fa-solid fa-arrow-left"></i>
                             <span>Back to Reading Hub</span>
                         </a>
-                        <span class="text-[11px] text-slate-400">Teacher: use masterpass</span>
                     </div>
 
                 </div>

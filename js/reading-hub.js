@@ -835,7 +835,7 @@ class ReadingHubApp {
         window.addEventListener('lesson-locker-changed', () => {
             this.render();
             this.updateTeacherHeaderStatus();
-            this.renderTeacherTable();
+            this.updateTeacherModalState();
         });
 
         // Close unlock modal when clicking backdrop
@@ -985,7 +985,7 @@ class ReadingHubApp {
     openTeacherModal() {
         if (typeof window.LessonLocker === 'undefined') return;
 
-        this.renderTeacherTable();
+        this.updateTeacherModalState();
         const modal = document.getElementById('teacher-modal');
         const card = document.getElementById('teacher-card');
 
@@ -1011,131 +1011,83 @@ class ReadingHubApp {
         }
     }
 
-    renderTeacherTable() {
+    updateTeacherModalState() {
         if (typeof window.LessonLocker === 'undefined') return;
 
         const isTeacher = window.LessonLocker.isTeacherActive();
-        const badge = document.getElementById('teacher-active-badge');
-        const btnToggle = document.getElementById('btn-teacher-activate');
+        const loginView = document.getElementById('teacher-login-view');
+        const activeView = document.getElementById('teacher-active-view');
+        const input = document.getElementById('teacher-masterpass-input');
+        const errorEl = document.getElementById('teacher-login-error');
 
-        if (badge) {
-            badge.className = isTeacher 
-                ? 'inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200'
-                : 'inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-200 text-slate-700';
-            badge.innerHTML = isTeacher 
-                ? '<i class="fa-solid fa-crown text-amber-500"></i> Teacher Active (All Unlocked)'
-                : 'Status: Inactive';
+        if (errorEl) errorEl.classList.add('hidden');
+        if (input) input.value = '';
+
+        if (isTeacher) {
+            if (loginView) loginView.classList.add('hidden');
+            if (activeView) activeView.classList.remove('hidden');
+        } else {
+            if (loginView) loginView.classList.remove('hidden');
+            if (activeView) activeView.classList.add('hidden');
         }
-
-        if (btnToggle) {
-            btnToggle.textContent = isTeacher ? 'Deactivate Teacher Mode' : 'Activate Teacher Mode (Unlock All)';
-            btnToggle.className = isTeacher
-                ? 'px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs shadow-xs transition'
-                : 'px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-xs transition';
-        }
-
-        const cheatSheet = window.LessonLocker.getTeacherCheatSheet();
-        const tbody = document.getElementById('teacher-passwords-table-body');
-        if (!tbody) return;
-
-        tbody.innerHTML = cheatSheet.map(item => {
-            return `
-            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                <td class="py-2.5 px-3">
-                    <div class="font-bold text-slate-900 dark:text-white">${item.title}</div>
-                    <span class="text-[11px] text-slate-400 font-mono">${item.filename}</span>
-                </td>
-                <td class="py-2.5 px-3">
-                    <div class="flex items-center space-x-1.5">
-                        <code class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 font-mono font-bold text-indigo-600 dark:text-indigo-400 text-xs">${item.password}</code>
-                        <button onclick="window.app.copyToClipboard('${item.password}', '${item.title.replace(/'/g, "\\'")}')" class="text-slate-400 hover:text-indigo-600 p-1" title="Copy password">
-                            <i class="fa-regular fa-copy text-xs"></i>
-                        </button>
-                    </div>
-                </td>
-                <td class="py-2.5 px-3 text-center">
-                    <span class="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full ${item.isUnlocked ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
-                        <i class="fa-solid ${item.isUnlocked ? 'fa-lock-open text-emerald-600' : 'fa-lock text-rose-600'} text-[10px]"></i>
-                        ${item.isUnlocked ? 'Unlocked' : 'Locked'}
-                    </span>
-                </td>
-                <td class="py-2.5 px-3 text-right">
-                    ${item.isUnlocked ? `
-                        <button onclick="window.app.handleToggleLessonLock('${item.filename}')" class="px-2 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold transition" title="Lock this lesson">
-                            Lock
-                        </button>
-                    ` : `
-                        <button onclick="window.app.handleQuickUnlockLesson('${item.filename}')" class="px-2 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-semibold transition" title="Unlock this lesson">
-                            Unlock
-                        </button>
-                    `}
-                </td>
-            </tr>
-            `;
-        }).join('');
     }
 
-    handleTeacherToggle() {
-        if (typeof window.LessonLocker === 'undefined') return;
-        const current = window.LessonLocker.isTeacherActive();
-        if (current) {
-            window.LessonLocker.setTeacherActive(false);
-            this.showToast('Teacher mode deactivated', 'info');
+    toggleTeacherPassVisibility() {
+        const input = document.getElementById('teacher-masterpass-input');
+        const eye = document.getElementById('teacher-eye');
+        if (!input || !eye) return;
+        if (input.type === 'password') {
+            input.type = 'text';
+            eye.className = 'fa-solid fa-eye-slash text-xs';
         } else {
-            const pass = prompt('Enter Teacher Masterpass:');
-            if (!pass) return;
-            const res = window.LessonLocker.verifyPassword(pass);
-            if (res.success && res.isMaster) {
-                this.showToast(res.message, 'success');
-            } else {
-                alert('Incorrect Masterpass!');
-            }
+            input.type = 'password';
+            eye.className = 'fa-solid fa-eye text-xs';
         }
-        this.renderTeacherTable();
+    }
+
+    submitTeacherLogin(event) {
+        if (event) event.preventDefault();
+        const input = document.getElementById('teacher-masterpass-input');
+        const errorEl = document.getElementById('teacher-login-error');
+
+        if (!input || typeof window.LessonLocker === 'undefined') return;
+
+        const pass = input.value.trim();
+        const res = window.LessonLocker.verifyPassword(pass);
+
+        if (res.success && res.isMaster) {
+            if (errorEl) errorEl.classList.add('hidden');
+            this.showToast('👑 Master Access Granted! All lessons unlocked.', 'success');
+            this.updateTeacherModalState();
+            this.render();
+            this.updateTeacherHeaderStatus();
+            setTimeout(() => this.closeTeacherModal(), 400);
+        } else {
+            if (errorEl) {
+                errorEl.textContent = 'Invalid Masterpass. Please try again.';
+                errorEl.classList.remove('hidden');
+            }
+            input.focus();
+            input.select();
+        }
+    }
+
+    handleTeacherLogout() {
+        if (typeof window.LessonLocker === 'undefined') return;
+        window.LessonLocker.setTeacherActive(false);
+        this.updateTeacherModalState();
         this.render();
         this.updateTeacherHeaderStatus();
+        this.showToast('Logged out of Teacher Mode', 'info');
     }
 
     handleRelockAll() {
         if (typeof window.LessonLocker === 'undefined') return;
-        if (confirm('Lock all lessons on this browser?')) {
-            window.LessonLocker.lockAll();
-            this.renderTeacherTable();
-            this.render();
-            this.updateTeacherHeaderStatus();
-            this.showToast('All lessons are now locked', 'info');
-        }
-    }
-
-    handleToggleLessonLock(filename) {
-        if (typeof window.LessonLocker === 'undefined') return;
-        window.LessonLocker.lockLesson(filename);
-        this.renderTeacherTable();
+        window.LessonLocker.lockAll();
+        this.updateTeacherModalState();
         this.render();
-        this.showToast(`Locked ${filename}`, 'info');
-    }
-
-    handleQuickUnlockLesson(filename) {
-        if (typeof window.LessonLocker === 'undefined') return;
-        const cfg = window.LessonLocker.getConfig(filename);
-        if (cfg) {
-            window.LessonLocker.verifyPassword(cfg.password, filename);
-            this.renderTeacherTable();
-            this.render();
-            this.showToast(`Unlocked ${cfg.title}`, 'success');
-        }
-    }
-
-    copyToClipboard(text, label) {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text).then(() => {
-                this.showToast(`Copied ${label} password (${text})`, 'success');
-            }).catch(() => {
-                this.showToast(`Password: ${text}`, 'info');
-            });
-        } else {
-            prompt(`Copy ${label} password:`, text);
-        }
+        this.updateTeacherHeaderStatus();
+        this.showToast('All lessons are now locked', 'info');
     }
 
     updateTeacherHeaderStatus() {
