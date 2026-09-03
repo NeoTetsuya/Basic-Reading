@@ -1,0 +1,15 @@
+# Security & Access Keys
+PASSWORDS.md
+passwords.md
+*password*.md
+
+# Local Backups
+backup*
+*_backup*
+*.bak
+
+# Environment & OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
